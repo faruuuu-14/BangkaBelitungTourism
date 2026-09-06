@@ -1,4 +1,4 @@
-﻿# 🌴 WebGIS & Spatial Decision Support System (SDSS) Pariwisata Kepulauan Bangka Belitung
+# 🌴 WebGIS & Spatial Decision Support System (SDSS) Pariwisata Kepulauan Bangka Belitung
 
 Aplikasi **Sistem Informasi Geografis (SIG)** dan **Sistem Pendukung Keputusan Spasial (SPKS)** berbasis web untuk pemetaan, analisis aksesibilitas, dan optimasi rute destinasi pariwisata terintegrasi di 7 Kabupaten/Kota se-Provinsi Kepulauan Bangka Belitung.
 
@@ -57,7 +57,7 @@ Aplikasi **Sistem Informasi Geografis (SIG)** dan **Sistem Pendukung Keputusan S
 
 1. **Clone Repository**:
    ```bash
-   git clone https://github.com/aatthhuurr/BangkaBelitungTourism.git
+   git clone https://github.com/faruuuu-14/BangkaBelitungTourism.git
    ```
 2. **Pindahkan ke Direktori Web Server**:
    - Jika menggunakan Laragon: letakkan di `C:/laragon/www/BangkaBelitungTourism/`
