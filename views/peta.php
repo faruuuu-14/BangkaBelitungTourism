@@ -54,9 +54,9 @@ $catchmentStats = getAccessibilityCatchmentStats();
                         <i class="fa-solid fa-location-dot text-ocean-600 text-[10px]"></i>
                         <span class="hidden md:inline">Pin</span>
                     </button>
-                    <button id="btnModeHeat" onclick="setMapMode('heat')" class="px-2 sm:px-2.5 py-1 rounded-lg font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1 text-[11px] transition-all" title="Mode Sebaran Kategori Warna Dasar">
-                        <i class="fa-solid fa-layer-group text-amber-500 text-[10px]"></i>
-                        <span class="hidden md:inline">Sebaran</span>
+                    <button id="btnModeHeat" onclick="setMapMode('heat')" class="px-2 sm:px-2.5 py-1 rounded-lg font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1 text-[11px] transition-all" title="Mode Heatmap Multi-Kategori">
+                        <i class="fa-solid fa-fire text-amber-500 text-[10px]"></i>
+                        <span class="hidden md:inline">Heatmap</span>
                     </button>
                 </div>
 
@@ -154,18 +154,18 @@ $catchmentStats = getAccessibilityCatchmentStats();
     <!-- Container Peta Penuh -->
     <div id="map" class="flex-grow w-full z-0 bg-slate-100"></div>
 
-    <!-- Floating Legend Sebaran Kategori (Hanya tampil saat mode Sebaran aktif) -->
+    <!-- Floating Legend Heatmap Kategori (Hanya tampil saat mode Heatmap aktif) -->
     <div id="heatmapLegend" class="hidden absolute bottom-6 left-3 sm:left-6 z-30 bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-2xl border border-slate-200/80 shadow-xl flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 text-xs pointer-events-auto">
-        <span class="font-bold text-slate-800 text-[11px] flex items-center gap-1.5">
-            <i class="fa-solid fa-layer-group text-ocean-600"></i>
-            <span>Warna Kategori:</span>
+        <span class="font-black text-slate-800 text-[11px] flex items-center gap-1.5">
+            <i class="fa-solid fa-fire text-amber-500"></i>
+            <span>Heatmap Kategori:</span>
         </span>
         <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[10px] font-bold">
-            <span class="flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 border border-white shadow-sm inline-block"></span> Alam</span>
-            <span class="flex items-center gap-1 text-amber-700 bg-amber-50 px-2 py-0.5 rounded-lg border border-amber-200"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 border border-white shadow-sm inline-block"></span> Buatan</span>
-            <span class="flex items-center gap-1 text-purple-700 bg-purple-50 px-2 py-0.5 rounded-lg border border-purple-200"><span class="w-2.5 h-2.5 rounded-full bg-purple-500 border border-white shadow-sm inline-block"></span> Budaya</span>
-            <span class="flex items-center gap-1 text-sky-700 bg-sky-50 px-2 py-0.5 rounded-lg border border-sky-200"><span class="w-2.5 h-2.5 rounded-full bg-sky-500 border border-white shadow-sm inline-block"></span> Hotel</span>
-            <span class="flex items-center gap-1 text-rose-700 bg-rose-50 px-2 py-0.5 rounded-lg border border-rose-200"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 border border-white shadow-sm inline-block"></span> Resto</span>
+            <span class="flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 border border-white shadow-sm inline-block"></span> Alam (Hijau)</span>
+            <span class="flex items-center gap-1 text-amber-700 bg-amber-50 px-2 py-0.5 rounded-lg border border-amber-200"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 border border-white shadow-sm inline-block"></span> Buatan (Kuning)</span>
+            <span class="flex items-center gap-1 text-purple-700 bg-purple-50 px-2 py-0.5 rounded-lg border border-purple-200"><span class="w-2.5 h-2.5 rounded-full bg-purple-500 border border-white shadow-sm inline-block"></span> Budaya (Ungu)</span>
+            <span class="flex items-center gap-1 text-sky-700 bg-sky-50 px-2 py-0.5 rounded-lg border border-sky-200"><span class="w-2.5 h-2.5 rounded-full bg-sky-500 border border-white shadow-sm inline-block"></span> Hotel (Biru)</span>
+            <span class="flex items-center gap-1 text-rose-700 bg-rose-50 px-2 py-0.5 rounded-lg border border-rose-200"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 border border-white shadow-sm inline-block"></span> Resto (Merah)</span>
         </div>
     </div>
 
@@ -598,7 +598,18 @@ const hubMarkersLayer = L.layerGroup().addTo(map);
 const catchmentRingsLayer = L.layerGroup().addTo(map);
 const transportHubs = <?= json_encode($hubs) ?>;
 let catchmentRingsVisible = true;
-let heatLayer = null;
+let heatLayers = [];
+
+function clearHeatLayers() {
+    if (heatLayers && heatLayers.length > 0) {
+        heatLayers.forEach(l => {
+            if (map.hasLayer(l)) {
+                map.removeLayer(l);
+            }
+        });
+        heatLayers = [];
+    }
+}
 let currentMode = 'pin';
 let currentCategory = 'all';
 let radarCircle = null;
@@ -651,10 +662,7 @@ function setMapMode(mode) {
     if (mode === 'pin') {
         btnPin.className = 'px-2.5 py-1 rounded-lg font-bold bg-white text-slate-900 shadow-sm flex items-center gap-1.5 transition-all';
         btnHeat.className = 'px-2.5 py-1 rounded-lg font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition-all';
-        if (heatLayer) {
-            map.removeLayer(heatLayer);
-            heatLayer = null;
-        }
+        clearHeatLayers();
         map.addLayer(markersLayer);
         if (legend) legend.classList.add('hidden');
         renderMarkers();
@@ -668,14 +676,44 @@ function setMapMode(mode) {
 }
 
 function renderHeatmap() {
-    if (heatLayer) {
-        map.removeLayer(heatLayer);
-        heatLayer = null;
-    }
-    heatLayer = L.layerGroup().addTo(map);
+    clearHeatLayers();
 
     const query = document.getElementById('searchInput').value.toLowerCase().trim();
     const kabFilter = document.getElementById('filterKabupaten').value;
+
+    // Palet warna dasar gonjreng, tegas & kontras untuk tiap kategori
+    // Membentuk heat cloud L.heatLayer yang estetik, tidak meluber/blepotan ke laut
+    const categoryConfig = {
+        'Alam': {
+            // Hijau Zamrud Tropis (Daya Tarik Alam)
+            gradient: { 0.2: '#86efac', 0.5: '#22c55e', 0.8: '#16a34a', 1.0: '#14532d' }
+        },
+        'Buatan': {
+            // Kuning Emas / Amber (Daya Tarik Buatan)
+            gradient: { 0.2: '#fef08a', 0.5: '#eab308', 0.8: '#ca8a04', 1.0: '#713f12' }
+        },
+        'Kebudayaan': {
+            // Ungu Violet Bersejarah (Daya Tarik Kebudayaan)
+            gradient: { 0.2: '#e9d5ff', 0.5: '#a855f7', 0.8: '#7e22ce', 1.0: '#3b0764' }
+        },
+        'Hotel': {
+            // Biru Samudra Cerah (Amenitas Hotel & Penginapan)
+            gradient: { 0.2: '#7dd3fc', 0.5: '#0ea5e9', 0.8: '#0284c7', 1.0: '#0c4a6e' }
+        },
+        'Restoran': {
+            // Merah Crimson Menyala (Amenitas Restoran & Kuliner)
+            gradient: { 0.2: '#fda4af', 0.5: '#f43f5e', 0.8: '#e11d48', 1.0: '#881337' }
+        }
+    };
+
+    const categoryPoints = {
+        'Alam': [],
+        'Buatan': [],
+        'Kebudayaan': [],
+        'Hotel': [],
+        'Restoran': []
+    };
+
     let matched = 0;
 
     rawPlaces.forEach(p => {
@@ -686,40 +724,32 @@ function renderHeatmap() {
 
             if (matchCat && matchKab && matchQuery) {
                 matched++;
-                const color = getMarkerColor(p.sub_kategori);
-                // Ukuran radius proporsional: 6.5px sampai 13px (rapi, tidak meluber/blepotan ke laut)
-                const radius = Math.min(13, Math.max(6.5, Math.log10((p.ulasan || 0) + 1) * 3.6));
-
-                const circle = L.circleMarker([p.latitude, p.longitude], {
-                    radius: radius,
-                    fillColor: color,
-                    fillOpacity: 0.88,
-                    color: '#ffffff',
-                    weight: 1.5
-                });
-
-                // Tooltip cerdas saat hover
-                circle.bindTooltip(`
-                    <div class="text-xs p-0.5">
-                        <div class="font-bold text-slate-900">${p.nama}</div>
-                        <div class="text-[10px] font-bold" style="color: ${color}">
-                            &bull; ${p.sub_kategori} (${p.kelompok})
-                        </div>
-                        <div class="text-[10px] text-slate-500">${p.kecamatan}, ${p.kabupaten} &bull; ★ ${p.rating || '-'} (${p.ulasan || 0} ulasan)</div>
-                    </div>
-                `, { direction: 'top', offset: [0, -radius] });
-
-                // Klik titik untuk langsung fokus & buka info lengkap
-                circle.on('click', () => {
-                    focusOnPlace(p.latitude, p.longitude, p.id);
-                });
-
-                heatLayer.addLayer(circle);
+                // Intensitas logaritmik ulasan (0.45 - 1.0)
+                const intensity = Math.min(1.0, Math.max(0.45, 0.45 + Math.log10((p.ulasan || 0) + 1) * 0.16));
+                const targetCat = categoryPoints[p.sub_kategori] ? p.sub_kategori : 'Alam';
+                categoryPoints[targetCat].push([p.latitude, p.longitude, intensity]);
             }
         }
     });
 
-    document.getElementById('counterBadge').innerText = `${matched} Titik (Sebaran)`;
+    // Render masing-masing heat layer per kategori
+    Object.keys(categoryPoints).forEach(cat => {
+        const points = categoryPoints[cat];
+        if (points.length > 0 && categoryConfig[cat]) {
+            const layer = L.heatLayer(points, {
+                radius: 17,
+                blur: 11,
+                maxZoom: 13,
+                max: 1.0,
+                minOpacity: 0.35,
+                gradient: categoryConfig[cat].gradient
+            }).addTo(map);
+            heatLayers.push(layer);
+        }
+    });
+
+    const badge = document.getElementById('counterBadge');
+    if (badge) badge.innerText = `${matched} Titik (Heatmap)`;
 }
 
 // ==============================================================
