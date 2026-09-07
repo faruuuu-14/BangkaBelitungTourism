@@ -154,6 +154,19 @@ $catchmentStats = getAccessibilityCatchmentStats();
     <!-- Container Peta Penuh -->
     <div id="map" class="flex-grow w-full z-0 bg-slate-100"></div>
 
+    <!-- Floating Heatmap Legend (Hanya tampil saat mode Heatmap aktif) -->
+    <div id="heatmapLegend" class="hidden absolute bottom-6 left-3 sm:left-6 z-30 bg-white/95 backdrop-blur-md px-3 sm:px-4 py-2 rounded-2xl border border-slate-200/80 shadow-xl flex items-center gap-2.5 text-xs transition-all pointer-events-auto">
+        <span class="font-bold text-slate-800 flex items-center gap-1.5 text-[11px]">
+            <i class="fa-solid fa-fire text-amber-500 animate-pulse"></i>
+            <span>Kepadatan:</span>
+        </span>
+        <div class="flex items-center gap-1.5 text-[10px] font-semibold text-slate-500">
+            <span>Rendah</span>
+            <div class="w-20 sm:w-28 h-2.5 rounded-full shadow-inner" style="background: linear-gradient(to right, #ffff00, #ff7700, #ff0033, #770033);"></div>
+            <span class="text-rose-600 font-bold">Tinggi</span>
+        </div>
+    </div>
+
     <!-- ============================================================== -->
     <!-- SLIDE-OVER DRAWER: SMART ITINERARY PLANNER (OPTIMASI RUTE)     -->
     <!-- ============================================================== -->
@@ -631,17 +644,20 @@ function setMapMode(mode) {
     currentMode = mode;
     const btnPin = document.getElementById('btnModePin');
     const btnHeat = document.getElementById('btnModeHeat');
+    const legend = document.getElementById('heatmapLegend');
 
     if (mode === 'pin') {
         btnPin.className = 'px-2.5 py-1 rounded-lg font-bold bg-white text-slate-900 shadow-sm flex items-center gap-1.5 transition-all';
         btnHeat.className = 'px-2.5 py-1 rounded-lg font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition-all';
         if (heatLayer) map.removeLayer(heatLayer);
         map.addLayer(markersLayer);
+        if (legend) legend.classList.add('hidden');
         renderMarkers();
     } else {
-        btnHeat.className = 'px-2.5 py-1 rounded-lg font-bold bg-amber-500 text-white shadow-sm flex items-center gap-1.5 transition-all';
+        btnHeat.className = 'px-2.5 py-1 rounded-lg font-bold bg-gradient-to-r from-amber-500 to-rose-500 text-white shadow-sm flex items-center gap-1.5 transition-all';
         btnPin.className = 'px-2.5 py-1 rounded-lg font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition-all';
         map.removeLayer(markersLayer);
+        if (legend) legend.classList.remove('hidden');
         renderHeatmap();
     }
 }
@@ -662,23 +678,28 @@ function renderHeatmap() {
 
             if (matchCat && matchKab && matchQuery) {
                 matched++;
-                // Bobot intensitas logaritmik berdasarkan popularitas ulasan Google Maps
-                const weight = Math.min(1.0, Math.log10((p.ulasan || 0) + 1) / 3.2);
-                heatPoints.push([p.latitude, p.longitude, Math.max(0.25, weight)]);
+                // Bobot intensitas: ulasan Google Maps + bobot dasar yang tegas (anti-pudar di pesisir)
+                const reviewWeight = Math.min(1.0, Math.log10((p.ulasan || 0) + 1) / 2.8);
+                // Bobot dasar minimum 0.55 agar titik tunggal pun tetap menyala kontras dan tidak pudar
+                heatPoints.push([p.latitude, p.longitude, Math.max(0.55, reviewWeight)]);
             }
         }
     });
 
+    // Palet Warna Gonjreng & Kontras Tinggi (Thermal Fire / Lava Neon)
+    // Menghilangkan warna biru laut agar 100% kontras dengan air laut dan daratan pulau Babel
     heatLayer = L.heatLayer(heatPoints, {
-        radius: 30,
-        blur: 18,
-        maxZoom: 15,
+        minOpacity: 0.60, // Kepekatan warna tinggi, tebal, tidak transparan/pudar
+        radius: 32,       // Jangkauan pendaran panas yang tegas
+        blur: 15,         // Efek pendaran halus tapi tetap bertepi tajam
+        maxZoom: 14,
         gradient: {
-            0.2: '#0284c7',
-            0.4: '#10b981',
-            0.6: '#fbbf24',
-            0.8: '#f97316',
-            1.0: '#ef4444'
+            0.15: '#ffff00', // Kuning Neon Menyala (Sangat kontras di atas air laut biru)
+            0.35: '#ff7700', // Oranye Terang
+            0.55: '#ff2200', // Oranye-Merah Menyala
+            0.75: '#ff0033', // Merah Api Tajam
+            0.90: '#cc0055', // Merah Crimson Pekat
+            1.00: '#770033'  // Merah Marun Magma (Pusat Titik Terpadat)
         }
     }).addTo(map);
 
