@@ -1,0 +1,125 @@
+DROP TABLE IF EXISTS `kunjungan_bps`;
+CREATE TABLE `kunjungan_bps` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `kabupaten` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tahun` int NOT NULL,
+  `bulan` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bulan_num` int NOT NULL,
+  `kunjungan` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_kab_tahun` (`kabupaten`,`tahun`),
+  KEY `idx_tahun_bulan` (`tahun`,`bulan_num`)
+) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (1, 'Bangka', 2025, 'Januari', 1, 79110);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (2, 'Bangka', 2025, 'Februari', 2, 61523);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (3, 'Bangka', 2025, 'Maret', 3, 59511);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (4, 'Bangka', 2025, 'April', 4, 118667);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (5, 'Bangka', 2025, 'Mei', 5, 98700);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (6, 'Bangka', 2025, 'Juni', 6, 87993);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (7, 'Bangka', 2025, 'Juli', 7, 102366);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (8, 'Bangka', 2025, 'Agustus', 8, 90662);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (9, 'Bangka', 2025, 'September', 9, 85289);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (10, 'Bangka', 2025, 'Oktober', 10, 81200);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (11, 'Bangka', 2025, 'November', 11, 78500);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (12, 'Bangka', 2025, 'Desember', 12, 87640);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (13, 'Belitung', 2025, 'Januari', 1, 34270);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (14, 'Belitung', 2025, 'Februari', 2, 23403);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (15, 'Belitung', 2025, 'Maret', 3, 22149);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (16, 'Belitung', 2025, 'April', 4, 57300);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (17, 'Belitung', 2025, 'Mei', 5, 42100);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (18, 'Belitung', 2025, 'Juni', 6, 36350);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (19, 'Belitung', 2025, 'Juli', 7, 35603);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (20, 'Belitung', 2025, 'Agustus', 8, 36261);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (21, 'Belitung', 2025, 'September', 9, 28918);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (22, 'Belitung', 2025, 'Oktober', 10, 29500);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (23, 'Belitung', 2025, 'November', 11, 27800);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (24, 'Belitung', 2025, 'Desember', 12, 31452);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (25, 'Bangka Barat', 2025, 'Januari', 1, 31627);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (26, 'Bangka Barat', 2025, 'Februari', 2, 37910);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (27, 'Bangka Barat', 2025, 'Maret', 3, 29005);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (28, 'Bangka Barat', 2025, 'April', 4, 46948);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (29, 'Bangka Barat', 2025, 'Mei', 5, 38200);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (30, 'Bangka Barat', 2025, 'Juni', 6, 34694);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (31, 'Bangka Barat', 2025, 'Juli', 7, 43337);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (32, 'Bangka Barat', 2025, 'Agustus', 8, 38066);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (33, 'Bangka Barat', 2025, 'September', 9, 35953);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (34, 'Bangka Barat', 2025, 'Oktober', 10, 36100);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (35, 'Bangka Barat', 2025, 'November', 11, 35800);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (36, 'Bangka Barat', 2025, 'Desember', 12, 38280);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (37, 'Bangka Tengah', 2025, 'Januari', 1, 64939);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (38, 'Bangka Tengah', 2025, 'Februari', 2, 50927);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (39, 'Bangka Tengah', 2025, 'Maret', 3, 48628);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (40, 'Bangka Tengah', 2025, 'April', 4, 77132);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (41, 'Bangka Tengah', 2025, 'Mei', 5, 69500);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (42, 'Bangka Tengah', 2025, 'Juni', 6, 65108);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (43, 'Bangka Tengah', 2025, 'Juli', 7, 74793);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (44, 'Bangka Tengah', 2025, 'Agustus', 8, 68588);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (45, 'Bangka Tengah', 2025, 'September', 9, 63442);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (46, 'Bangka Tengah', 2025, 'Oktober', 10, 62100);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (47, 'Bangka Tengah', 2025, 'November', 11, 60800);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (48, 'Bangka Tengah', 2025, 'Desember', 12, 67738);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (49, 'Bangka Selatan', 2025, 'Januari', 1, 31995);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (50, 'Bangka Selatan', 2025, 'Februari', 2, 28547);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (51, 'Bangka Selatan', 2025, 'Maret', 3, 26394);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (52, 'Bangka Selatan', 2025, 'April', 4, 49509);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (53, 'Bangka Selatan', 2025, 'Mei', 5, 39800);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (54, 'Bangka Selatan', 2025, 'Juni', 6, 35967);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (55, 'Bangka Selatan', 2025, 'Juli', 7, 46594);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (56, 'Bangka Selatan', 2025, 'Agustus', 8, 37205);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (57, 'Bangka Selatan', 2025, 'September', 9, 32670);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (58, 'Bangka Selatan', 2025, 'Oktober', 10, 33400);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (59, 'Bangka Selatan', 2025, 'November', 11, 32100);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (60, 'Bangka Selatan', 2025, 'Desember', 12, 38337);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (61, 'Belitung Timur', 2025, 'Januari', 1, 16999);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (62, 'Belitung Timur', 2025, 'Februari', 2, 14799);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (63, 'Belitung Timur', 2025, 'Maret', 3, 12970);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (64, 'Belitung Timur', 2025, 'April', 4, 28209);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (65, 'Belitung Timur', 2025, 'Mei', 5, 21500);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (66, 'Belitung Timur', 2025, 'Juni', 6, 15870);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (67, 'Belitung Timur', 2025, 'Juli', 7, 18299);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (68, 'Belitung Timur', 2025, 'Agustus', 8, 17053);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (69, 'Belitung Timur', 2025, 'September', 9, 15395);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (70, 'Belitung Timur', 2025, 'Oktober', 10, 14900);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (71, 'Belitung Timur', 2025, 'November', 11, 13800);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (72, 'Belitung Timur', 2025, 'Desember', 12, 12988);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (73, 'Pangkal Pinang', 2025, 'Januari', 1, 99639);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (74, 'Pangkal Pinang', 2025, 'Februari', 2, 73069);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (75, 'Pangkal Pinang', 2025, 'Maret', 3, 87512);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (76, 'Pangkal Pinang', 2025, 'April', 4, 129795);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (77, 'Pangkal Pinang', 2025, 'Mei', 5, 115200);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (78, 'Pangkal Pinang', 2025, 'Juni', 6, 107712);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (79, 'Pangkal Pinang', 2025, 'Juli', 7, 110021);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (80, 'Pangkal Pinang', 2025, 'Agustus', 8, 110486);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (81, 'Pangkal Pinang', 2025, 'September', 9, 94928);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (82, 'Pangkal Pinang', 2025, 'Oktober', 10, 98100);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (83, 'Pangkal Pinang', 2025, 'November', 11, 95300);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (84, 'Pangkal Pinang', 2025, 'Desember', 12, 108245);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (85, 'Bangka', 2026, 'Januari', 1, 88797);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (86, 'Bangka', 2026, 'Februari', 2, 82156);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (87, 'Bangka', 2026, 'Maret', 3, 107264);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (88, 'Bangka', 2026, 'April', 4, 89505);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (89, 'Belitung', 2026, 'Januari', 1, 32359);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (90, 'Belitung', 2026, 'Februari', 2, 25723);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (91, 'Belitung', 2026, 'Maret', 3, 44423);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (92, 'Belitung', 2026, 'April', 4, 32432);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (93, 'Bangka Barat', 2026, 'Januari', 1, 35540);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (94, 'Bangka Barat', 2026, 'Februari', 2, 48454);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (95, 'Bangka Barat', 2026, 'Maret', 3, 45289);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (96, 'Bangka Barat', 2026, 'April', 4, 37125);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (97, 'Bangka Tengah', 2026, 'Januari', 1, 65385);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (98, 'Bangka Tengah', 2026, 'Februari', 2, 59975);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (99, 'Bangka Tengah', 2026, 'Maret', 3, 72008);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (100, 'Bangka Tengah', 2026, 'April', 4, 63270);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (101, 'Bangka Selatan', 2026, 'Januari', 1, 35041);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (102, 'Bangka Selatan', 2026, 'Februari', 2, 35040);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (103, 'Bangka Selatan', 2026, 'Maret', 3, 42969);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (104, 'Bangka Selatan', 2026, 'April', 4, 31569);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (105, 'Belitung Timur', 2026, 'Januari', 1, 20117);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (106, 'Belitung Timur', 2026, 'Februari', 2, 19982);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (107, 'Belitung Timur', 2026, 'Maret', 3, 27528);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (108, 'Belitung Timur', 2026, 'April', 4, 17599);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (109, 'Pangkal Pinang', 2026, 'Januari', 1, 109287);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (110, 'Pangkal Pinang', 2026, 'Februari', 2, 89479);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (111, 'Pangkal Pinang', 2026, 'Maret', 3, 128123);
+INSERT INTO `kunjungan_bps` (`id`, `kabupaten`, `tahun`, `bulan`, `bulan_num`, `kunjungan`) VALUES (112, 'Pangkal Pinang', 2026, 'April', 4, 99539);
