@@ -13,11 +13,11 @@ $monthlyTrends = getBpsMonthlyTrends();
 $macroCorr = getMacroCorrelation();
 $corr = getCorrelationMatrix();
 
-// 4. Data Gap Amenitas per Kecamatan
+// 4. Data Gap Amenitas & Keseimbangan Triangulasi per Kecamatan
 $gapData = getGapAnalysis();
-$kritisCount = count(array_filter($gapData, fn($i) => $i['status'] === 'Defisit Kritis'));
-$waspadaCount = count(array_filter($gapData, fn($i) => $i['status'] === 'Perlu Peningkatan'));
-$idealCount = count(array_filter($gapData, fn($i) => $i['status'] === 'Seimbang / Ideal'));
+$kritisCount = count(array_filter($gapData, fn($i) => str_contains($i['status'], 'Defisit')));
+$waspadaCount = count(array_filter($gapData, fn($i) => str_contains($i['status'], 'Potensi') || str_contains($i['status'], 'Longgar') || str_contains($i['status'], 'Perlu')));
+$idealCount = count(array_filter($gapData, fn($i) => str_contains($i['status'], 'Seimbang')));
 
 // 5. Data IPKN-Daerah (BTDI Score) & Tipologi Klassen
 $btdiScores = getBtdiDistrictScores();
@@ -361,14 +361,14 @@ function getCorrelationBadge($r) {
                 <div>
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-ocean-500/20 text-ocean-300 border border-ocean-400/30 mb-2">
                         <i class="fa-solid fa-sliders"></i>
-                        <span>Decision Support System (DSS) Simulator</span>
+                        <span>Decision Support System (DSS) Simulator &bull; Supply-Demand Equilibrium</span>
                     </div>
                     <h3 class="text-xl font-black text-white">Simulator Kebijakan: "What-If Scenario"</h3>
-                    <p class="text-slate-400 text-xs mt-0.5">Uji dampak penambahan fasilitas akomodasi & kuliner terhadap perubahan status kesenjangan kecamatan secara real-time</p>
+                    <p class="text-slate-400 text-xs mt-0.5">Uji dampak penambahan akomodasi &amp; kuliner terhadap daya tampung pasar riil dan kelayakan investasi anti-rugi pengelola secara real-time</p>
                 </div>
                 <div class="text-left md:text-right">
-                    <span class="text-xs text-slate-400 block">Target Standar Kemenpar</span>
-                    <span class="text-base font-black text-emerald-400">Rasio ≥ 0.80 (Ideal)</span>
+                    <span class="text-xs text-slate-400 block">Metode Evaluasi</span>
+                    <span class="text-base font-black text-emerald-400">Triangulasi Pasar (BPS)</span>
                 </div>
             </div>
 
@@ -382,8 +382,14 @@ function getCorrelationBadge($r) {
                         <select id="simKecamatan" class="w-full px-4 py-3 rounded-2xl bg-white/10 border border-white/20 text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-ocean-400">
                             <?php foreach ($gapData as $k): ?>
                             <option value="<?= htmlspecialchars($k['kecamatan']) ?>" class="bg-slate-900 text-white" 
-                                data-dt="<?= $k['daya_tarik'] ?>" data-am="<?= $k['amenitas'] ?>" data-status="<?= $k['status'] ?>" data-kab="<?= htmlspecialchars($k['kabupaten']) ?>">
-                                <?= htmlspecialchars($k['kecamatan']) ?> (<?= htmlspecialchars($k['kabupaten']) ?>) &bull; <?= $k['status'] ?>
+                                data-dt="<?= $k['daya_tarik'] ?>" 
+                                data-am="<?= $k['amenitas'] ?>" 
+                                data-vis="<?= $k['kunjungan_tahunan'] ?>" 
+                                data-beban="<?= $k['beban_per_amenitas'] ?>" 
+                                data-status="<?= $k['status'] ?>" 
+                                data-kelayakan="<?= $k['kelayakan'] ?>"
+                                data-kab="<?= htmlspecialchars($k['kabupaten']) ?>">
+                                <?= htmlspecialchars($k['kecamatan']) ?> (<?= htmlspecialchars($k['kabupaten']) ?>) &bull; <?= number_format($k['kunjungan_tahunan'], 0, ',', '.') ?> Wisatawan &bull; <?= $k['status'] ?>
                             </option>
                             <?php endforeach; ?>
                         </select>
@@ -413,24 +419,32 @@ function getCorrelationBadge($r) {
                 </div>
 
                 <!-- Panel Hasil Proyeksi Real-time -->
-                <div class="lg:col-span-6 bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-sm">
-                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-3">Hasil Proyeksi Real-time:</span>
+                <div class="lg:col-span-6 bg-white/5 border border-white/10 p-6 rounded-3xl backdrop-blur-sm space-y-4">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Hasil Proyeksi Ekuilibrium Real-time:</span>
                     
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
-                            <span class="text-[11px] text-slate-400 block mb-1">Rasio Eksisting</span>
-                            <div id="simCurrentRatio" class="text-2xl font-black text-slate-300">0.00</div>
-                            <span id="simCurrentStatus" class="inline-block px-2 py-0.5 rounded text-[10px] font-bold mt-1 bg-rose-500/20 text-rose-300 border border-rose-500/30">Defisit</span>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-white/5 p-3.5 rounded-2xl border border-white/5">
+                            <span class="text-[10px] text-slate-400 block mb-0.5">Beban Wisatawan / Unit (Eksisting)</span>
+                            <div id="simCurrentLoad" class="text-xl font-black text-slate-300">0</div>
+                            <span class="text-[10px] text-slate-500">orang / fasilitas / thn</span>
                         </div>
-                        <div class="bg-ocean-500/10 p-4 rounded-2xl border border-ocean-500/30">
-                            <span class="text-[11px] text-ocean-300 block mb-1">Rasio Proyeksi (Simulasi)</span>
-                            <div id="simNewRatio" class="text-2xl font-black text-emerald-400">0.00</div>
-                            <span id="simNewStatus" class="inline-block px-2 py-0.5 rounded text-[10px] font-bold mt-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Ideal</span>
+                        <div class="bg-ocean-500/10 p-3.5 rounded-2xl border border-ocean-500/30">
+                            <span class="text-[10px] text-ocean-300 block mb-0.5">Beban Proyeksi (Simulasi)</span>
+                            <div id="simNewLoad" class="text-xl font-black text-emerald-400">0</div>
+                            <span class="text-[10px] text-ocean-400">orang / fasilitas / thn</span>
                         </div>
                     </div>
 
-                    <!-- Pesan Kesimpulan Rekomendasi -->
-                    <div id="simInsightText" class="text-xs text-slate-300 leading-relaxed bg-black/20 p-3.5 rounded-2xl border border-white/5">
+                    <div class="bg-white/5 p-3.5 rounded-2xl border border-white/5 flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] text-slate-400 block">Status Kelayakan Investasi:</span>
+                            <div id="simFeasibilityLabel" class="text-sm font-black text-white mt-0.5">Memuat...</div>
+                        </div>
+                        <span id="simNewStatus" class="inline-block px-3 py-1 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Ideal</span>
+                    </div>
+
+                    <!-- Pesan Kesimpulan Rekomendasi Anti-Rugi -->
+                    <div id="simInsightText" class="text-xs text-slate-300 leading-relaxed bg-black/30 p-3.5 rounded-2xl border border-white/5">
                         Memuat kalkulasi proyeksi intervensi...
                     </div>
                 </div>
@@ -440,19 +454,19 @@ function getCorrelationBadge($r) {
         <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="p-6 sm:p-8 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h3 class="text-lg font-bold text-slate-900">Rasio Kesenjangan Amenitas per Kecamatan</h3>
-                    <p class="text-xs text-slate-500 mt-0.5">Standar Ideal Kemenpar: 8 Amenitas per 10 Objek Wisata (0.80)</p>
+                    <h3 class="text-lg font-bold text-slate-900">Model Keseimbangan Triangulasi Pariwisata per Kecamatan</h3>
+                    <p class="text-xs text-slate-500 mt-0.5">Keseimbangan 3 Faktor: Daya Tarik (Atraksi) &bull; Amenitas (Kapasitas) &bull; Volume Kunjungan BPS (Demand Pasar Riil)</p>
                 </div>
 
                 <div class="flex items-center gap-2">
                     <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
-                        <?= $kritisCount ?> Defisit Kritis
+                        <?= $kritisCount ?> Defisit Beban Tinggi
                     </span>
                     <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-                        <?= $waspadaCount ?> Perlu Peningkatan
+                        <?= $waspadaCount ?> Potensi / Perlu Promosi
                     </span>
                     <span class="px-3 py-1 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        <?= $idealCount ?> Ideal
+                        <?= $idealCount ?> Seimbang / Ideal
                     </span>
                 </div>
             </div>
@@ -461,12 +475,13 @@ function getCorrelationBadge($r) {
                 <table class="w-full text-left text-sm text-slate-600">
                     <thead class="bg-slate-50/80 text-xs uppercase tracking-wider text-slate-400 font-semibold border-b border-slate-100">
                         <tr>
-                            <th class="px-6 py-4">Kecamatan & Wilayah</th>
-                            <th class="px-6 py-4 text-center">Daya Tarik (Alam/Buatan)</th>
+                            <th class="px-6 py-4">Kecamatan &amp; Wilayah</th>
+                            <th class="px-6 py-4 text-center">Daya Tarik</th>
                             <th class="px-6 py-4 text-center">Amenitas (Hotel/Resto)</th>
-                            <th class="px-6 py-4 text-center">Rasio Ketersediaan</th>
-                            <th class="px-6 py-4 text-center">Defisit Fasilitas</th>
-                            <th class="px-6 py-4 text-right">Status Kemenpar</th>
+                            <th class="px-6 py-4 text-center">Kunjungan BPS / Thn</th>
+                            <th class="px-6 py-4 text-center">Beban / Amenitas</th>
+                            <th class="px-6 py-4 text-center">Kelayakan Investasi</th>
+                            <th class="px-6 py-4 text-right">Status Ekuilibrium</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 font-medium">
@@ -478,28 +493,36 @@ function getCorrelationBadge($r) {
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span class="font-bold text-slate-800"><?= $row['daya_tarik'] ?></span>
-                                <span class="text-xs text-slate-400 block">(<?= $row['alam'] ?> / <?= $row['buatan'] ?>)</span>
+                                <span class="text-xs text-slate-400 block">(<?= $row['alam'] ?> Alam / <?= $row['buatan'] ?> B/B)</span>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span class="font-bold text-slate-800"><?= $row['amenitas'] ?></span>
-                                <span class="text-xs text-slate-400 block">(<?= $row['hotel'] ?> / <?= $row['restoran'] ?>)</span>
+                                <span class="text-xs text-slate-400 block">(<?= $row['hotel'] ?> Hotel / <?= $row['restoran'] ?> Resto)</span>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <span class="font-bold <?= $row['rasio'] < 0.35 ? 'text-rose-600' : ($row['rasio'] < 0.8 ? 'text-amber-600' : 'text-emerald-600') ?>">
-                                    <?= $row['rasio'] ?>
+                                <span class="font-bold text-slate-900 font-mono">
+                                    <?= number_format($row['kunjungan_tahunan'], 0, ',', '.') ?>
                                 </span>
-                                <span class="text-xs text-slate-400">/ 0.80</span>
+                                <span class="text-[10px] text-slate-400 block">wisatawan/thn</span>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <?php if ($row['gap_defisit'] > 0): ?>
-                                    <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-700">
-                                        -<?= $row['gap_defisit'] ?> Titik
-                                    </span>
-                                <?php else: ?>
-                                    <span class="text-xs font-semibold text-emerald-600">
-                                        <i class="fa-solid fa-check text-[10px]"></i> Terpenuhi
-                                    </span>
-                                <?php endif; ?>
+                                <span class="font-bold font-mono <?= $row['beban_per_amenitas'] >= 8000 ? 'text-rose-600' : ($row['beban_per_amenitas'] < 2000 ? 'text-sky-600' : 'text-emerald-600') ?>">
+                                    <?= number_format($row['beban_per_amenitas'], 0, ',', '.') ?>
+                                </span>
+                                <span class="text-[10px] text-slate-400 block">wis/unit</span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <?php
+                                $kelClass = match($row['kelayakan']) {
+                                    'Sangat Layak' => 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                                    'Waspada Over-Supply' => 'bg-sky-100 text-sky-800 border-sky-200',
+                                    'Waspada Rugi' => 'bg-amber-100 text-amber-800 border-amber-200',
+                                    default => 'bg-slate-100 text-slate-700 border-slate-200'
+                                };
+                                ?>
+                                <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-bold border <?= $kelClass ?>">
+                                    <?= $row['kelayakan'] ?>
+                                </span>
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <?php 
@@ -507,6 +530,7 @@ function getCorrelationBadge($r) {
                                     'red' => 'bg-rose-50 text-rose-700 border-rose-200',
                                     'amber' => 'bg-amber-50 text-amber-700 border-amber-200',
                                     'emerald' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                                    'sky' => 'bg-sky-50 text-sky-700 border-sky-200',
                                     default => 'bg-slate-100 text-slate-600 border-slate-200'
                                 };
                                 ?>
@@ -1554,47 +1578,74 @@ function updateSimulation() {
     const opt = selKec.options[selKec.selectedIndex];
     const dt = parseInt(opt.getAttribute('data-dt')) || 0;
     const am = parseInt(opt.getAttribute('data-am')) || 0;
+    const vis = parseInt(opt.getAttribute('data-vis')) || 0;
     const addH = parseInt(sHotel.value) || 0;
     const addR = parseInt(sResto.value) || 0;
 
     document.getElementById('labelAddHotel').innerText = `+${addH} Unit`;
     document.getElementById('labelAddResto').innerText = `+${addR} Unit`;
 
-    const currentRatio = dt > 0 ? (am / dt).toFixed(2) : (am > 0 ? '1.00' : '0.00');
+    // Beban pengunjung per amenitas (orang / unit / thn)
+    const currentLoad = am > 0 ? Math.round(vis / am) : vis;
     const newAm = am + addH + addR;
-    const newRatio = dt > 0 ? (newAm / dt).toFixed(2) : (newAm > 0 ? '1.00' : '0.00');
+    const newLoad = newAm > 0 ? Math.round(vis / newAm) : vis;
 
-    document.getElementById('simCurrentRatio').innerText = currentRatio;
-    document.getElementById('simNewRatio').innerText = newRatio;
+    const elCurrentLoad = document.getElementById('simCurrentLoad');
+    const elNewLoad = document.getElementById('simNewLoad');
+    if (elCurrentLoad) elCurrentLoad.innerText = currentLoad.toLocaleString('id-ID');
+    if (elNewLoad) elNewLoad.innerText = newLoad.toLocaleString('id-ID');
 
-    // Evaluasi Status Baru
+    // Evaluasi Kelayakan Investasi & Status Keseimbangan
+    let feasibilityText = 'Seimbang / Stabil';
+    let feasibilityClass = 'text-emerald-400';
     let newStatus = 'Seimbang / Ideal';
     let newStatusBadge = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+    let insight = '';
 
-    if (dt > 0 && newRatio < 0.35) {
-        newStatus = 'Defisit Kritis';
+    const kecName = opt.value;
+    const totalAdded = addH + addR;
+
+    if (vis < 4000 && totalAdded >= 3) {
+        // PERINGATAN RISIKO KERUGIAN PENGELOLA (OVER-SUPPLY PADA PASAR SEPI)
+        feasibilityText = '⚠️ Risiko Tinggi Merugikan Pengelola';
+        feasibilityClass = 'text-rose-400 font-black';
+        newStatus = 'Over-Supply (Pasar Sepi)';
         newStatusBadge = 'bg-rose-500/20 text-rose-300 border-rose-500/30';
-    } else if (dt > 0 && newRatio < 0.80) {
-        newStatus = 'Perlu Peningkatan';
-        newStatusBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+        insight = `⚠️ <strong>Peringatan Risiko Pengelola:</strong> Total kunjungan di <strong>${kecName}</strong> saat ini masih relatif rendah (~<strong>${vis.toLocaleString('id-ID')} wisatawan/tahun</strong>). Menambah <strong>+${addH} hotel</strong> dan <strong>+${addR} resto</strong> berisiko membuat beban pelayanan anjlok ke ~<strong>${newLoad.toLocaleString('id-ID')} orang/unit</strong>, sehingga tingkat okupansi rendah dan <strong>pengelola berisiko merugi!</strong> Prioritaskan promosi event &amp; aktivasi atraksi terlebih dahulu sebelum menambah unit fisik.`;
+    } else if (currentLoad >= 8000 && totalAdded > 0) {
+        // SANGAT LAYAK & MENGUNTUNGKAN (PASAR MEMBLUDAK)
+        feasibilityText = '🎉 Sangat Layak Investasi (Pasar Siap)';
+        feasibilityClass = 'text-emerald-400 font-black';
+        newStatus = 'Defisit Teratasi';
+        newStatusBadge = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+        insight = `🎉 <strong>Investasi Sangat Layak &amp; Menguntungkan!</strong> Dengan volume kunjungan mencapai ~<strong>${vis.toLocaleString('id-ID')} wisatawan/tahun</strong>, penambahan <strong>${addH} hotel</strong> dan <strong>${addR} resto</strong> akan langsung terserap pasar tanpa risiko sepi. Beban pelayanan menjadi lebih sehat dari <strong>${currentLoad.toLocaleString('id-ID')}</strong> menjadi <strong>${newLoad.toLocaleString('id-ID')} orang/unit</strong>.`;
+    } else if (totalAdded > 0) {
+        // MODERAT / SEIMBANG
+        feasibilityText = '📈 Layak Bertahap (Pasar Terjaga)';
+        feasibilityClass = 'text-sky-400 font-bold';
+        newStatus = 'Ekuilibrium Terjaga';
+        newStatusBadge = 'bg-sky-500/20 text-sky-300 border-sky-500/30';
+        insight = `📈 <strong>Progres Ekuilibrium Positif:</strong> Beban pelayanan bergeser dari <strong>${currentLoad.toLocaleString('id-ID')}</strong> menjadi <strong>${newLoad.toLocaleString('id-ID')} orang/unit</strong>. Penambahan fasilitas proporsional dengan proyeksi pertumbuhan pasar wisatawan.`;
+    } else {
+        feasibilityText = currentLoad >= 8000 ? '🔴 Butuh Tambahan Amenitas' : (vis < 4000 ? '🟡 Butuh Promosi Wisatawan' : '🟢 Kondisi Saat Ini Stabil');
+        feasibilityClass = currentLoad >= 8000 ? 'text-rose-400' : 'text-slate-300';
+        insight = `Geser slider <strong>+Hotel</strong> dan <strong>+Resto</strong> untuk menguji daya serap pasar wisatawan riil di <strong>${kecName}</strong> (~${vis.toLocaleString('id-ID')} kunjungan/tahun).`;
+    }
+
+    const elFeas = document.getElementById('simFeasibilityLabel');
+    if (elFeas) {
+        elFeas.innerHTML = feasibilityText;
+        elFeas.className = `text-sm font-black mt-0.5 ${feasibilityClass}`;
     }
 
     const newStatusEl = document.getElementById('simNewStatus');
-    newStatusEl.innerText = newStatus;
-    newStatusEl.className = `inline-block px-2.5 py-0.5 rounded text-[10px] font-bold mt-1 border ${newStatusBadge}`;
-
-    // Teks Kesimpulan Insight
-    let insight = '';
-    if (newRatio >= 0.80) {
-        insight = `🎉 <strong>Target Tercapai!</strong> Dengan penambahan <strong>${addH} homestay/hotel</strong> dan <strong>${addR} resto</strong>, ${opt.value} berhasil melampaui ambang batas ideal Kemenpar (Rasio ${newRatio} &ge; 0.80). Ekosistem pariwisata daerah ini siap menyerap lonjakan kunjungan wisatawan!`;
-    } else if (newRatio > currentRatio) {
-        const gapLeft = Math.ceil(dt * 0.80) - newAm;
-        insight = `📈 <strong>Progres Positif!</strong> Rasio naik dari <strong>${currentRatio}</strong> menjadi <strong>${newRatio}</strong>. Masih dibutuhkan sekitar <strong>${gapLeft > 0 ? gapLeft : 0} amenitas lagi</strong> untuk mencapai status Seimbang/Ideal.`;
-    } else {
-        insight = `Geser slider untuk melihat proyeksi dampak investasi amenitas di <strong>${opt.value}</strong>.`;
+    if (newStatusEl) {
+        newStatusEl.innerText = newStatus;
+        newStatusEl.className = `inline-block px-3 py-1 rounded-xl text-xs font-bold border ${newStatusBadge}`;
     }
 
-    document.getElementById('simInsightText').innerHTML = insight;
+    const elInsight = document.getElementById('simInsightText');
+    if (elInsight) elInsight.innerHTML = insight;
 }
 
 if (selKec && sHotel && sResto) {

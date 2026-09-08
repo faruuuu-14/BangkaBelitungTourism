@@ -294,53 +294,125 @@ function getCorrelationMatrix(): array {
 }
 
 /**
- * Menghitung Analisis Kesenjangan (Amenity Gap) per Kecamatan
+ * Model Keseimbangan Triangulasi Pariwisata (Supply-Demand Tourism Equilibrium Model)
+ * Mengukur ekuilibrium antara Daya Tarik (Atraksi), Amenitas (Hotel & Resto),
+ * dan Volume Kunjungan Wisatawan Riil BPS per Kecamatan untuk mencegah kerugian pengelola/investor akibat over-supply.
  */
 function getGapAnalysis(): array {
     $data = getKecamatanAggregates();
-    $hasil = [];
-    $rasioIdeal = 0.80;
+    $yoy = getBpsYoYGrowth();
 
-    foreach ($data as $item) {
-        $dt = (int)$item['jml_daya_tarik'];
-        $am = (int)$item['jml_amenitas'];
-
-        $rasio = $dt > 0 ? round($am / $dt, 2) : ($am > 0 ? 1.0 : 0.0);
-        $kebutuhanIdeal = (int)ceil($dt * $rasioIdeal);
-        $gapDefisit = max(0, $kebutuhanIdeal - $am);
-
-        if ($dt == 0 && $am == 0) {
-            $status = 'Kosong';
-            $badgeColor = 'gray';
-        } elseif ($dt > 0 && $rasio < 0.35) {
-            $status = 'Defisit Kritis';
-            $badgeColor = 'red';
-        } elseif ($dt > 0 && $rasio < $rasioIdeal) {
-            $status = 'Perlu Peningkatan';
-            $badgeColor = 'amber';
-        } else {
-            $status = 'Seimbang / Ideal';
-            $badgeColor = 'emerald';
-        }
-
-        $hasil[] = [
-            'kabupaten'       => $item['kabupaten'],
-            'kecamatan'       => $item['kecamatan'],
-            'daya_tarik'      => $dt,
-            'alam'            => (int)$item['jml_alam'],
-            'buatan'          => (int)$item['jml_buatan'],
-            'amenitas'        => $am,
-            'hotel'           => (int)$item['jml_hotel'],
-            'restoran'        => (int)$item['jml_restoran'],
-            'rasio'           => $rasio,
-            'kebutuhan_ideal' => $kebutuhanIdeal,
-            'gap_defisit'     => $gapDefisit,
-            'status'          => $status,
-            'badge_color'     => $badgeColor
-        ];
+    $kabTotals = [];
+    foreach ($yoy['daerah'] as $d) {
+        $kabTotals[$d['kabupaten']] = (int)$d['total_2025_setahun'];
     }
 
-    usort($hasil, fn($a, $b) => $b['gap_defisit'] <=> $a['gap_defisit']);
+    // Kelompokkan kecamatan berdasarkan nama kabupaten bersih
+    $kabKecMap = [];
+    foreach ($data as $row) {
+        $kClean = str_replace(['Kabupaten ', 'Kota '], '', $row['kabupaten']);
+        if ($kClean === 'Pangkalpinang') $kClean = 'Pangkal Pinang';
+        $kabKecMap[$kClean][] = $row;
+    }
+
+    $hasil = [];
+    foreach ($kabKecMap as $kabClean => $rows) {
+        $kabBpsTotal = $kabTotals[$kabClean] ?? 500000;
+
+        // Hitung total ulasan & bobot daya tarik di kabupaten ini untuk pembobotan ilmiah
+        $totalWeightKab = 0;
+        foreach ($rows as $r) {
+            $w = (int)$r['total_ulasan'] + ((int)$r['jml_daya_tarik'] * 50) + 10;
+            $totalWeightKab += $w;
+        }
+
+        foreach ($rows as $r) {
+            $w = (int)$r['total_ulasan'] + ((int)$r['jml_daya_tarik'] * 50) + 10;
+            $share = $totalWeightKab > 0 ? ($w / $totalWeightKab) : (1 / count($rows));
+            $kunjunganKec = (int)round($kabBpsTotal * $share);
+
+            $dt = (int)$r['jml_daya_tarik'];
+            $am = (int)$r['jml_amenitas'];
+            $hotel = (int)$r['jml_hotel'];
+            $resto = (int)$r['jml_restoran'];
+
+            // Beban pengunjung per unit amenitas (orang / unit / tahun)
+            $bebanPerAmenitas = $am > 0 ? (int)round($kunjunganKec / $am) : $kunjunganKec;
+
+            // Rasio amenitas terhadap daya tarik
+            $rasioAmDt = $dt > 0 ? round($am / $dt, 2) : ($am > 0 ? 1.0 : 0.0);
+
+            // Perhitungan Kebutuhan Ideal Berbasis Kelayakan Pasar Riil
+            // Standar kapasitas pelayanan sehat pariwisata daerah: 1 unit amenitas melayani ~4.000 - 6.000 wisatawan/tahun
+            $kebutuhanPasar = (int)ceil($kunjunganKec / 5000);
+            $kebutuhanAtraksi = (int)ceil($dt * 0.5);
+            $kebutuhanIdeal = max(1, min($kebutuhanPasar, $kebutuhanAtraksi + 2));
+
+            // Jika kunjungan rendah (< 3.000/thn), tidak ada defisit fisik agar pengelola tidak merugi
+            if ($kunjunganKec < 3000) {
+                $gapDefisit = 0;
+                $kebutuhanIdeal = max(1, $am);
+            } else {
+                $gapDefisit = max(0, $kebutuhanIdeal - $am);
+            }
+
+            // Klasifikasi Status Keseimbangan & Kelayakan Finansial
+            if ($dt == 0 && $am == 0) {
+                $status = 'Kosong';
+                $badgeColor = 'gray';
+                $kelayakan = 'Rintisan';
+                $rekomendasi = 'Belum terdapat destinasi atau amenitas terdaftar.';
+            } elseif ($am == 0 && $dt > 0 && $kunjunganKec >= 5000) {
+                $status = 'Defisit Kritis';
+                $badgeColor = 'red';
+                $kelayakan = 'Sangat Layak';
+                $rekomendasi = 'Kunjungan tinggi namun tanpa hotel/resto. Sangat mendesak & menguntungkan untuk investasi amenitas rintisan.';
+            } elseif ($bebanPerAmenitas >= 8000 && $dt > 0) {
+                $status = 'Defisit Beban Tinggi';
+                $badgeColor = 'red';
+                $kelayakan = 'Sangat Layak';
+                $rekomendasi = 'Fasilitas amenitas kewalahan melayani lonjakan wisatawan. Penambahan hotel & resto sangat layak secara finansial.';
+            } elseif ($dt >= 2 && $kunjunganKec < 5000 && $am <= 2) {
+                $status = 'Perlu Promosi Atraksi';
+                $badgeColor = 'amber';
+                $kelayakan = 'Waspada Rugi';
+                $rekomendasi = 'Daya tarik potensial namun pengunjung masih rendah. Prioritaskan promosi atraksi sebelum membangun fisik agar pengelola tidak rugi.';
+            } elseif ($dt > 0 && $am > 0 && $bebanPerAmenitas < 2000) {
+                $status = 'Kapasitas Cukup / Longgar';
+                $badgeColor = 'sky';
+                $kelayakan = 'Waspada Over-Supply';
+                $rekomendasi = 'Amenitas sudah mencukupi volume kunjungan saat ini. Hindari penambahan agresif tanpa peningkatan pasar wisatawan.';
+            } else {
+                $status = 'Seimbang / Ideal';
+                $badgeColor = 'emerald';
+                $kelayakan = 'Seimbang';
+                $rekomendasi = 'Kapasitas daya tarik, amenitas, dan volume kunjungan berada pada titik keseimbangan yang sehat.';
+            }
+
+            $hasil[] = [
+                'kabupaten'          => $r['kabupaten'],
+                'kecamatan'          => $r['kecamatan'],
+                'daya_tarik'         => $dt,
+                'alam'               => (int)$r['jml_alam'],
+                'buatan'             => (int)$r['jml_buatan'] + (int)$r['jml_budaya'],
+                'amenitas'           => $am,
+                'hotel'              => $hotel,
+                'restoran'           => $resto,
+                'kunjungan_tahunan'  => $kunjunganKec,
+                'beban_per_amenitas' => $bebanPerAmenitas,
+                'rasio'              => $rasioAmDt,
+                'rasio_am_dt'        => $rasioAmDt,
+                'kebutuhan_ideal'    => $kebutuhanIdeal,
+                'gap_defisit'        => $gapDefisit,
+                'status'             => $status,
+                'badge_color'        => $badgeColor,
+                'kelayakan'          => $kelayakan,
+                'rekomendasi'        => $rekomendasi
+            ];
+        }
+    }
+
+    usort($hasil, fn($a, $b) => $b['beban_per_amenitas'] <=> $a['beban_per_amenitas']);
 
     return $hasil;
 }
@@ -556,8 +628,8 @@ function getExecutivePolicyBriefData(): array {
     $gaps = getGapAnalysis();
     $macro = getMacroCorrelation();
 
-    // 3 kecamatan dengan defisit amenitas paling kritis
-    $criticalSubdistricts = array_slice(array_filter($gaps, fn($g) => $g['status'] === 'Defisit Kritis'), 0, 3);
+    // 3 kecamatan dengan defisit beban amenitas paling kritis
+    $criticalSubdistricts = array_slice(array_filter($gaps, fn($g) => str_contains($g['status'], 'Defisit')), 0, 3);
 
     return [
         'tanggal_cetak'       => date('d F Y'),
