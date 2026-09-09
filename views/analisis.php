@@ -77,6 +77,74 @@ function getCorrelationBadge($r) {
         </div>
     </div>
 
+    
+    <!-- ============================================================== -->
+    <!-- RINGKASAN EKSEKUTIF UTAMA (1 MENIT UNTUK PENGAMBIL KEBIJAKAN)   -->
+    <!-- ============================================================== -->
+    <div class="bg-gradient-to-br from-slate-950 via-ocean-950 to-slate-900 rounded-3xl p-5 sm:p-7 text-white shadow-xl border border-white/10 mb-6 sm:mb-8 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-white/10">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-ocean-500/30 text-ocean-300 border border-ocean-400/30 flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <div>
+                    <h2 class="text-sm sm:text-base font-extrabold text-white">Ringkasan Eksekutif: Kondisi Pariwisata Babel Terkini</h2>
+                    <p class="text-xs text-slate-400">Rangkuman 4 temuan paling strategis dari 8 modul analisis data resmi BPS &amp; Kemenparekraf</p>
+                </div>
+            </div>
+            <span class="text-[10px] font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 self-start sm:self-auto">
+                Status: Positif Bertumbuh
+            </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            <!-- 1. Pertumbuhan Wisatawan -->
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-ocean-300 block">1. Laju Kunjungan (BPS)</span>
+                <div class="text-xl sm:text-2xl font-black text-emerald-400 flex items-baseline gap-1.5">
+                    <span>+<?= $prov['growth'] ?>%</span>
+                    <span class="text-xs font-normal text-slate-300">YoY 2026</span>
+                </div>
+                <p class="text-slate-400 text-[11px] leading-relaxed">
+                    Total <?= number_format($prov['kunjungan_2026']) ?> wisatawan nusantara telah berkunjung ke Babel pada triwulan awal 2026.
+                </p>
+            </div>
+
+            <!-- 2. Keseimbangan Amenitas -->
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300 block">2. Beban &amp; Peluang Hotel</span>
+                <div class="text-xl sm:text-2xl font-black text-amber-400">
+                    <?= $kritisCount ?> <span class="text-xs font-normal text-slate-300">Kec. Defisit Akut</span>
+                </div>
+                <p class="text-slate-400 text-[11px] leading-relaxed">
+                    <?= $idealCount ?> kecamatan seimbang, sementara <?= $kritisCount ?> kecamatan membutuhkan penambahan hotel &amp; resto pendukung.
+                </p>
+            </div>
+
+            <!-- 3. Pola Spasial -->
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-purple-300 block">3. Pola Sebaran Objek</span>
+                <div class="text-xl sm:text-2xl font-black text-purple-300">
+                    Mengelompok <span class="text-xs font-normal text-slate-300">(Clustered)</span>
+                </div>
+                <p class="text-slate-400 text-[11px] leading-relaxed">
+                    Pola NNA membuktikan objek wisata terkonsentrasi di kawasan pesisir pantai &amp; dekat simpul transportasi bandara/pelabuhan.
+                </p>
+            </div>
+
+            <!-- 4. Kesiapan Wilayah -->
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-sky-300 block">4. Lokomotif Daerah</span>
+                <div class="text-base sm:text-lg font-black text-sky-300 truncate">
+                    Pangkalpinang &amp; Belitung
+                </div>
+                <p class="text-slate-400 text-[11px] leading-relaxed">
+                    Memimpin indeks kesiapan pariwisata (IPKN) &amp; menempati Kuadran I (Daerah Maju &amp; Cepat Tumbuh) dalam tipologi Klassen.
+                </p>
+            </div>
+        </div>
+    </div>
+
     <!-- Tab Navigasi Analisis (8 Pilar Standar Kemenpar & Akademik) -->
     <div class="w-full max-w-full min-w-0 border-b border-slate-200 mb-6 sm:mb-8 pb-1">
         <div class="w-full max-w-full min-w-0 overflow-x-auto no-scrollbar touch-scroll py-1">
@@ -129,6 +197,19 @@ function getCorrelationBadge($r) {
     <!-- TAB 1: PERTUMBUHAN YoY & TREN TIME SERIES BPS                 -->
     <!-- ============================================================== -->
     <div id="tab-yoy" class="tab-content space-y-8">
+        <!-- CONTEXT BOX: FUNGSI TAB 1 -->
+        <div class="bg-gradient-to-r from-ocean-50 via-sky-50 to-emerald-50 border border-ocean-200/80 rounded-2xl p-4 flex items-start gap-3.5">
+            <div class="w-8 h-8 rounded-xl bg-ocean-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                <i class="fa-solid fa-lightbulb text-xs"></i>
+            </div>
+            <div class="space-y-1 text-xs">
+                <h3 class="font-bold text-slate-900">💡 Apa Fungsi Analisis Ini &amp; Bagaimana Cara Membacanya?</h3>
+                <p class="text-slate-600 leading-relaxed text-[11px]">
+                    <strong>Tujuan:</strong> Memantau pergerakan wisatawan nusantara dari tahun ke tahun berdasarkan data resmi Badan Pusat Statistik (BPS) RI.<br>
+                    <strong>Cara Baca:</strong> Persentase hijau positif menandakan kunjungan meningkat dibanding periode yang sama tahun lalu. Angka ini menjadi dasar bagi pemerintah daerah dalam menetapkan target pendapatan dan retribusi wisata.
+                </p>
+            </div>
+        </div>
         
         <!-- Kartu Metrik YoY Provinsi -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

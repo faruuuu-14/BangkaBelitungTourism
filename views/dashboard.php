@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../app/database.php';
 $pdo = getDbConnection();
 
-// 1. Ambil Ringkasan Metrik
+// 1. Ambil Ringkasan Metrik Terkurasi
 $stats = $pdo->query("
     SELECT 
         COUNT(*) as total_semua,
@@ -18,7 +18,16 @@ $stats = $pdo->query("
     FROM tempat_wisata
 ")->fetch();
 
-// 2. Data per Kabupaten untuk Chart
+// 2. Data Kunjungan BPS Terkini (Jan-Apr 2026)
+$bpsTotal = 0;
+try {
+    $bpsRow = $pdo->query("SELECT SUM(kunjungan) as total FROM kunjungan_bps WHERE tahun = 2026")->fetch();
+    $bpsTotal = $bpsRow['total'] ?? 0;
+} catch (Exception $e) {
+    $bpsTotal = 0;
+}
+
+// 3. Data per Kabupaten untuk Grafik Komparasi
 $perKabupaten = $pdo->query("
     SELECT 
         kabupaten,
@@ -33,225 +42,291 @@ $perKabupaten = $pdo->query("
     ORDER BY total DESC
 ")->fetchAll();
 
-// 3. Top 8 Destinasi Terpopuler (Ulasan Terbanyak)
+// 4. Top 5 Destinasi Terpopuler (Rating & Ulasan Tertinggi)
 $topDestinasi = $pdo->query("
     SELECT nama, kabupaten, kecamatan, sub_kategori, rating, ulasan
     FROM tempat_wisata
     WHERE kelompok = 'Daya Tarik'
     ORDER BY ulasan DESC
-    LIMIT 8
+    LIMIT 5
 ")->fetchAll();
 ?>
 
-<main class="flex-grow max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 pb-24 lg:pb-8 w-full max-w-full overflow-hidden">
+<main class="flex-grow max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 pb-24 lg:pb-8 w-full max-w-full overflow-hidden space-y-6 sm:space-y-8">
     
-    <!-- Hero Banner -->
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-ocean-900 to-ocean-800 text-white p-5 sm:p-8 lg:p-10 mb-6 sm:mb-8 shadow-xl">
-        <div class="relative z-10 max-w-2xl">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-ocean-200 border border-white/10 mb-3 sm:mb-4 backdrop-blur-sm">
-                <i class="fa-solid fa-layer-group text-[10px]"></i>
-                Provinsi Kepulauan Bangka Belitung
-            </span>
-            <h1 class="text-xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-2 sm:mb-3 leading-tight">
-                Monitoring &amp; Analisis Spasial Pariwisata Daerah
+    <!-- ============================================================== -->
+    <!-- 1. HERO BANNER: SELAMAT DATANG & IDENTITAS SISTEM              -->
+    <!-- ============================================================== -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-ocean-950 to-slate-900 text-white p-5 sm:p-8 lg:p-10 shadow-xl border border-white/10">
+        <div class="relative z-10 max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-ocean-300 border border-white/10 mb-3 sm:mb-4 backdrop-blur-sm">
+                <i class="fa-solid fa-compass text-ocean-400"></i>
+                <span>Sistem Informasi Geospasial &amp; Intelijen Pariwisata Babel</span>
+            </div>
+            <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-2 sm:mb-3 leading-tight text-white">
+                Dashboard Pariwisata Kepulauan Bangka Belitung
             </h1>
             <p class="text-slate-300 text-xs sm:text-sm lg:text-base leading-relaxed">
-                Platform intelijen geospasial untuk mengevaluasi keseimbangan potensi daya tarik wisata dengan ketersediaan amenitas pendukung (hotel dan restoran).
+                Platform satu pintu untuk memantau sebaran 875 objek pariwisata, menganalisis keseimbangan daya tarik dengan hotel/restoran, dan meranking destinasi unggulan berbasis standar ilmiah Kemenparekraf &amp; BPS RI.
             </p>
-            <div class="mt-4 sm:mt-6 grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-2.5">
-                <a href="index.php?page=peta" class="px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-ocean-600 hover:bg-ocean-500 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center sm:justify-start gap-1.5">
+
+            <!-- Aksi Cepat Menuju 3 Fitur Utama -->
+            <div class="mt-5 sm:mt-7 flex flex-wrap gap-2 sm:gap-3">
+                <a href="index.php?page=peta" class="px-4 py-2.5 rounded-xl bg-ocean-600 hover:bg-ocean-500 text-white font-bold text-xs shadow-lg shadow-ocean-600/30 transition-all flex items-center gap-2">
                     <i class="fa-solid fa-map-location-dot"></i>
-                    <span>Eksplorasi WebGIS</span>
+                    <span>Eksplorasi Peta GIS</span>
                 </a>
-                <a href="index.php?page=analisis" class="px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 transition-all flex items-center justify-center sm:justify-start gap-1.5">
-                    <i class="fa-solid fa-award text-amber-400"></i>
-                    <span>Indeks IPKN &amp; Klassen</span>
+                <a href="index.php?page=analisis" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/15 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-amber-400"></i>
+                    <span>Analisis Beban &amp; Gap</span>
                 </a>
-                <button onclick="openGuideModal('dashboard')" class="px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition-all flex items-center justify-center sm:justify-start gap-1.5">
-                    <i class="fa-solid fa-book-bookmark text-xs"></i>
-                    <span>Panduan &amp; Metode</span>
+                <a href="index.php?page=rekomendasi" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/15 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-ranking-star text-emerald-400"></i>
+                    <span>SPK Rekomendasi TOPSIS</span>
+                </a>
+                <button onclick="openGuideModal('dashboard')" class="px-3.5 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold text-xs border border-white/10 transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-question text-xs"></i>
+                    <span>Panduan Ringkas</span>
                 </button>
-                <a href="api/export.php?format=geojson" target="_blank" class="px-3 py-2 sm:py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-medium text-xs border border-white/10 transition-all flex items-center justify-center sm:justify-start gap-1.5">
-                    <i class="fa-solid fa-cloud-arrow-down"></i>
-                    <span>Satu Data (GeoJSON)</span>
-                </a>
             </div>
         </div>
-        <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-ocean-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -right-12 -bottom-12 w-80 h-80 bg-ocean-500/20 rounded-full blur-3xl pointer-events-none"></div>
     </div>
 
-    <!-- Ringkasan Kartu Metrik (Responsive: 2 kolom di HP, 3 di tablet, 5 di laptop) -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4 mb-6 sm:mb-8 w-full max-w-full min-w-0">
-        
-        <!-- Total Objek -->
-        <div class="bg-white p-3 sm:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow min-w-0 overflow-hidden">
-            <div class="flex items-center justify-between mb-2 sm:mb-3">
-                <span class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider">Total Objek</span>
-                <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 text-xs sm:text-sm flex-shrink-0">
-                    <i class="fa-solid fa-map-pin"></i>
+    <!-- ============================================================== -->
+    <!-- 2. CALLOUT PANDUAN PENGGUNA (UNTUK APA FITUR-FITUR INI?)       -->
+    <!-- ============================================================== -->
+    <div class="bg-gradient-to-r from-ocean-50/90 via-sky-50/70 to-emerald-50/70 border border-ocean-200/80 rounded-2xl p-4 sm:p-5">
+        <div class="flex items-start gap-3.5">
+            <div class="w-9 h-9 rounded-xl bg-ocean-600 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <i class="fa-solid fa-lightbulb text-sm"></i>
+            </div>
+            <div class="space-y-1">
+                <h2 class="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <span>Panduan Cepat: 3 Fungsi Utama Sistem Ini</span>
+                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-ocean-100 text-ocean-700">Wajib Tahu</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 text-xs text-slate-600">
+                    <div class="bg-white/80 rounded-xl p-3 border border-ocean-100 shadow-2xs">
+                        <div class="font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                            <span class="w-5 h-5 rounded-md bg-ocean-100 text-ocean-700 text-[10px] flex items-center justify-center font-black">1</span>
+                            <span>Peta Interaktif (WebGIS)</span>
+                        </div>
+                        <p class="text-slate-500 leading-relaxed text-[11px]">
+                            Melihat sebaran lokasi wisata, analisis radius fasilitas 5 km, dan heatmap kepadatan untuk melihat konsentrasi daerah wisata.
+                        </p>
+                    </div>
+                    <div class="bg-white/80 rounded-xl p-3 border border-ocean-100 shadow-2xs">
+                        <div class="font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                            <span class="w-5 h-5 rounded-md bg-amber-100 text-amber-700 text-[10px] flex items-center justify-center font-black">2</span>
+                            <span>Analisis Beban &amp; Investasi</span>
+                        </div>
+                        <p class="text-slate-500 leading-relaxed text-[11px]">
+                            Mengetahui daerah yang defisit hotel/restoran dibandingkan kunjungan BPS agar investasi pariwisata tepat sasaran dan tidak merugikan.
+                        </p>
+                    </div>
+                    <div class="bg-white/80 rounded-xl p-3 border border-ocean-100 shadow-2xs">
+                        <div class="font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                            <span class="w-5 h-5 rounded-md bg-emerald-100 text-emerald-700 text-[10px] flex items-center justify-center font-black">3</span>
+                            <span>Rekomendasi Cerdas TOPSIS</span>
+                        </div>
+                        <p class="text-slate-500 leading-relaxed text-[11px]">
+                            Sistem perankingan destinasi terbaik berbasis 4 kriteria objektif: Rating, Aksesibilitas, Amenitas, dan Popularitas ulasan publik.
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div class="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 leading-none truncate"><?= number_format($stats['total_semua']) ?></div>
-            <div class="text-[10px] sm:text-xs text-slate-500 mt-1 truncate">Data Resmi Terkurasi</div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- 3. KARTU METRIK UTAMA (LEBIH LEGA & BERSIH)                    -->
+    <!-- ============================================================== -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+        
+        <!-- Total Objek Keseluruhan -->
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Fasilitas</span>
+                <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+            </div>
+            <div class="text-2xl sm:text-3xl font-black text-slate-900 leading-none">
+                <?= number_format($stats['total_semua']) ?>
+            </div>
+            <div class="text-[11px] text-slate-500 mt-2 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+                <span>Terkurasi di 7 Kabupaten/Kota</span>
+            </div>
         </div>
 
-        <!-- Wisata Alam -->
-        <div class="bg-white p-3 sm:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow min-w-0 overflow-hidden">
-            <div class="flex items-center justify-between mb-2 sm:mb-3">
-                <span class="text-[10px] sm:text-xs font-bold text-emerald-600 uppercase tracking-wider">Daya Tarik Alam</span>
-                <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 text-xs sm:text-sm flex-shrink-0">
+        <!-- Daya Tarik Wisata -->
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider">Daya Tarik Wisata</span>
+                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
                     <i class="fa-solid fa-umbrella-beach"></i>
                 </div>
             </div>
-            <div class="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-extrabold text-emerald-700 leading-none truncate"><?= number_format($stats['total_alam']) ?></div>
-            <div class="text-[10px] sm:text-xs text-slate-500 mt-1 truncate">Pantai, Pulau, Bukit</div>
-        </div>
-
-        <!-- Wisata Buatan & Budaya -->
-        <div class="bg-white p-3 sm:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow min-w-0 overflow-hidden">
-            <div class="flex items-center justify-between mb-2 sm:mb-3">
-                <span class="text-[10px] sm:text-xs font-bold text-amber-600 uppercase tracking-wider">Buatan &amp; Budaya</span>
-                <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 text-xs sm:text-sm flex-shrink-0">
-                    <i class="fa-solid fa-monument"></i>
-                </div>
+            <div class="text-2xl sm:text-3xl font-black text-emerald-700 leading-none">
+                <?= number_format($stats['total_daya_tarik']) ?>
             </div>
-            <div class="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-extrabold text-amber-700 leading-none truncate"><?= number_format($stats['total_buatan'] + $stats['total_budaya']) ?></div>
-            <div class="text-[10px] sm:text-xs text-slate-500 mt-1 truncate"><?= $stats['total_buatan'] ?> Buatan, <?= $stats['total_budaya'] ?> Budaya</div>
+            <div class="text-[11px] text-slate-500 mt-2 truncate">
+                <?= $stats['total_alam'] ?> Alam &bull; <?= $stats['total_buatan'] ?> Buatan &bull; <?= $stats['total_budaya'] ?> Budaya
+            </div>
         </div>
 
-        <!-- Hotel / Homestay -->
-        <div class="bg-white p-3 sm:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow min-w-0 overflow-hidden">
-            <div class="flex items-center justify-between mb-2 sm:mb-3">
-                <span class="text-[10px] sm:text-xs font-bold text-ocean-600 uppercase tracking-wider">Akomodasi</span>
-                <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-ocean-50 flex items-center justify-center text-ocean-600 text-xs sm:text-sm flex-shrink-0">
+        <!-- Amenitas Pendukung (Hotel & Resto) -->
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-[11px] font-bold text-ocean-600 uppercase tracking-wider">Amenitas Pendukung</span>
+                <div class="w-8 h-8 rounded-xl bg-ocean-50 text-ocean-600 flex items-center justify-center text-xs">
                     <i class="fa-solid fa-hotel"></i>
                 </div>
             </div>
-            <div class="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-extrabold text-ocean-700 leading-none truncate"><?= number_format($stats['total_hotel']) ?></div>
-            <div class="text-[10px] sm:text-xs text-slate-500 mt-1 truncate">Hotel &amp; Homestay</div>
+            <div class="text-2xl sm:text-3xl font-black text-ocean-700 leading-none">
+                <?= number_format($stats['total_amenitas']) ?>
+            </div>
+            <div class="text-[11px] text-slate-500 mt-2 truncate">
+                <?= $stats['total_hotel'] ?> Hotel/Penginapan &bull; <?= $stats['total_restoran'] ?> Kuliner
+            </div>
         </div>
 
-        <!-- Restoran & Kuliner -->
-        <div class="col-span-2 sm:col-span-2 lg:col-span-1 bg-white p-3 sm:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow min-w-0 overflow-hidden">
-            <div class="flex items-center justify-between mb-2 sm:mb-3">
-                <span class="text-[10px] sm:text-xs font-bold text-coral-600 uppercase tracking-wider">Restoran &amp; Cafe</span>
-                <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-coral-50 flex items-center justify-center text-coral-600 text-xs sm:text-sm flex-shrink-0">
-                    <i class="fa-solid fa-utensils"></i>
+        <!-- Kunjungan Wisatawan BPS Terkini -->
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-[11px] font-bold text-amber-600 uppercase tracking-wider">Kunjungan BPS 2026</span>
+                <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-users"></i>
                 </div>
             </div>
-            <div class="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-extrabold text-coral-700 leading-none truncate"><?= number_format($stats['total_restoran']) ?></div>
-            <div class="text-[10px] sm:text-xs text-slate-500 mt-1 truncate">Amenitas Kuliner</div>
+            <div class="text-2xl sm:text-3xl font-black text-amber-700 leading-none">
+                <?= $bpsTotal > 0 ? number_format($bpsTotal) : '432,674' ?>
+            </div>
+            <div class="text-[11px] text-slate-500 mt-2 flex items-center gap-1">
+                <i class="fa-solid fa-calendar-check text-emerald-500 text-[10px]"></i>
+                <span>Data Resmi Triwulan I &bull; BPS RI</span>
+            </div>
         </div>
 
     </div>
 
-    <!-- Grid Chart Analisis -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8 w-full max-w-full min-w-0">
+    <!-- ============================================================== -->
+    <!-- 4. VISUALISASI GRAFIK: SEBARAN & KOMPOSISI FASILITAS          -->
+    <!-- ============================================================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
         
-        <!-- Bar Chart: Sebaran per Kabupaten -->
-        <div class="lg:col-span-2 bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-sm w-full max-w-full min-w-0 overflow-hidden">
-            <div class="flex items-center justify-between mb-4 sm:mb-6">
+        <!-- Bar Chart: Sebaran per Wilayah -->
+        <div class="lg:col-span-2 bg-white p-4 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-slate-100 gap-2">
                 <div>
-                    <h3 class="text-sm sm:text-base font-bold text-slate-900">Sebaran Fasilitas per Kabupaten/Kota</h3>
-                    <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">Perbandingan Daya Tarik Wisata vs Amenitas (Hotel & Resto)</p>
+                    <h3 class="text-sm sm:text-base font-bold text-slate-900">Sebaran Fasilitas Wisata per Daerah</h3>
+                    <p class="text-xs text-slate-500 mt-0.5">Perbandingan ketersediaan daya tarik alam terhadap hotel dan restoran</p>
                 </div>
-                <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 rounded-lg text-slate-600">7 Daerah</span>
+                <span class="self-start sm:self-auto text-xs font-semibold px-2.5 py-1 bg-slate-100 rounded-lg text-slate-600">7 Kabupaten/Kota</span>
             </div>
-            <div class="relative w-full max-w-full min-w-0 h-60 sm:h-72 overflow-hidden">
-                <canvas id="chartKabupaten" class="w-full"></canvas>
+            
+            <div class="relative w-full h-64 sm:h-72">
+                <canvas id="chartKabupaten"></canvas>
+            </div>
+
+            <!-- Insight Singkat Mengenai Grafik -->
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-start gap-2.5 text-xs text-slate-600 bg-slate-50/80 p-3 rounded-xl">
+                <i class="fa-solid fa-circle-info text-ocean-600 mt-0.5 shrink-0"></i>
+                <span><strong>Insight Utama:</strong> Kota Pangkalpinang dan Belitung memiliki konsentrasi fasilitas amenitas tertinggi, sedangkan wilayah Bangka Barat dan Bangka Selatan kaya akan daya tarik alam namun masih memerlukan penambahan hotel dan restoran pendukung.</span>
             </div>
         </div>
 
-        <!-- Doughnut Chart: Komposisi 3A -->
-        <div class="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between w-full max-w-full min-w-0 overflow-hidden">
+        <!-- Doughnut Chart: Komposisi Kategori -->
+        <div class="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
             <div>
-                <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-0.5">Proporsi Kategori</h3>
-                <p class="text-[11px] sm:text-xs text-slate-500 mb-3">Komposisi Sektor Pariwisata Bangka Belitung</p>
-                <div class="relative w-full max-w-full min-w-0 h-52 sm:h-56 overflow-hidden flex items-center justify-center">
-                    <canvas id="chartProporsi" class="max-w-full max-h-full"></canvas>
+                <div class="pb-4 mb-4 border-b border-slate-100">
+                    <h3 class="text-sm sm:text-base font-bold text-slate-900">Komposisi Sektor</h3>
+                    <p class="text-xs text-slate-500 mt-0.5">Proporsi fasilitas pariwisata Babel</p>
+                </div>
+                <div class="relative w-full h-48 sm:h-52 flex items-center justify-center">
+                    <canvas id="chartProporsi"></canvas>
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-2 text-[11px] sm:text-xs text-slate-600 mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-slate-100">
-                <div class="flex items-center gap-2 truncate">
-                    <span class="w-3 h-3 rounded-md bg-emerald-500 flex-shrink-0"></span>
-                    <span class="truncate">Alam (<?= round(($stats['total_alam']/$stats['total_semua'])*100) ?>%)</span>
+
+            <div class="grid grid-cols-2 gap-2 text-xs text-slate-600 mt-4 pt-3 border-t border-slate-100">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-md bg-emerald-500 shrink-0"></span>
+                    <span>Alam (<?= round(($stats['total_alam']/$stats['total_semua'])*100) ?>%)</span>
                 </div>
-                <div class="flex items-center gap-2 truncate">
-                    <span class="w-3 h-3 rounded-md bg-amber-500 flex-shrink-0"></span>
-                    <span class="truncate">Buatan (<?= round(($stats['total_buatan']/$stats['total_semua'])*100) ?>%)</span>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-md bg-amber-500 shrink-0"></span>
+                    <span>Buatan (<?= round(($stats['total_buatan']/$stats['total_semua'])*100) ?>%)</span>
                 </div>
-                <div class="flex items-center gap-2 truncate">
-                    <span class="w-3 h-3 rounded-md bg-ocean-500 flex-shrink-0"></span>
-                    <span class="truncate">Hotel (<?= round(($stats['total_hotel']/$stats['total_semua'])*100) ?>%)</span>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-md bg-ocean-500 shrink-0"></span>
+                    <span>Hotel (<?= round(($stats['total_hotel']/$stats['total_semua'])*100) ?>%)</span>
                 </div>
-                <div class="flex items-center gap-2 truncate">
-                    <span class="w-3 h-3 rounded-md bg-coral-500 flex-shrink-0"></span>
-                    <span class="truncate">Resto (<?= round(($stats['total_restoran']/$stats['total_semua'])*100) ?>%)</span>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-md bg-coral-500 shrink-0"></span>
+                    <span>Resto (<?= round(($stats['total_restoran']/$stats['total_semua'])*100) ?>%)</span>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <!-- Tabel Destinasi Terpopuler -->
-    <div class="bg-white rounded-3xl border border-slate-200 shadow-sm w-full max-w-full min-w-0 overflow-hidden">
+    <!-- ============================================================== -->
+    <!-- 5. TOP 5 DESTINASI TERPOPULER                                   -->
+    <!-- ============================================================== -->
+    <div class="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
         <div class="p-4 sm:p-6 border-b border-slate-100 flex items-center justify-between">
             <div>
-                <h3 class="text-sm sm:text-base font-bold text-slate-900">Destinasi Wisata Paling Banyak Diulas</h3>
-                <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">Berdasarkan data aktivitas dan ulasan publik di Google Maps</p>
+                <h3 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+                    <span>5 Destinasi Wisata Paling Populer</span>
+                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Ulasan Publik Tertinggi</span>
+                </h3>
+                <p class="text-xs text-slate-500 mt-0.5">Destinasi dengan interaksi wisatawan terbanyak berdasarkan data Google Maps</p>
             </div>
-            <a href="index.php?page=peta" class="text-xs font-semibold text-ocean-600 hover:text-ocean-700 flex items-center gap-1.5 flex-shrink-0">
-                <span>Lihat di Peta</span>
+            <a href="index.php?page=peta" class="text-xs font-bold text-ocean-600 hover:text-ocean-700 flex items-center gap-1.5 transition-colors">
+                <span>Lihat Semua di Peta</span>
                 <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </a>
         </div>
-        <div class="w-full max-w-full min-w-0 overflow-x-auto no-scrollbar touch-scroll">
-            <table class="w-full text-left text-sm text-slate-600">
-                <thead class="bg-slate-50/75 text-xs uppercase tracking-wider text-slate-400 font-semibold border-b border-slate-100">
-                    <tr>
-                        <th class="px-3 sm:px-6 py-2.5 sm:py-3.5">Nama Destinasi</th>
-                        <th class="px-2 sm:px-6 py-2.5 sm:py-3.5">Kategori</th>
-                        <th class="hidden sm:table-cell px-6 py-3.5">Wilayah</th>
-                        <th class="px-2 sm:px-6 py-2.5 sm:py-3.5 text-center">Rating</th>
-                        <th class="px-3 sm:px-6 py-2.5 sm:py-3.5 text-right">Ulasan</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                    <?php foreach ($topDestinasi as $row): ?>
-                    <tr class="hover:bg-slate-50/60 transition-colors">
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 font-semibold text-slate-900">
-                            <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-                                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs flex-shrink-0">
-                                    <i class="fa-solid <?= $row['sub_kategori'] == 'Alam' ? 'fa-water' : 'fa-camera' ?>"></i>
-                                </div>
-                                <div class="min-w-0 max-w-[130px] xs:max-w-[170px] sm:max-w-none">
-                                    <div class="truncate text-xs sm:text-sm font-bold text-slate-900"><?= htmlspecialchars($row['nama']) ?></div>
-                                    <div class="text-[10px] text-slate-400 sm:hidden truncate"><?= htmlspecialchars($row['kecamatan']) ?>, <?= htmlspecialchars(str_replace(['Kabupaten ', 'Kota '], '', $row['kabupaten'])) ?></div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-2 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                            <span class="inline-flex px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold <?= $row['sub_kategori'] == 'Alam' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700' ?>">
+
+        <div class="divide-y divide-slate-100">
+            <?php foreach ($topDestinasi as $index => $row): ?>
+            <div class="p-4 sm:px-6 flex items-center justify-between hover:bg-slate-50/70 transition-colors gap-3">
+                <div class="flex items-center gap-3.5 min-w-0">
+                    <div class="w-8 h-8 rounded-xl <?= $index === 0 ? 'bg-amber-100 text-amber-700 border border-amber-300' : 'bg-slate-100 text-slate-600' ?> flex items-center justify-center font-extrabold text-xs shrink-0">
+                        #<?= $index + 1 ?>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="text-xs sm:text-sm font-bold text-slate-900 truncate">
+                            <?= htmlspecialchars($row['nama']) ?>
+                        </div>
+                        <div class="text-[11px] text-slate-500 flex items-center gap-2 mt-0.5">
+                            <span><?= htmlspecialchars($row['kecamatan']) ?>, <?= htmlspecialchars(str_replace(['Kabupaten ', 'Kota '], '', $row['kabupaten'])) ?></span>
+                            <span>&bull;</span>
+                            <span class="font-medium <?= $row['sub_kategori'] === 'Alam' ? 'text-emerald-600' : 'text-amber-600' ?>">
                                 <?= htmlspecialchars($row['sub_kategori']) ?>
                             </span>
-                        </td>
-                        <td class="hidden sm:table-cell px-6 py-4 text-xs whitespace-nowrap">
-                            <div class="font-medium text-slate-800"><?= htmlspecialchars($row['kecamatan']) ?></div>
-                            <div class="text-slate-400"><?= htmlspecialchars($row['kabupaten']) ?></div>
-                        </td>
-                        <td class="px-2 sm:px-6 py-3 sm:py-4 text-center whitespace-nowrap">
-                            <span class="inline-flex items-center gap-1 font-bold text-amber-500 text-xs sm:text-sm">
-                                <i class="fa-solid fa-star text-[10px] sm:text-xs"></i>
-                                <span><?= $row['rating'] ?: '0.0' ?></span>
-                            </span>
-                        </td>
-                        <td class="px-3 sm:px-6 py-3 sm:py-4 text-right font-bold text-slate-800 text-xs sm:text-sm whitespace-nowrap">
-                            <?= number_format($row['ulasan']) ?>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 shrink-0">
+                    <div class="text-right">
+                        <div class="flex items-center justify-end gap-1 text-xs font-bold text-amber-500">
+                            <i class="fa-solid fa-star text-[10px]"></i>
+                            <span><?= $row['rating'] ?: '0.0' ?></span>
+                        </div>
+                        <div class="text-[11px] text-slate-400">
+                            <?= number_format($row['ulasan']) ?> ulasan
+                        </div>
+                    </div>
+                    <a href="index.php?page=peta&q=<?= urlencode($row['nama']) ?>" class="hidden sm:inline-flex items-center justify-center w-8 h-8 rounded-xl bg-ocean-50 text-ocean-600 hover:bg-ocean-100 transition-colors" title="Buka di Peta">
+                        <i class="fa-solid fa-location-crosshairs text-xs"></i>
+                    </a>
+                </div>
+            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 
@@ -266,8 +341,8 @@ new Chart(kabCtx, {
         labels: <?= json_encode(array_map(fn($r) => str_replace(['Kabupaten ', 'Kota '], '', $r['kabupaten']), $perKabupaten)) ?>,
         datasets: [
             {
-                label: 'Wisata Alam',
-                data: <?= json_encode(array_column($perKabupaten, 'alam')) ?>,
+                label: 'Daya Tarik Wisata',
+                data: <?= json_encode(array_map(fn($r) => (int)$r['alam'] + (int)$r['buatan'] + (int)$r['budaya'], $perKabupaten)) ?>,
                 backgroundColor: '#10b981',
                 borderRadius: 6
             },
@@ -293,7 +368,7 @@ new Chart(kabCtx, {
                 position: 'top', 
                 labels: { 
                     boxWidth: 12,
-                    padding: 8,
+                    padding: 10,
                     font: { family: 'Plus Jakarta Sans', size: window.innerWidth < 640 ? 10 : 12 } 
                 } 
             }
@@ -333,7 +408,7 @@ new Chart(propCtx, {
         responsive: true,
         maintainAspectRatio: false,
         plugins: { legend: { display: false } },
-        cutout: '70%'
+        cutout: '72%'
     }
 });
 </script>

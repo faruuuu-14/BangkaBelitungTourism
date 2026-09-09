@@ -154,6 +154,28 @@ $catchmentStats = getAccessibilityCatchmentStats();
     <!-- Container Peta Penuh -->
     <div id="map" class="flex-grow w-full z-0 bg-slate-100"></div>
 
+    <!-- Floating Quick Guide Banner (Bisa di-close / Dismissible) -->
+    <div id="mapFloatingGuide" class="absolute top-24 left-3 sm:left-6 z-30 max-w-xs sm:max-w-md bg-white/95 backdrop-blur-md rounded-2xl p-3.5 shadow-xl border border-ocean-200/80 transition-all duration-300">
+        <div class="flex items-start gap-2.5">
+            <div class="w-7 h-7 rounded-xl bg-ocean-600 text-white flex items-center justify-center shrink-0 text-xs mt-0.5 shadow-xs">
+                <i class="fa-solid fa-lightbulb"></i>
+            </div>
+            <div class="space-y-1 text-xs flex-1">
+                <div class="flex items-center justify-between">
+                    <span class="font-bold text-slate-900">Tips Penggunaan Peta WebGIS</span>
+                    <button onclick="dismissMapGuide()" class="text-slate-400 hover:text-slate-700 p-0.5" title="Tutup Panduan">
+                        <i class="fa-solid fa-xmark text-xs"></i>
+                    </button>
+                </div>
+                <p class="text-[11px] text-slate-600 leading-relaxed">
+                    &bull; <strong>Analisis 5 km:</strong> Klik sembarang destinasi wisata untuk memunculkan radar fasilitas hotel &amp; restoran di sekitarnya.<br>
+                    &bull; <strong>Mode Heatmap:</strong> Tekan tombol <em>"Heatmap"</em> di atas untuk melihat visualisasi kepadatan objek 5 warna.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Floating Legend Heatmap Kategori (Hanya tampil saat mode Heatmap aktif) -->
     <div id="heatmapLegend" class="hidden absolute bottom-6 left-3 sm:left-6 z-30 bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded-2xl border border-slate-200/80 shadow-xl flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 text-xs pointer-events-auto">
         <span class="font-black text-slate-800 text-[11px] flex items-center gap-1.5">
