@@ -1,0 +1,198 @@
+<?php
+/**
+ * ==============================================================================
+ * SISTEM INFORMASI INTELIJEN PARIWISATA BANGKA BELITUNG (BABEL TOURISM HUB)
+ * ==============================================================================
+ * 
+ * @file      index.php
+ * @folder    views/analisis/
+ * @author    Fathurrahman Safari Lubis (NIM: 2411500025) - ISB Atma Luhur
+ * @version   2.0.0 (Pengendali Utama Modul Analisis Statistik & Beban BPS)
+ * 
+ * ------------------------------------------------------------------------------
+ * DESKRIPSI & FUNGSI FILE:
+ * Pengontrol utama (Master View Controller) untuk seluruh modul Pusat Analisis
+ * Statistik dan Ekonometrika Pariwisata Bangka Belitung. Mengorganisasikan
+ * modul-modul sub-fitur ke dalam navigasi tab modern (Segmented Pills Navigation)
+ * untuk mengeliminasi beban informasi berlebih (Zero Information Overload):
+ * 1. Tab 1: Ringkasan Eksekutif & KPI Makro BPS
+ * 2. Tab 2: Uji Korelasi Pearson & Pembuktian Rumus
+ * 3. Tab 3: Evaluasi Ketimpangan Spasial & Rasio Kebutuhan
+ * 4. Tab 4: Matriks 4 Kuadran Prioritas Investasi Daerah
+ * 5. Tab 5: Proyeksi Tren Deret Waktu & Simulasi Interaktif
+ * 
+ * KETERKAITAN ALUR (DATA & LOGIKA):
+ * - Dimuat oleh: index.php (Master Router) saat ?page=analisis
+ * - Membaca pustaka data: app/statistics.php (seluruh fungsi kalkulasi statistik)
+ * - Memuat sub-komponen:
+ *   - ringkasan/kartu_kpi.php, ringkasan/pilar_visual.php
+ *   - korelasi_pearson/ringkasan_korelasi.php, grafik_sebaran.php, penjelasan_rumus.php
+ *   - ketimpangan_spasial/tabel_rasio_beban.php, arahan_kebijakan.php
+ *   - matriks_kuadran/grafik_kuadran.php, panduan_kuadran.php
+ *   - proyeksi_tren/grafik_proyeksi.php
+ *   - simulasi_investasi/alat_simulasi.php
+ * 
+ * TUJUAN DIBUATNYA FILE:
+ * Menggantikan halaman panjang 137 KB menjadi arsitektur modular terorganisir,
+ * bersih, mudah dirawat (*maintainable*), dan ramah terhadap pengguna serta penguji.
+ * ==============================================================================
+ */
+
+require_once __DIR__ . '/../../app/statistics.php';
+
+// --------------------------------------------------------------------------
+// 1. DATA PERTUMBUHAN YEAR-OVER-YEAR (YoY) BPS
+// --------------------------------------------------------------------------
+$yoyData = getBpsYoYGrowth();
+$prov = $yoyData['provinsi'] ?? ['growth' => '9.95', 'total_2026' => 157294];
+$daerahYoY = $yoyData['daerah'] ?? [];
+
+// --------------------------------------------------------------------------
+// 2. DATA KORELASI PEARSON & DERET WAKTU
+// --------------------------------------------------------------------------
+$macroCorr = getMacroCorrelation();
+$corr = getCorrelationMatrix();
+
+// --------------------------------------------------------------------------
+// 3. DATA EVALUASI KETIMPANGAN AMENITAS PER KECAMATAN
+// --------------------------------------------------------------------------
+$gapData = getGapAnalysis();
+$kritisCount = count(array_filter($gapData, fn($i) => str_contains($i['status'], 'Defisit')));
+$waspadaCount = count(array_filter($gapData, fn($i) => str_contains($i['status'], 'Potensi') || str_contains($i['status'], 'Longgar') || str_contains($i['status'], 'Perlu')));
+$idealCount = count(array_filter($gapData, fn($i) => str_contains($i['status'], 'Seimbang')));
+?>
+
+<!-- ============================================================== -->
+<!-- STRUKTUR TATA LETAK UTAMA MODUL ANALISIS (STANDAR KONSISTENSI) -->
+<!-- ============================================================== -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 pb-24 lg:pb-8 min-w-0 overflow-hidden space-y-6">
+
+    <!-- Header Halaman Analisis -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-ocean-50 text-ocean-700 border border-ocean-200/80 mb-2">
+                <i class="fa-solid fa-landmark-flag text-[11px]"></i>
+                <span>Standar Analisis Kemenparekraf, Bappenas &amp; BPS RI</span>
+            </div>
+            <h1 class="text-xl sm:text-3xl font-black text-slate-900 tracking-tight leading-tight">
+                Pusat Intelijen &amp; Analisis Statistik Pariwisata
+            </h1>
+            <p class="text-slate-500 text-xs sm:text-sm mt-1 max-w-3xl leading-relaxed">
+                Integrasi indikator pertumbuhan Year-over-Year (YoY), matriks korelasi Pearson, evaluasi ketimpangan amenitas spasial, dan peramalan tren kunjungan resmi BPS.
+            </p>
+        </div>
+
+        <!-- Tombol Aksi Header -->
+        <div class="flex items-center gap-2 self-start md:self-auto">
+            <button onclick="openGuideModal('analisis')" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-xs transition-colors flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-question text-ocean-400"></i>
+                <span>Panduan &amp; Rumus</span>
+            </button>
+            <button onclick="window.print()" class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold border border-slate-200 shadow-xs transition-colors flex items-center gap-1.5">
+                <i class="fa-solid fa-print text-ocean-600"></i>
+                <span>Cetak Laporan</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- BILAH NAVIGASI TAB SEGMENTASI BERBAHASA INDONESIA              -->
+    <!-- Menghilangkan information overload, pengguna memilih fokusnya  -->
+    <!-- ============================================================== -->
+    <div class="bg-white p-1.5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-1 overflow-x-auto">
+        
+        <button onclick="switchTab('tab-ringkasan')" id="btn-tab-ringkasan" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap bg-ocean-600 text-white shadow-xs">
+            <i class="fa-solid fa-chart-pie mr-1.5"></i> Ringkasan BPS &amp; Makro
+        </button>
+
+        <button onclick="switchTab('tab-korelasi')" id="btn-tab-korelasi" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap text-slate-600 hover:text-ocean-600 hover:bg-ocean-50">
+            <i class="fa-solid fa-link mr-1.5"></i> Korelasi Pearson (r)
+        </button>
+
+        <button onclick="switchTab('tab-ketimpangan')" id="btn-tab-ketimpangan" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap text-slate-600 hover:text-ocean-600 hover:bg-ocean-50">
+            <i class="fa-solid fa-scale-unbalanced mr-1.5"></i> Ketimpangan Spasial
+        </button>
+
+        <button onclick="switchTab('tab-kuadran')" id="btn-tab-kuadran" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap text-slate-600 hover:text-ocean-600 hover:bg-ocean-50">
+            <i class="fa-solid fa-table-cells-large mr-1.5"></i> Matriks Kuadran Investasi
+        </button>
+
+        <button onclick="switchTab('tab-proyeksi')" id="btn-tab-proyeksi" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap text-slate-600 hover:text-ocean-600 hover:bg-ocean-50">
+            <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> Proyeksi Tren &amp; Simulasi
+        </button>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- KONTEN TAB 1: RINGKASAN BPS & MAKRO                            -->
+    <!-- ============================================================== -->
+    <div id="tab-ringkasan" class="tab-content space-y-6">
+        <?php include __DIR__ . '/ringkasan/kartu_kpi.php'; ?>
+        <?php include __DIR__ . '/ringkasan/pilar_visual.php'; ?>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- KONTEN TAB 2: KORELASI PEARSON (r)                             -->
+    <!-- ============================================================== -->
+    <div id="tab-korelasi" class="tab-content hidden space-y-6">
+        <?php include __DIR__ . '/korelasi_pearson/ringkasan_korelasi.php'; ?>
+        <?php include __DIR__ . '/korelasi_pearson/grafik_sebaran.php'; ?>
+        <?php include __DIR__ . '/korelasi_pearson/penjelasan_rumus.php'; ?>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- KONTEN TAB 3: KETIMPANGAN SPASIAL & RASIO BEBAN                -->
+    <!-- ============================================================== -->
+    <div id="tab-ketimpangan" class="tab-content hidden space-y-6">
+        <?php include __DIR__ . '/ketimpangan_spasial/tabel_rasio_beban.php'; ?>
+        <?php include __DIR__ . '/ketimpangan_spasial/arahan_kebijakan.php'; ?>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- KONTEN TAB 4: MATRIKS KUADRAN PRIORITAS INVESTASI              -->
+    <!-- ============================================================== -->
+    <div id="tab-kuadran" class="tab-content hidden space-y-6">
+        <?php include __DIR__ . '/matriks_kuadran/grafik_kuadran.php'; ?>
+        <?php include __DIR__ . '/matriks_kuadran/panduan_kuadran.php'; ?>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- KONTEN TAB 5: PROYEKSI TREN DERET WAKTU & SIMULASI INTERAKTIF  -->
+    <!-- ============================================================== -->
+    <div id="tab-proyeksi" class="tab-content hidden space-y-6">
+        <?php include __DIR__ . '/proyeksi_tren/grafik_proyeksi.php'; ?>
+        <?php include __DIR__ . '/simulasi_investasi/alat_simulasi.php'; ?>
+    </div>
+
+</main>
+
+<!-- Skrip Pengendali Perpindahan Tab Navigasi -->
+<script>
+function switchTab(targetTabId) {
+    // 1. Sembunyikan seluruh konten tab
+    document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.add('hidden');
+    });
+
+    // 2. Tampilkan konten tab yang dipilih
+    const targetContent = document.getElementById(targetTabId);
+    if (targetContent) {
+        targetContent.classList.remove('hidden');
+    }
+
+    // 3. Perbarui gaya tombol tab aktif vs tidak aktif
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-ocean-600', 'text-white', 'shadow-xs');
+        btn.classList.add('text-slate-600', 'hover:text-ocean-600', 'hover:bg-ocean-50');
+    });
+
+    const activeBtn = document.getElementById('btn-' + targetTabId);
+    if (activeBtn) {
+        activeBtn.classList.remove('text-slate-600', 'hover:text-ocean-600', 'hover:bg-ocean-50');
+        activeBtn.classList.add('bg-ocean-600', 'text-white', 'shadow-xs');
+    }
+
+    // Trigger resize agar grafik Chart.js menyesuaikan ukuran kontainer
+    window.dispatchEvent(new Event('resize'));
+}
+</script>

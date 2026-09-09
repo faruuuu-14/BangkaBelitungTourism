@@ -1,3 +1,31 @@
+<?php
+/**
+ * ==============================================================================
+ * SISTEM INFORMASI INTELIJEN PARIWISATA BANGKA BELITUNG (BABEL TOURISM HUB)
+ * ==============================================================================
+ * 
+ * @file      header.php
+ * @folder    components/
+ * @author    Fathurrahman Safari Lubis (NIM: 2411500025) - ISB Atma Luhur
+ * @version   2.0.0 (Kepala Halaman Global, Pustaka CDN & Gaya Visual)
+ * 
+ * ------------------------------------------------------------------------------
+ * DESKRIPSI & FUNGSI FILE:
+ * Komponen kepala dokumen HTML (Head Header). Memuat deklarasi metadata dokumen,
+ * atribusi kepemilikan karya akademis pengembang, pustaka eksternal (Tailwind CSS,
+ * Google Font Plus Jakarta Sans, FontAwesome 6, Leaflet WebGIS, Leaflet Heatmap,
+ * dan Chart.js), serta definisi tema warna kepariwisataan Kepulauan Bangka Belitung.
+ * 
+ * KETERKAITAN ALUR (DATA & LOGIKA):
+ * - Dimuat oleh: index.php (di baris pertama perutean)
+ * - Menyediakan fondasi visual bagi seluruh tampilan di views/
+ * 
+ * TUJUAN DIBUATNYA FILE:
+ * Menyediakan kerangka HTML5 standar dan menjamin seluruh pustaka visual UI/UX
+ * terpasang secara konsisten di setiap fitur aplikasi.
+ * ==============================================================================
+ */
+?>
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
