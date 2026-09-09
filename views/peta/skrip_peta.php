@@ -7,91 +7,88 @@
  * @file      skrip_peta.php
  * @folder    views/peta/
  * @author    Fathurrahman Safari Lubis (NIM: 2411500025) - ISB Atma Luhur
- * @version   2.0.0 (Logika JavaScript Leaflet WebGIS, Clustering, & Perencana Rute)
+ * @version   2.5.0 (Logika WebGIS Lengkap: Hubs, Radar Amenitas, Google Maps, WA)
  * 
  * ------------------------------------------------------------------------------
  * DESKRIPSI & FUNGSI FILE:
- * Komponen pengendali logika sisi klien (Client-Side GIS Controller) untuk WebGIS.
- * Mengelola inisialisasi peta Leaflet (OpenStreetMap Tile Layer), penempatan pin
- * marker kustom dengan warna kategori Kemenparekraf, popup kaya informasi dengan
- * foto otentik representatif, layer heatmap kepadatan destinasi, visualisasi radius
- * buffer 5 km, pencarian interaktif, filter wilayah, serta mesin perhitungan rute
- * wisata cerdas (Smart Itinerary Optimizer).
+ * Komponen pengendali logika sisi klien (Client-Side GIS Controller) terlengkap.
+ * Menyediakan:
+ * 1. Peta interaktif Leaflet dengan Tile Layer OpenStreetMap.
+ * 2. Visualisasi Simpul Transportasi (2 Bandara Utama + 4 Pelabuhan Pintu Masuk).
+ * 3. Buffer Lingkaran Aksesibilitas Kemenparekraf (15 km, 30 km, 50 km).
+ * 4. Radar Amenitas Terdekat (mencari hotel & restoran dalam radius 5 km via Haversine).
+ * 5. Integrasi Perencana Rute Multi-Stop terhubung langsung ke Navigasi Google Maps.
+ * 6. Ekspor Rencana Perjalanan Wisata langsung ke WhatsApp.
+ * 7. Filter Spasial (Kategori 3A, Kabupaten, Mode Pin vs Heatmap, Buffer 5 km).
+ * 8. Deep-linking otomatis via URL (?kabupaten=..., ?search=..., ?lat=...&lng=...).
  * 
  * KETERKAITAN ALUR (DATA & LOGIKA):
  * - Dimuat oleh: views/peta/index.php
- * - Menerima data: variabel JSON $places dari PHP
- * - Menggunakan pustaka: Leaflet.js & Leaflet.heat
- * 
- * TUJUAN DIBUATNYA FILE:
- * Memberikan performa pemetaan spasial yang cepat, interaktif, mulus, dan bebas lag
- * saat menampilkan ratusan data titik geografis di Kepulauan Bangka Belitung.
+ * - Menerima variabel PHP: $places (875 titik) dan $hubs (simpul transportasi)
  * ==============================================================================
  */
 ?>
 
 <script>
 // --------------------------------------------------------------------------
-// 1. DATA MENTAH DARI PHP BASIS DATA
+// 1. DATA MENTAH DARI BASIS DATA MYSQL
 // --------------------------------------------------------------------------
-const rawPlaces = <?= json_encode($places) ?>;
+const rawPlaces = <?= json_encode($places ?? []) ?>;
+const transportHubs = <?= json_encode($hubs ?? []) ?>;
 
 // --------------------------------------------------------------------------
 // 2. INISIALISASI PETA LEAFLET
-// Pusatkan koordinat awal pada titik tengah geografis Kepulauan Bangka Belitung
-// Lat: -2.500, Lng: 106.800 dengan tingkat zoom 9
+// Pusatkan koordinat awal pada titik tengah Kepulauan Bangka Belitung (-2.5, 106.8)
 // --------------------------------------------------------------------------
 const map = L.map('map', {
     zoomControl: false
 }).setView([-2.5, 106.8], 9);
 
-// Kontrol Zoom di sudut kanan bawah
 L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-// Tile Layer Resmi OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | Pariwisata Babel',
     maxZoom: 19
 }).addTo(map);
 
-// Layer Group Penampung Marker & Pola
+// Layer Groups
 const markerLayer = L.layerGroup().addTo(map);
+const hubMarkersLayer = L.layerGroup().addTo(map);
+const catchmentRingsLayer = L.layerGroup().addTo(map);
 const bufferLayer = L.layerGroup();
+const radarPulseLayer = L.layerGroup().addTo(map);
+
 let heatLayer = null;
 let itineraryPolyline = null;
 
-// State Global
+// Status Global
 let currentMode = 'pin';
 let currentCategory = 'Semua';
 let isBufferActive = false;
+let isCatchmentActive = true;
 let itineraryStops = [];
+let currentRadarData = { hotels: [], restos: [] };
 
 // --------------------------------------------------------------------------
-// 3. FUNGSI RESOLUSI FOTO OTENTIK SISI KLIEN (CLIENT-SIDE PHOTO RESOLVER)
-// Menjamin 100% dari 875 popup objek memiliki foto representatif berimbang
+// 3. FUNGSI RESOLUSI FOTO OTENTIK SISI KLIEN
 // --------------------------------------------------------------------------
 function getClientPhoto(nama, sub, kab) {
     const n = (nama || '').toLowerCase();
     const s = (sub || '').toLowerCase();
     const k = (kab || '').toLowerCase();
 
-    // Landmark Spesifik Bangka Barat
     if (n.includes('tanjung ular') || n.includes('batu rakit') || n.includes('menumbing') || n.includes('pesanggrahan') || n.includes('muntok') || n.includes('mentok')) {
         return 'assets/img/pantai_tanjung_ular.jpg';
     }
-    // Landmark Spesifik Bangka (Sungailiat)
     if (n.includes('tikus emas') || n.includes('tongaci') || n.includes('parai') || n.includes('matras') || n.includes('puri tri agung') || n.includes('sungailiat')) {
         return 'assets/img/pantai_tikus_emas.jpg';
     }
-    // Landmark Spesifik Bangka Tengah (Koba)
     if (n.includes('kaolin') || n.includes('air biru') || n.includes('koba') || n.includes('namang')) {
         return 'assets/img/danau_kaolin_koba.jpg';
     }
-    // Landmark Spesifik Bangka Selatan (Toboali)
     if (n.includes('batu perahu') || n.includes('toboali') || n.includes('nek aji') || n.includes('lepar')) {
         return 'assets/img/pantai_batu_perahu.jpg';
     }
-    // Landmark Spesifik Belitung
     if (n.includes('lengkuas') || n.includes('mercusuar') || n.includes('kepayang')) {
         return 'assets/img/pantai_lengkuas.jpg';
     }
@@ -101,7 +98,6 @@ function getClientPhoto(nama, sub, kab) {
     if (n.includes('gantong') || n.includes('gantung') || n.includes('laskar pelangi') || n.includes('andrea hirata') || n.includes('manggar')) {
         return 'assets/img/laskar_pelangi_gantong.jpg';
     }
-    // Landmark Spesifik Pangkalpinang
     if (n.includes('museum') || n.includes('timah') || n.includes('pasir padi') || n.includes('pangkalpinang')) {
         return 'assets/img/museum_timah_babel.jpg';
     }
@@ -112,14 +108,12 @@ function getClientPhoto(nama, sub, kab) {
         return 'assets/img/alat_musik_dambus.jpg';
     }
 
-    // Fallback Wilayah
     if (k.includes('barat')) return 'assets/img/pantai_tanjung_ular.jpg';
     if (k.includes('selatan')) return 'assets/img/pantai_batu_perahu.jpg';
     if (k.includes('tengah')) return 'assets/img/danau_kaolin_koba.jpg';
     if (k.includes('timur')) return 'assets/img/laskar_pelangi_gantong.jpg';
     if (k.includes('belitung')) return 'assets/img/pantai_tanjung_tinggi.jpg';
 
-    // Fallback Kategori
     if (s === 'kebudayaan') return 'assets/img/budaya_tari_campak.jpg';
     if (s === 'restoran' || n.includes('resto') || n.includes('warung') || n.includes('kuliner')) return 'assets/img/budaya_nganggung.jpg';
     if (s === 'hotel') return 'assets/img/pantai_tanjung_tinggi.jpg';
@@ -128,15 +122,15 @@ function getClientPhoto(nama, sub, kab) {
 }
 
 // --------------------------------------------------------------------------
-// 4. IKON PIN MARKER KUSTOM BERDASARKAN KATEGORI
+// 4. IKON PIN KUSTOM (DESTINASI & SIMPUL TRANSPORTASI)
 // --------------------------------------------------------------------------
 function getMarkerColor(sub) {
     switch (sub) {
-        case 'Alam': return '#10b981';       // Hijau Zamrud
-        case 'Buatan': return '#f59e0b';     // Amber Emas
-        case 'Kebudayaan': return '#ec4899';  // Merah Muda / Mawar
-        case 'Hotel': return '#0ea5e9';      // Biru Langit
-        case 'Restoran': return '#ef4444';   // Merah Terang
+        case 'Alam': return '#10b981';
+        case 'Buatan': return '#f59e0b';
+        case 'Kebudayaan': return '#ec4899';
+        case 'Hotel': return '#0ea5e9';
+        case 'Restoran': return '#ef4444';
         default: return '#64748b';
     }
 }
@@ -151,7 +145,7 @@ function createCustomIcon(sub) {
     else if (sub === 'Restoran') iconClass = 'fa-utensils';
 
     const html = `
-        <div style="background-color: ${color}; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">
+        <div style="background-color: ${color}; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.35);">
             <i class="fa-solid ${iconClass}" style="font-size: 12px;"></i>
         </div>
     `;
@@ -165,25 +159,230 @@ function createCustomIcon(sub) {
     });
 }
 
+function createHubIcon(tipe) {
+    const isAirport = (tipe === 'Bandara');
+    const bg = isAirport ? '#7c3aed' : '#0891b2'; // Ungu untuk bandara, Cyan untuk pelabuhan
+    const iconClass = isAirport ? 'fa-plane-departure' : 'fa-ship';
+
+    const html = `
+        <div style="background-color: ${bg}; width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; border: 2.5px solid white; box-shadow: 0 3px 8px rgba(0,0,0,0.4); transform: rotate(-5deg);">
+            <i class="fa-solid ${iconClass}" style="font-size: 14px;"></i>
+        </div>
+    `;
+
+    return L.divIcon({
+        className: 'custom-hub-pin',
+        html: html,
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+    });
+}
+
 // --------------------------------------------------------------------------
-// 5. RENDER POPUP DESTINASI DENGAN FOTO & TOMBOL AKSI
+// 5. ALGORITMA HAVERSINE & ANALISIS KETERJANGKAUAN SIMPUL
+// --------------------------------------------------------------------------
+function calculateHaversine(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius bumi km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+}
+
+function getNearestHubClient(lat, lng) {
+    let minAirportDist = Infinity;
+    let nearestAirport = null;
+    let minPortDist = Infinity;
+    let nearestPort = null;
+
+    transportHubs.forEach(h => {
+        const d = calculateHaversine(lat, lng, parseFloat(h.latitude), parseFloat(h.longitude));
+        if (h.tipe === 'Bandara') {
+            if (d < minAirportDist) {
+                minAirportDist = d;
+                nearestAirport = { ...h, dist: d, mins: Math.round((d / 45) * 60) };
+            }
+        } else if (h.tipe === 'Pelabuhan') {
+            if (d < minPortDist) {
+                minPortDist = d;
+                nearestPort = { ...h, dist: d, mins: Math.round((d / 45) * 60) };
+            }
+        }
+    });
+
+    let zoneLabel = 'Ring 4: Blank Spot (>50 km)';
+    let zoneColor = '#e11d48';
+
+    if (minAirportDist <= 15) {
+        zoneLabel = 'Ring 1: Inti Urban (≤15 km)';
+        zoneColor = '#10b981';
+    } else if (minAirportDist <= 30) {
+        zoneLabel = 'Ring 2: Koridor (15-30 km)';
+        zoneColor = '#0ea5e9';
+    } else if (minAirportDist <= 50) {
+        zoneLabel = 'Ring 3: Terjangkau (30-50 km)';
+        zoneColor = '#f59e0b';
+    }
+
+    return {
+        airport: nearestAirport,
+        port: nearestPort,
+        zoneLabel,
+        zoneColor
+    };
+}
+
+// --------------------------------------------------------------------------
+// 6. RENDER SIMPUL TRANSPORTASI (BANDARA & PELABUHAN)
+// --------------------------------------------------------------------------
+function renderHubMarkers(filterType = 'all') {
+    hubMarkersLayer.clearLayers();
+    if (filterType === 'none') return;
+
+    transportHubs.forEach(h => {
+        if (filterType === 'bandara' && h.tipe !== 'Bandara') return;
+        if (filterType === 'pelabuhan' && h.tipe !== 'Pelabuhan') return;
+
+        const lat = parseFloat(h.latitude);
+        const lng = parseFloat(h.longitude);
+        if (isNaN(lat) || isNaN(lng)) return;
+
+        const marker = L.marker([lat, lng], {
+            icon: createHubIcon(h.tipe),
+            zIndexOffset: 1000
+        });
+
+        const badgeBg = (h.tipe === 'Bandara') ? '#7c3aed' : '#0891b2';
+        const popupContent = `
+            <div class="p-2 max-w-[260px] text-slate-800" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+                <div class="flex items-center gap-1.5 mb-1.5">
+                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold text-white shadow-xs" style="background-color: ${badgeBg}">
+                        ${h.tipe} &bull; ${h.kode}
+                    </span>
+                    <span class="text-[10px] text-slate-400 font-semibold">${h.kabupaten}</span>
+                </div>
+                <h4 class="font-black text-sm text-slate-900 leading-snug mb-1">${h.nama}</h4>
+                <p class="text-xs text-slate-600 mb-2 leading-relaxed">${h.deskripsi}</p>
+                <div class="pt-1.5 border-t border-slate-100 flex gap-1.5">
+                    <button onclick="focusOnHub('${h.id}', ${lat}, ${lng})" 
+                        class="w-full py-1.5 px-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-[11px] shadow-sm flex items-center justify-center gap-1.5 transition">
+                        <i class="fa-solid fa-bullseye"></i> Fokus Buffer Hub Ini
+                    </button>
+                </div>
+            </div>
+        `;
+
+        marker.bindPopup(popupContent, { maxWidth: 280, className: 'clean-popup' });
+        hubMarkersLayer.addLayer(marker);
+    });
+}
+
+function renderCatchmentRings(targetHubId = 'all') {
+    catchmentRingsLayer.clearLayers();
+    if (!isCatchmentActive) return;
+
+    // Default tampilkan buffer 2 bandara utama (PGK & TJQ) agar tidak bertumpuk berlebihan
+    const hubsToRender = (targetHubId === 'all')
+        ? transportHubs.filter(h => h.tipe === 'Bandara')
+        : transportHubs.filter(h => h.id === targetHubId);
+
+    hubsToRender.forEach(h => {
+        const lat = parseFloat(h.latitude);
+        const lng = parseFloat(h.longitude);
+
+        // Ring 1: 15 km (Inti Urban)
+        L.circle([lat, lng], {
+            radius: 15000,
+            color: '#10b981',
+            weight: 1.5,
+            dashArray: '4, 4',
+            fillColor: '#10b981',
+            fillOpacity: 0.05
+        }).bindTooltip(`Ring 1 (≤15 km): ${h.nama}`, { sticky: true }).addTo(catchmentRingsLayer);
+
+        // Ring 2: 30 km (Koridor Menengah)
+        L.circle([lat, lng], {
+            radius: 30000,
+            color: '#0ea5e9',
+            weight: 1.5,
+            dashArray: '6, 6',
+            fillColor: '#0ea5e9',
+            fillOpacity: 0.03
+        }).bindTooltip(`Ring 2 (30 km): ${h.nama}`, { sticky: true }).addTo(catchmentRingsLayer);
+
+        // Ring 3: 50 km (Terjangkau Harian)
+        L.circle([lat, lng], {
+            radius: 50000,
+            color: '#f59e0b',
+            weight: 1.2,
+            dashArray: '8, 8',
+            fillColor: '#f59e0b',
+            fillOpacity: 0.02
+        }).bindTooltip(`Ring 3 (50 km): ${h.nama}`, { sticky: true }).addTo(catchmentRingsLayer);
+    });
+}
+
+function toggleCatchmentRings() {
+    isCatchmentActive = !isCatchmentActive;
+    const btn = document.getElementById('btnCatchment');
+    if (isCatchmentActive) {
+        map.addLayer(catchmentRingsLayer);
+        renderCatchmentRings('all');
+        if (btn) btn.className = 'px-2.5 py-1.5 rounded-xl border border-purple-200 bg-purple-600 text-white text-[11px] font-bold transition-all shadow-xs flex items-center gap-1';
+    } else {
+        map.removeLayer(catchmentRingsLayer);
+        if (btn) btn.className = 'px-2.5 py-1.5 rounded-xl border border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-800 text-[11px] font-bold transition-all shadow-xs flex items-center gap-1';
+    }
+}
+
+function focusOnHub(hubId, lat, lng) {
+    renderCatchmentRings(hubId);
+    map.flyTo([lat, lng], 11, { duration: 1.2 });
+}
+
+function onHubFilterChange() {
+    const val = document.getElementById('hubFilter')?.value || 'all';
+    renderHubMarkers(val);
+}
+
+// --------------------------------------------------------------------------
+// 7. RENDER POPUP DESTINASI DENGAN RADAR AMENITAS & SIMPUL
 // --------------------------------------------------------------------------
 function createPopupContent(place) {
     const photo = getClientPhoto(place.nama, place.sub_kategori, place.kabupaten);
     const color = getMarkerColor(place.sub_kategori);
+    const access = getNearestHubClient(parseFloat(place.latitude), parseFloat(place.longitude));
 
-    // Escape nama tempat untuk parameter JS
     const safeNama = place.nama.replace(/'/g, "\\'");
     const safeSub = (place.sub_kategori || '').replace(/'/g, "\\'");
     const safeKab = (place.kabupaten || '').replace(/'/g, "\\'");
 
+    // Tombol Radar Amenitas (Khusus kelompok Daya Tarik / Wisata)
+    let radarButtonHtml = '';
+    if (place.kelompok === 'Daya Tarik') {
+        radarButtonHtml = `
+            <button onclick="findNearbyAmenities(${place.id})" 
+                class="w-full py-1.5 px-2 rounded-xl bg-gradient-to-r from-ocean-600 to-emerald-600 hover:from-ocean-700 hover:to-emerald-700 text-white font-bold text-[11px] transition shadow-xs flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-radar text-amber-300"></i>
+                <span>Radar Amenitas Terdekat</span>
+            </button>
+        `;
+    }
+
     return `
-        <div class="overflow-hidden rounded-2xl max-w-[260px] text-slate-800" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+        <div class="overflow-hidden rounded-2xl max-w-[270px] text-slate-800" style="font-family: 'Plus Jakarta Sans', sans-serif;">
             <div class="relative h-28 w-full overflow-hidden bg-slate-900">
                 <img src="${photo}" alt="${place.nama}" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
                 <span class="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-bold text-white shadow" style="background-color: ${color};">
                     ${place.sub_kategori}
+                </span>
+                <span class="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[9px] font-extrabold text-white shadow" style="background-color: ${access.zoneColor};">
+                    ${access.zoneLabel}
                 </span>
                 <span class="absolute bottom-2 right-2 text-amber-300 text-xs font-bold flex items-center gap-0.5 drop-shadow">
                     ★ ${parseFloat(place.rating).toFixed(1)}
@@ -194,19 +393,35 @@ function createPopupContent(place) {
                     <h4 class="font-extrabold text-xs text-slate-900 leading-snug">${place.nama}</h4>
                     <p class="text-[10px] text-slate-400 mt-0.5">${place.kabupaten} &bull; Kec. ${place.kecamatan}</p>
                 </div>
-                <div class="text-[10px] text-slate-500 flex items-center justify-between border-t border-slate-100 pt-1.5">
-                    <span>${parseInt(place.ulasan).toLocaleString()} ulasan publik</span>
-                    <span class="font-mono text-slate-400">${parseFloat(place.latitude).toFixed(3)}, ${parseFloat(place.longitude).toFixed(3)}</span>
+
+                <!-- Aksesibilitas Simpul Transportasi Kemenparekraf -->
+                <div class="p-2 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1 text-[10px]">
+                    <div class="flex items-center justify-between text-slate-600">
+                        <span class="font-bold flex items-center gap-1 text-purple-700">
+                            <i class="fa-solid fa-plane-departure text-[9px]"></i> ${access.airport ? access.airport.kode : 'Bandara'}:
+                        </span>
+                        <span class="font-semibold text-slate-800">${access.airport ? access.airport.dist.toFixed(1) + ' km (~' + access.airport.mins + ' mnt)' : '-'}</span>
+                    </div>
+                    <div class="flex items-center justify-between text-slate-600">
+                        <span class="font-bold flex items-center gap-1 text-cyan-700">
+                            <i class="fa-solid fa-ship text-[9px]"></i> ${access.port ? access.port.kode : 'Pelabuhan'}:
+                        </span>
+                        <span class="font-semibold text-slate-800">${access.port ? access.port.dist.toFixed(1) + ' km (~' + access.port.mins + ' mnt)' : '-'}</span>
+                    </div>
                 </div>
-                <div class="pt-1 flex gap-1.5">
-                    <button onclick="addToItinerary(${place.id}, '${safeNama}', ${place.latitude}, ${place.longitude}, '${safeSub}', '${safeKab}')" 
-                        class="flex-1 py-1.5 px-2 rounded-xl bg-ocean-600 hover:bg-ocean-700 text-white font-bold text-[10px] transition-colors flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-plus"></i> Tambah ke Rute
-                    </button>
-                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.nama + ' ' + place.kabupaten)}" target="_blank"
-                        class="p-1.5 px-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold transition-colors" title="Buka di Google Maps">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </a>
+
+                <div class="space-y-1.5 pt-1">
+                    ${radarButtonHtml}
+                    <div class="flex gap-1.5">
+                        <button onclick="addToItinerary(${place.id}, '${safeNama}', ${place.latitude}, ${place.longitude}, '${safeSub}', '${safeKab}')" 
+                            class="flex-1 py-1.5 px-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-[10px] transition-colors flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-plus text-amber-300"></i> Tambah Rute
+                        </button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.nama + ' ' + place.kabupaten)}" target="_blank"
+                            class="p-1.5 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold transition-colors flex items-center justify-center" title="Buka di Google Maps">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -214,7 +429,137 @@ function createPopupContent(place) {
 }
 
 // --------------------------------------------------------------------------
-// 6. RENDER MARKER & FILTER SPASIAL
+// 8. RADAR AMENITAS TERDEKAT (RADIUS 5 KM HAVERSINE)
+// --------------------------------------------------------------------------
+function findNearbyAmenities(placeId) {
+    const origin = rawPlaces.find(p => p.id == placeId);
+    if (!origin) return;
+
+    const originLat = parseFloat(origin.latitude);
+    const originLng = parseFloat(origin.longitude);
+
+    // Gambarkan Lingkaran Radar di Peta
+    radarPulseLayer.clearLayers();
+    const pulseCircle = L.circle([originLat, originLng], {
+        radius: 5000,
+        color: '#059669',
+        weight: 2,
+        fillColor: '#10b981',
+        fillOpacity: 0.15
+    }).addTo(radarPulseLayer);
+
+    map.flyTo([originLat, originLng], 12, { duration: 1.0 });
+
+    // Hitung seluruh amenitas (Hotel & Resto)
+    const hotels = [];
+    const restos = [];
+
+    rawPlaces.forEach(p => {
+        if (p.kelompok === 'Amenitas' && p.latitude && p.longitude) {
+            const dist = calculateHaversine(originLat, originLng, parseFloat(p.latitude), parseFloat(p.longitude));
+            if (dist <= 15.0) { // Cari hingga 15 km terdekat
+                const item = { ...p, dist: dist, mins: Math.round((dist / 35) * 60) };
+                if (p.sub_kategori === 'Hotel') hotels.push(item);
+                else if (p.sub_kategori === 'Restoran') restos.push(item);
+            }
+        }
+    });
+
+    hotels.sort((a, b) => a.dist - b.dist);
+    restos.sort((a, b) => a.dist - b.dist);
+
+    currentRadarData = {
+        origin: origin,
+        hotels: hotels.slice(0, 8),
+        restos: restos.slice(0, 8)
+    };
+
+    // Update Header Modal
+    document.getElementById('radarOriginName').innerText = `${origin.nama} (${origin.kabupaten})`;
+    document.getElementById('radarHotelCount').innerText = currentRadarData.hotels.length;
+    document.getElementById('radarRestoCount').innerText = currentRadarData.restos.length;
+
+    // Render Tab Hotel terlebih dahulu
+    switchRadarTab('hotel');
+
+    // Buka Modal Radar
+    document.getElementById('amenityRadarModal').classList.remove('hidden');
+}
+
+function closeAmenityRadar() {
+    document.getElementById('amenityRadarModal').classList.add('hidden');
+    radarPulseLayer.clearLayers();
+}
+
+function switchRadarTab(type) {
+    const tabHotel = document.getElementById('tabRadarHotel');
+    const tabResto = document.getElementById('tabRadarResto');
+    const container = document.getElementById('radarListContainer');
+
+    if (type === 'hotel') {
+        tabHotel.className = 'flex-1 py-1.5 rounded-xl font-bold text-xs bg-sky-600 text-white shadow-xs flex items-center justify-center gap-1.5 transition';
+        tabResto.className = 'flex-1 py-1.5 rounded-xl font-bold text-xs bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center justify-center gap-1.5 transition';
+        renderRadarList(currentRadarData.hotels, 'Hotel');
+    } else {
+        tabResto.className = 'flex-1 py-1.5 rounded-xl font-bold text-xs bg-orange-600 text-white shadow-xs flex items-center justify-center gap-1.5 transition';
+        tabHotel.className = 'flex-1 py-1.5 rounded-xl font-bold text-xs bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 flex items-center justify-center gap-1.5 transition';
+        renderRadarList(currentRadarData.restos, 'Restoran');
+    }
+}
+
+function renderRadarList(items, type) {
+    const container = document.getElementById('radarListContainer');
+    if (!items || items.length === 0) {
+        container.innerHTML = `
+            <div class="py-8 text-center text-slate-400 space-y-1">
+                <i class="fa-solid fa-circle-question text-2xl text-slate-300"></i>
+                <p class="text-xs">Tidak ditemukan fasilitas ${type} dalam radius 15 km dari titik ini.</p>
+            </div>
+        `;
+        return;
+    }
+
+    let html = '';
+    items.forEach(item => {
+        const photo = getClientPhoto(item.nama, item.sub_kategori, item.kabupaten);
+        const safeNama = item.nama.replace(/'/g, "\\'");
+        const safeSub = (item.sub_kategori || '').replace(/'/g, "\\'");
+        const safeKab = (item.kabupaten || '').replace(/'/g, "\\'");
+
+        html += `
+            <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3 text-xs hover:bg-white transition-all shadow-2xs">
+                <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                    <img src="${photo}" alt="${item.nama}" class="w-10 h-10 rounded-xl object-cover border border-slate-200 shrink-0">
+                    <div class="min-w-0 flex-1">
+                        <div class="font-extrabold text-slate-900 truncate">${item.nama}</div>
+                        <div class="text-[10px] text-slate-500 flex items-center gap-1.5 mt-0.5">
+                            <span class="font-bold text-ocean-700 flex items-center gap-0.5">
+                                <i class="fa-solid fa-location-arrow text-[9px]"></i> ${item.dist.toFixed(1)} km (~${item.mins} mnt)
+                            </span>
+                            <span>&bull;</span>
+                            <span class="text-amber-500 font-bold">★ ${parseFloat(item.rating).toFixed(1)}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1 shrink-0">
+                    <button onclick="addToItinerary(${item.id}, '${safeNama}', ${item.latitude}, ${item.longitude}, '${safeSub}', '${safeKab}')"
+                        class="px-2.5 py-1.5 bg-slate-900 hover:bg-ocean-600 text-white rounded-xl text-[10px] font-bold transition flex items-center gap-1" title="Tambah ke Rute">
+                        <i class="fa-solid fa-plus text-amber-300"></i> Rute
+                    </button>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=${item.latitude},${item.longitude}" target="_blank"
+                        class="p-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-[10px] font-bold transition" title="Rute Google Maps Langsung">
+                        <i class="fa-solid fa-diamond-turn-right"></i>
+                    </a>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+// --------------------------------------------------------------------------
+// 9. RENDER MARKER & FILTER SPASIAL
 // --------------------------------------------------------------------------
 function renderMarkers(data) {
     markerLayer.clearLayers();
@@ -225,18 +570,17 @@ function renderMarkers(data) {
         const lng = parseFloat(p.longitude);
         if (isNaN(lat) || isNaN(lng) || lat === 0 || lng === 0) return;
 
-        // Marker Pin
         const marker = L.marker([lat, lng], {
             icon: createCustomIcon(p.sub_kategori)
         });
 
-        marker.bindPopup(createPopupContent(p), { maxWidth: 280, className: 'clean-popup' });
+        marker.bindPopup(createPopupContent(p), { maxWidth: 290, className: 'clean-popup' });
         markerLayer.addLayer(marker);
 
-        // Buffer Lingkaran 5 km untuk Hotel & Resto
+        // Buffer Lingkaran 5 km untuk Hotel & Restoran
         if (p.kelompok === 'Amenitas' || p.sub_kategori === 'Hotel' || p.sub_kategori === 'Restoran') {
             const circle = L.circle([lat, lng], {
-                radius: 5000, // 5.000 meter = 5 km
+                radius: 5000,
                 color: '#0ea5e9',
                 weight: 1,
                 fillColor: '#38bdf8',
@@ -246,14 +590,10 @@ function renderMarkers(data) {
         }
     });
 
-    // Perbarui badge jumlah titik
     const badge = document.getElementById('counterBadge');
     if (badge) badge.innerText = `${data.length} Titik`;
 }
 
-// --------------------------------------------------------------------------
-// 7. PENYARING DATA (FILTER LOGIC)
-// --------------------------------------------------------------------------
 function applyFilter() {
     const searchVal = (document.getElementById('searchInput')?.value || '').toLowerCase();
     const kabVal = document.getElementById('kabFilter')?.value || '';
@@ -285,9 +625,6 @@ function filterCategory(cat) {
     applyFilter();
 }
 
-// --------------------------------------------------------------------------
-// 8. ALIH MODE: PIN MARKER VS HEATMAP MULTI-KATEGORI
-// --------------------------------------------------------------------------
 function setMapMode(mode) {
     currentMode = mode;
     const btnPin = document.getElementById('btnModePin');
@@ -330,9 +667,6 @@ function renderHeatmap(data) {
     }
 }
 
-// --------------------------------------------------------------------------
-// 9. TOGGLE BUFFER 5 KM AMENITAS
-// --------------------------------------------------------------------------
 function toggleBuffer() {
     isBufferActive = !isBufferActive;
     const btn = document.getElementById('btnBuffer');
@@ -349,7 +683,7 @@ function toggleBuffer() {
 }
 
 // --------------------------------------------------------------------------
-// 10. PERENCANA RUTE WISATA CERDAS (SMART ITINERARY LOGIC)
+// 10. PERENCANA RUTE CERDAS TERINTEGRASI GOOGLE MAPS & WHATSAPP
 // --------------------------------------------------------------------------
 function toggleItineraryDrawer() {
     const drawer = document.getElementById('itineraryDrawer');
@@ -357,7 +691,6 @@ function toggleItineraryDrawer() {
 }
 
 function addToItinerary(id, nama, lat, lng, sub, kab) {
-    // Cek jika tempat sudah terdaftar
     if (itineraryStops.some(s => s.id === id)) {
         alert('Destinasi ini sudah ada dalam daftar rencana rute kamu.');
         return;
@@ -366,8 +699,7 @@ function addToItinerary(id, nama, lat, lng, sub, kab) {
     const photo = getClientPhoto(nama, sub, kab);
     itineraryStops.push({ id, nama, lat: parseFloat(lat), lng: parseFloat(lng), sub, kab, photo });
     updateItineraryUI();
-    
-    // Buka drawer otomatis
+
     const drawer = document.getElementById('itineraryDrawer');
     if (drawer && drawer.classList.contains('translate-x-full')) {
         drawer.classList.remove('translate-x-full');
@@ -392,18 +724,6 @@ function clearItinerary() {
     }
 }
 
-// Hitung Jarak Haversine antar 2 koordinat (dalam km)
-function calculateHaversine(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Radius bumi dalam km
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
-}
-
 function updateItineraryUI() {
     const badge = document.getElementById('itineraryCountBadge');
     const list = document.getElementById('itineraryList');
@@ -411,6 +731,8 @@ function updateItineraryUI() {
     const totalDistEl = document.getElementById('itineraryTotalDist');
     const totalTimeEl = document.getElementById('itineraryTotalTime');
     const btnDraw = document.getElementById('btnDrawRoute');
+    const btnGmaps = document.getElementById('btnGmapsNav');
+    const btnWa = document.getElementById('btnShareWa');
 
     if (badge) badge.innerText = itineraryStops.length;
 
@@ -419,13 +741,20 @@ function updateItineraryUI() {
         if (totalDistEl) totalDistEl.innerText = '0.0 km';
         if (totalTimeEl) totalTimeEl.innerText = '0 Menit';
         if (btnDraw) btnDraw.disabled = true;
+        if (btnGmaps) {
+            btnGmaps.href = '#';
+            btnGmaps.classList.add('pointer-events-none', 'opacity-50');
+        }
+        if (btnWa) btnWa.disabled = true;
+        list.innerHTML = '';
         return;
     }
 
     if (empty) empty.classList.add('hidden');
-    if (btnDraw) btnDraw.disabled = itineraryStops.length < 2;
+    if (btnDraw) btnDraw.disabled = (itineraryStops.length < 2);
+    if (btnWa) btnWa.disabled = false;
 
-    // Hitung total akumulasi jarak rute
+    // Hitung total akumulasi jarak
     let totalDist = 0;
     for (let i = 0; i < itineraryStops.length - 1; i++) {
         totalDist += calculateHaversine(
@@ -434,11 +763,18 @@ function updateItineraryUI() {
         );
     }
 
-    // Estimasi kecepatan rata-rata darat: 45 km/jam
     const totalMinutes = Math.round((totalDist / 45) * 60);
 
     if (totalDistEl) totalDistEl.innerText = `${totalDist.toFixed(1)} km`;
     if (totalTimeEl) totalTimeEl.innerText = `~${totalMinutes} Menit`;
+
+    // Hubungkan tautan multi-stop Google Maps
+    if (btnGmaps) {
+        const coords = itineraryStops.map(s => `${s.lat},${s.lng}`);
+        const gmapsUrl = `https://www.google.com/maps/dir/${coords.join('/')}`;
+        btnGmaps.href = gmapsUrl;
+        btnGmaps.classList.remove('pointer-events-none', 'opacity-50');
+    }
 
     // Render HTML kartu perhentian
     let html = '';
@@ -452,7 +788,7 @@ function updateItineraryUI() {
                     <img src="${stop.photo}" alt="${stop.nama}" class="w-9 h-9 rounded-xl object-cover border border-slate-200 shrink-0">
                     <div class="min-w-0">
                         <div class="font-extrabold text-slate-900 truncate">${stop.nama}</div>
-                        <div class="text-[10px] text-slate-400">${stop.kabupaten}</div>
+                        <div class="text-[10px] text-slate-400">${stop.kabupaten} &bull; ${stop.sub}</div>
                     </div>
                 </div>
                 <button onclick="removeFromItinerary(${i})" class="w-6 h-6 rounded-full bg-slate-200 hover:bg-rose-100 hover:text-rose-600 text-slate-500 flex items-center justify-center transition-colors text-[10px] shrink-0">
@@ -476,33 +812,90 @@ function drawItineraryRoute() {
         color: '#0284c7',
         weight: 4,
         dashArray: '8, 8',
-        opacity: 0.85
+        opacity: 0.9
     }).addTo(map);
 
-    map.fitBounds(itineraryPolyline.getBounds(), { padding: [40, 40] });
-    toggleItineraryDrawer(); // Tutup drawer agar jalur terlihat jelas
+    map.fitBounds(itineraryPolyline.getBounds(), { padding: [50, 50] });
+    toggleItineraryDrawer();
+}
+
+function shareItineraryWhatsApp() {
+    if (itineraryStops.length === 0) return;
+
+    let totalDist = 0;
+    for (let i = 0; i < itineraryStops.length - 1; i++) {
+        totalDist += calculateHaversine(
+            itineraryStops[i].lat, itineraryStops[i].lng,
+            itineraryStops[i+1].lat, itineraryStops[i+1].lng
+        );
+    }
+    const totalMins = Math.round((totalDist / 45) * 60);
+
+    const coords = itineraryStops.map(s => `${s.lat},${s.lng}`);
+    const gmapsUrl = `https://www.google.com/maps/dir/${coords.join('/')}`;
+
+    let msg = `🌴 *Rencana Perjalanan Wisata Bangka Belitung* 🌴\n`;
+    msg += `Disusun melalui Portal Intelijen Pariwisata Babel SDSS\n\n`;
+    msg += `📍 *Daftar Kunjungan Destinasi:*\n`;
+
+    itineraryStops.forEach((s, idx) => {
+        msg += `${idx + 1}. *${s.nama}* (${s.sub}, ${s.kab})\n`;
+    });
+
+    msg += `\n📏 *Estimasi Total Jarak:* ${totalDist.toFixed(1)} km\n`;
+    msg += `⏱️ *Estimasi Waktu Tempuh:* ~${totalMins} Menit\n`;
+    msg += `🗺️ *Navigasi Google Maps Multi-Stop:*\n${gmapsUrl}\n\n`;
+    msg += `_Semoga perjalanan wisatamu di Bangka Belitung menyenangkan!_`;
+
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+    window.open(waUrl, '_blank');
 }
 
 // --------------------------------------------------------------------------
-// 11. INITIAL LOAD
+// 11. INITIAL LOAD & URL QUERY PARAMETERS DEEP-LINKING
 // --------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', function() {
+    // 1. Render data awal
     renderMarkers(rawPlaces);
+    renderHubMarkers('all');
+    renderCatchmentRings('all');
 
-    // Cek jika ada parameter search dari URL (misal: index.php?page=peta&search=Pantai+Tikus)
+    // 2. Baca URL Query Parameters
     const urlParams = new URLSearchParams(window.location.search);
-    const searchParam = urlParams.get('search');
-    if (searchParam) {
-        const input = document.getElementById('searchInput');
-        if (input) {
-            input.value = searchParam;
+    const kabParam = urlParams.get('kabupaten');
+    const searchParam = urlParams.get('search') || urlParams.get('q');
+    const latParam = parseFloat(urlParams.get('lat'));
+    const lngParam = parseFloat(urlParams.get('lng'));
+
+    // A. Deep link filter Kabupaten
+    if (kabParam) {
+        const kabSelect = document.getElementById('kabFilter');
+        if (kabSelect) {
+            kabSelect.value = kabParam;
             applyFilter();
-            // Zoom ke tempat jika ditemukan 1 hasil
-            const found = rawPlaces.find(p => p.nama.toLowerCase().includes(searchParam.toLowerCase()));
-            if (found && found.latitude && found.longitude) {
-                map.flyTo([parseFloat(found.latitude), parseFloat(found.longitude)], 13, { duration: 1.5 });
+            const firstInKab = rawPlaces.find(p => p.kabupaten.toLowerCase() === kabParam.toLowerCase());
+            if (firstInKab && firstInKab.latitude && firstInKab.longitude) {
+                map.flyTo([parseFloat(firstInKab.latitude), parseFloat(firstInKab.longitude)], 11, { duration: 1.5 });
             }
         }
+    }
+
+    // B. Deep link pencarian kata kunci
+    if (searchParam) {
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.value = searchParam;
+            applyFilter();
+            const match = rawPlaces.find(p => p.nama.toLowerCase().includes(searchParam.toLowerCase()));
+            if (match && match.latitude && match.longitude) {
+                map.flyTo([parseFloat(match.latitude), parseFloat(match.longitude)], 13, { duration: 1.5 });
+            }
+        }
+    }
+
+    // C. Deep link koordinat spesifik
+    if (!isNaN(latParam) && !isNaN(lngParam)) {
+        map.flyTo([latParam, lngParam], 14, { duration: 1.5 });
     }
 });
 </script>

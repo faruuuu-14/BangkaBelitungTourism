@@ -100,6 +100,12 @@ if (!function_exists('navActive')) {
 
             <!-- Aksi Kanan & Profil Pengembang -->
             <div class="flex items-center gap-2 flex-shrink-0">
+                <!-- Sakelar Tema Gelap / Terang (Dark / Light Mode) -->
+                <button id="themeToggleBtn" onclick="toggleAppTheme()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 flex items-center justify-center border border-slate-200 transition-all shadow-xs cursor-pointer" title="Ganti Mode Tampilan (Gelap / Terang)">
+                    <i id="themeIconMoon" class="fa-solid fa-moon text-sm text-slate-600"></i>
+                    <i id="themeIconSun" class="fa-solid fa-sun text-sm text-amber-400 hidden"></i>
+                </button>
+
                 <!-- Tombol Buku Panduan Pengguna -->
                 <button onclick="openGuideModal()" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 hover:text-ocean-700 text-xs font-bold border border-slate-200 transition-all shadow-xs" title="Buku Panduan, Sumber Data &amp; Metodologi">
                     <i class="fa-solid fa-circle-question text-ocean-600 text-sm"></i>
@@ -156,3 +162,35 @@ if (!function_exists('navActive')) {
         <?php endif; ?>
     </a>
 </nav>
+
+<script>
+// Fungsi Sinkronisasi Ikon & Status Tema Gelap/Terang
+function updateThemeIcon() {
+    const isDark = document.documentElement.classList.contains('dark');
+    const moon = document.getElementById('themeIconMoon');
+    const sun = document.getElementById('themeIconSun');
+    if (moon && sun) {
+        if (isDark) {
+            moon.classList.add('hidden');
+            sun.classList.remove('hidden');
+        } else {
+            moon.classList.remove('hidden');
+            sun.classList.add('hidden');
+        }
+    }
+}
+
+function toggleAppTheme() {
+    if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.theme = 'light';
+    } else {
+        document.documentElement.classList.add('dark');
+        localStorage.theme = 'dark';
+    }
+    updateThemeIcon();
+}
+
+// Inisialisasi ikon saat DOM siap
+document.addEventListener('DOMContentLoaded', updateThemeIcon);
+</script>

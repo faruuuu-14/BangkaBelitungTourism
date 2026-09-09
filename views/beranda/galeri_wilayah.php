@@ -157,9 +157,14 @@
                 <p class="text-slate-300 text-[11px] line-clamp-2 leading-relaxed">
                     Ikon batuan granit purba raksasa berumur ratusan juta tahun di kawasan UNESCO Global Geopark Belitong.
                 </p>
-                <button onclick="openPhotoModal('assets/img/pantai_tanjung_tinggi.jpg', 'Pantai Tanjung Tinggi &bull; Sijuk, Kab. Belitung', 'Kawasan geowisata terpopuler dunia dengan batu granit raksasa di tepi laut tenang nan jernih, lokasi syuting film legendaris Laskar Pelangi.')" class="pt-1 text-[11px] font-bold text-emerald-300 hover:text-white flex items-center gap-1">
-                    <span>Lihat Foto Layar Penuh</span> <i class="fa-solid fa-arrow-right text-[9px]"></i>
-                </button>
+                <div class="flex items-center justify-between pt-1">
+                    <button onclick="openPhotoModal('assets/img/pantai_tanjung_tinggi.jpg', 'Pantai Tanjung Tinggi &bull; Sijuk, Kab. Belitung', 'Geosite utama UNESCO Global Geopark Belitong dengan formasi batu granit raksasa di atas pasir putih lembut.', 'Pantai Tanjung Tinggi')" class="text-[11px] font-bold text-emerald-300 hover:text-white flex items-center gap-1">
+                        <span>Lihat Foto Layar Penuh</span> <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                    </button>
+                    <a href="index.php?page=peta&kabupaten=Kabupaten+Belitung" class="text-[10px] px-2 py-0.5 rounded-lg bg-white/15 hover:bg-white/30 text-white font-bold transition flex items-center gap-1" title="Buka Peta Kabupaten Belitung">
+                        <i class="fa-solid fa-map"></i> Peta
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -178,9 +183,14 @@
                 <p class="text-slate-300 text-[11px] line-clamp-2 leading-relaxed">
                     Replika sekolah kayu legendaris dan Rumah Kece di Gantong, simbol perjuangan literasi karya Andrea Hirata.
                 </p>
-                <button onclick="openPhotoModal('assets/img/laskar_pelangi_gantong.jpg', 'SD Laskar Pelangi &bull; Gantong, Kab. Belitung Timur', 'Sekolah kayu sederhana yang menjadi latar kisah fenomenal novel karya Andrea Hirata di Belitung Timur.')" class="pt-1 text-[11px] font-bold text-indigo-300 hover:text-white flex items-center gap-1">
-                    <span>Lihat Foto Layar Penuh</span> <i class="fa-solid fa-arrow-right text-[9px]"></i>
-                </button>
+                <div class="flex items-center justify-between pt-1">
+                    <button onclick="openPhotoModal('assets/img/laskar_pelangi_gantong.jpg', 'SD Laskar Pelangi &bull; Gantong, Kab. Belitung Timur', 'Replika sekolah kayu bersejarah karya novelis Andrea Hirata yang menginspirasi jutaan insan tentang kekuatan cita-cita.', 'Laskar Pelangi')" class="text-[11px] font-bold text-indigo-300 hover:text-white flex items-center gap-1">
+                        <span>Lihat Foto Layar Penuh</span> <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                    </button>
+                    <a href="index.php?page=peta&kabupaten=Kabupaten+Belitung+Timur" class="text-[10px] px-2 py-0.5 rounded-lg bg-white/15 hover:bg-white/30 text-white font-bold transition flex items-center gap-1" title="Buka Peta Kabupaten Belitung Timur">
+                        <i class="fa-solid fa-map"></i> Peta
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -199,9 +209,14 @@
                 <p class="text-slate-300 text-[11px] line-clamp-2 leading-relaxed">
                     Gedung kolonial cagar budaya di Pangkalpinang, museum pertimahan satu-satunya di Asia Tenggara.
                 </p>
-                <button onclick="openPhotoModal('assets/img/museum_timah_babel.jpg', 'Museum Timah Indonesia &bull; Kota Pangkalpinang', 'Satu-satunya museum pertambangan timah di Asia Tenggara, terletak di jantung Kota Pangkalpinang.')" class="pt-1 text-[11px] font-bold text-violet-300 hover:text-white flex items-center gap-1">
-                    <span>Lihat Foto Layar Penuh</span> <i class="fa-solid fa-arrow-right text-[9px]"></i>
-                </button>
+                <div class="flex items-center justify-between pt-1">
+                    <button onclick="openPhotoModal('assets/img/museum_timah_babel.jpg', 'Museum Timah Indonesia &bull; Kota Pangkalpinang', 'Gedung cagar budaya pertambangan timah dunia satu-satunya di Asia Tenggara yang berdiri megah di jantung ibukota Pangkalpinang.', 'Museum Timah')" class="text-[11px] font-bold text-violet-300 hover:text-white flex items-center gap-1">
+                        <span>Lihat Foto Layar Penuh</span> <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                    </button>
+                    <a href="index.php?page=peta&kabupaten=Kota+Pangkalpinang" class="text-[10px] px-2 py-0.5 rounded-lg bg-white/15 hover:bg-white/30 text-white font-bold transition flex items-center gap-1" title="Buka Peta Kota Pangkalpinang">
+                        <i class="fa-solid fa-map"></i> Peta
+                    </a>
+                </div>
             </div>
         </div>
 

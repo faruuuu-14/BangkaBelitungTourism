@@ -68,8 +68,27 @@
             Sistem informasi intelijen terintegrasi untuk memetakan <strong class="text-white font-bold">875 objek pariwisata</strong>, menganalisis rasio beban amenitas hotel &amp; restoran berbasis data resmi BPS, serta meranking destinasi unggulan menggunakan algoritma ilmiah SPK TOPSIS.
         </p>
 
+        <!-- Kotak Pencarian Instan (Instant Quick Search Bar) -->
+        <div class="relative w-full max-w-xl z-20 pt-1">
+            <div class="relative flex items-center">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 text-slate-400 text-sm"></i>
+                <input type="text" id="heroQuickSearch" placeholder="Cari pantai, hotel, museum, atau kuliner khas Babel..."
+                    autocomplete="off"
+                    class="w-full pl-11 pr-24 py-3 sm:py-3.5 text-xs sm:text-sm rounded-2xl bg-white/95 text-slate-900 placeholder-slate-400 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-ocean-500 shadow-xl border border-white/30 backdrop-blur-md"
+                    oninput="handleHeroSearch(this.value)"
+                    onkeydown="if(event.key==='Enter') submitHeroSearch()">
+                <button onclick="submitHeroSearch()" class="absolute right-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-ocean-600 hover:bg-ocean-700 text-white font-bold text-xs shadow-sm transition">
+                    Cari
+                </button>
+            </div>
+            <!-- Dropdown Hasil Pencarian Cepat -->
+            <div id="heroSearchResults" class="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden hidden max-h-72 overflow-y-auto text-slate-800 z-50">
+                <!-- Hasil dimasukkan secara dinamis via JS -->
+            </div>
+        </div>
+
         <!-- Tombol Aksi Pintas (Modern Glassmorphic Quick Action Buttons) -->
-        <div class="flex flex-wrap items-center gap-2.5 sm:gap-3.5 pt-2">
+        <div class="flex flex-wrap items-center gap-2.5 sm:gap-3.5 pt-1">
             <!-- Aksi 1: Peta Spasial GIS -->
             <a href="index.php?page=peta" class="px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl bg-ocean-600 hover:bg-ocean-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-ocean-600/30 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
                 <i class="fa-solid fa-map-location-dot"></i>
@@ -104,3 +123,94 @@
     </div>
 
 </div>
+
+<script>
+// Data tempat untuk pencarian instan
+const heroSearchData = <?= json_encode($searchPlaces ?? []) ?>;
+
+function handleHeroSearch(q) {
+    const val = (q || '').trim().toLowerCase();
+    const resultsContainer = document.getElementById('heroSearchResults');
+    if (!val || val.length < 2) {
+        resultsContainer.classList.add('hidden');
+        resultsContainer.innerHTML = '';
+        return;
+    }
+
+    const matches = heroSearchData.filter(p => 
+        p.nama.toLowerCase().includes(val) || 
+        p.kabupaten.toLowerCase().includes(val) || 
+        (p.kecamatan && p.kecamatan.toLowerCase().includes(val))
+    ).slice(0, 5);
+
+    if (matches.length === 0) {
+        resultsContainer.innerHTML = `
+            <div class="p-4 text-center text-xs text-slate-500">
+                Tidak ada destinasi cocok dengan "<strong>${val}</strong>".
+            </div>
+        `;
+        resultsContainer.classList.remove('hidden');
+        return;
+    }
+
+    let html = '';
+    matches.forEach(p => {
+        const photo = getHeroItemPhoto(p.nama, p.sub_kategori, p.kabupaten);
+        html += `
+            <a href="index.php?page=peta&search=${encodeURIComponent(p.nama)}" 
+                class="p-2.5 flex items-center justify-between gap-3 hover:bg-slate-50 border-b border-slate-100 last:border-0 transition-colors">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <img src="${photo}" alt="${p.nama}" class="w-10 h-10 rounded-xl object-cover border border-slate-200 shrink-0">
+                    <div class="min-w-0">
+                        <div class="font-bold text-xs text-slate-900 truncate">${p.nama}</div>
+                        <div class="text-[10px] text-slate-500 flex items-center gap-1.5 mt-0.5">
+                            <span class="font-semibold text-ocean-700">${p.sub_kategori}</span>
+                            <span>&bull;</span>
+                            <span>${p.kabupaten}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1 shrink-0 text-amber-500 font-bold text-xs">
+                    <i class="fa-solid fa-star text-[10px]"></i>
+                    <span>${parseFloat(p.rating).toFixed(1)}</span>
+                </div>
+            </a>
+        `;
+    });
+
+    resultsContainer.innerHTML = html;
+    resultsContainer.classList.remove('hidden');
+}
+
+function submitHeroSearch() {
+    const q = document.getElementById('heroQuickSearch').value.trim();
+    if (q) {
+        window.location.href = `index.php?page=peta&search=${encodeURIComponent(q)}`;
+    }
+}
+
+function getHeroItemPhoto(nama, sub, kab) {
+    const n = (nama || '').toLowerCase();
+    const k = (kab || '').toLowerCase();
+    if (n.includes('tikus emas') || n.includes('parai')) return 'assets/img/pantai_tikus_emas.jpg';
+    if (n.includes('tanjung ular') || n.includes('menumbing') || k.includes('barat')) return 'assets/img/pantai_tanjung_ular.jpg';
+    if (n.includes('kaolin') || k.includes('tengah')) return 'assets/img/danau_kaolin_koba.jpg';
+    if (n.includes('batu perahu') || k.includes('selatan')) return 'assets/img/pantai_batu_perahu.jpg';
+    if (n.includes('lengkuas')) return 'assets/img/pantai_lengkuas.jpg';
+    if (n.includes('tanjung tinggi') || k.includes('belitung')) return 'assets/img/pantai_tanjung_tinggi.jpg';
+    if (n.includes('gantong') || k.includes('timur')) return 'assets/img/laskar_pelangi_gantong.jpg';
+    if (n.includes('museum') || n.includes('timah') || k.includes('pangkalpinang')) return 'assets/img/museum_timah_babel.jpg';
+    if (sub === 'Kebudayaan') return 'assets/img/kain_cual_bangka.jpg';
+    if (sub === 'Restoran') return 'assets/img/budaya_nganggung.jpg';
+    return 'assets/img/pantai_tikus_emas.jpg';
+}
+
+// Tutup dropdown jika klik di luar
+document.addEventListener('click', function(e) {
+    const searchBox = document.getElementById('heroQuickSearch');
+    const results = document.getElementById('heroSearchResults');
+    if (searchBox && results && !searchBox.contains(e.target) && !results.contains(e.target)) {
+        results.classList.add('hidden');
+    }
+});
+</script>

@@ -43,9 +43,15 @@
         </div>
 
         <!-- Deskripsi & Narasi Objek Wisata -->
-        <div class="p-5 sm:p-6 bg-slate-900/95 border-t border-white/10 text-white space-y-1.5">
-            <h3 id="photoModalTitle" class="text-base sm:text-lg font-black text-white"></h3>
-            <p id="photoModalDesc" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
+        <div class="p-5 sm:p-6 bg-slate-900/95 border-t border-white/10 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="space-y-1 max-w-2xl">
+                <h3 id="photoModalTitle" class="text-base sm:text-lg font-black text-white"></h3>
+                <p id="photoModalDesc" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
+            </div>
+            <a id="photoModalMapBtn" href="index.php?page=peta" class="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-ocean-600 hover:bg-ocean-500 text-white font-bold text-xs shadow-lg shadow-ocean-600/30 flex items-center gap-2 shrink-0 transition">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>Jelajahi di Peta</span>
+            </a>
         </div>
 
     </div>
@@ -58,12 +64,14 @@
  * @param {string} src Jalur path file gambar
  * @param {string} title Judul objek wisata/budaya
  * @param {string} desc Narasi sejarah/keunikan objek
+ * @param {string} searchKeyword Kata kunci untuk pencarian di peta WebGIS
  */
-function openPhotoModal(src, title, desc) {
+function openPhotoModal(src, title, desc, searchKeyword = '') {
     const modal = document.getElementById('photoModal');
     const img = document.getElementById('photoModalImg');
     const t = document.getElementById('photoModalTitle');
     const d = document.getElementById('photoModalDesc');
+    const mapBtn = document.getElementById('photoModalMapBtn');
 
     if (!modal || !img) return;
 
@@ -71,6 +79,11 @@ function openPhotoModal(src, title, desc) {
     img.alt = title;
     t.innerHTML = title;
     d.innerHTML = desc;
+
+    if (mapBtn) {
+        const query = searchKeyword || title.split('&bull;')[0].trim();
+        mapBtn.href = `index.php?page=peta&search=${encodeURIComponent(query)}`;
+    }
 
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden'; // Mencegah scrolling latar belakang

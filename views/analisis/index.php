@@ -67,6 +67,24 @@ $idealCount = count(array_filter($gapData, fn($i) => str_contains($i['status'], 
 <!-- ============================================================== -->
 <main class="flex-grow w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 pb-24 lg:pb-8 min-w-0 overflow-hidden space-y-6">
 
+    <!-- KOP SURAT RESMI PEMERINTAH PROVINSI (HANYA MUNCUL SAAT CETAK / PDF) -->
+    <div class="hidden print:block border-b-2 border-slate-900 pb-3 mb-6">
+        <div class="flex items-center justify-between gap-4">
+            <div class="w-14 h-14 shrink-0 flex items-center justify-center">
+                <img src="assets/img/fathurrahman.jpg" alt="Logo" class="w-12 h-12 rounded-xl object-cover border border-slate-400">
+            </div>
+            <div class="text-center flex-1 space-y-0.5">
+                <h2 class="text-sm font-black uppercase tracking-wider text-slate-900 leading-tight">Pemerintah Provinsi Kepulauan Bangka Belitung</h2>
+                <h3 class="text-xs font-extrabold uppercase text-slate-800 leading-tight">Dinas Pariwisata, Kebudayaan, dan Kepemudaan Olahraga</h3>
+                <p class="text-[9px] text-slate-600">Komplek Perkantoran Terpadu Pemerintah Provinsi Kepulauan Bangka Belitung, Pangkalpinang</p>
+                <p class="text-[9px] font-mono text-slate-500 font-bold">Ringkasan Eksekutif Spatial Decision Support System (SDSS) Pariwisata Babel - <?= date('d F Y') ?></p>
+            </div>
+            <div class="w-14 h-14 shrink-0 text-right text-[8px] text-slate-500 font-mono flex flex-col justify-center">
+                <span class="font-bold border border-slate-400 px-1 py-0.5 rounded">DOKUMEN<br>EKSEKUTIF</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Header Halaman Analisis -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -88,9 +106,9 @@ $idealCount = count(array_filter($gapData, fn($i) => str_contains($i['status'], 
                 <i class="fa-solid fa-circle-question text-ocean-400"></i>
                 <span>Panduan &amp; Rumus</span>
             </button>
-            <button onclick="window.print()" class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold border border-slate-200 shadow-xs transition-colors flex items-center gap-1.5">
+            <button onclick="window.print()" class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold border border-slate-200 shadow-xs transition-colors flex items-center gap-1.5" title="Cetak Ringkasan Eksekutif Resmi (A4 / PDF)">
                 <i class="fa-solid fa-print text-ocean-600"></i>
-                <span>Cetak Laporan</span>
+                <span>Cetak Ringkasan Eksekutif</span>
             </button>
         </div>
     </div>

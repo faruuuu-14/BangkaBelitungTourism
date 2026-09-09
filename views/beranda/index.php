@@ -95,6 +95,17 @@ $topDestinasi = $pdo->query("
     ORDER BY ulasan DESC
     LIMIT 5
 ")->fetchAll();
+
+// --------------------------------------------------------------------------
+// 5. QUERY DATA OBJEK WISATA UNTUK PENCARIAN CEPAT INSTAN DI HERO BANNER
+// --------------------------------------------------------------------------
+$searchPlaces = $pdo->query("
+    SELECT id, nama, kabupaten, kecamatan, sub_kategori, rating, ulasan
+    FROM tempat_wisata
+    WHERE status_verifikasi = 'Resmi'
+    ORDER BY ulasan DESC
+    LIMIT 150
+")->fetchAll();
 ?>
 
 <!-- ============================================================== -->

@@ -82,6 +82,33 @@
     </div>
 </footer>
 
+<!-- Tombol Melayang Kembali ke Atas (Back to Top FAB) -->
+<button id="backToTopBtn" onclick="scrollToTop()" class="fixed bottom-20 lg:bottom-8 right-4 lg:right-8 z-40 w-11 h-11 rounded-2xl bg-ocean-600 hover:bg-ocean-700 text-white shadow-lg shadow-ocean-600/30 flex items-center justify-center transition-all duration-300 opacity-0 pointer-events-none translate-y-3 cursor-pointer group" title="Kembali ke Atas Halaman">
+    <i class="fa-solid fa-arrow-up text-sm group-hover:-translate-y-0.5 transition-transform"></i>
+</button>
+
+<script>
+window.addEventListener('scroll', function() {
+    const btn = document.getElementById('backToTopBtn');
+    if (btn) {
+        if (window.scrollY > 300) {
+            btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
+            btn.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+        } else {
+            btn.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            btn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-3');
+        }
+    }
+});
+
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+</script>
+
 <?php include __DIR__ . '/guide_modal.php'; ?>
 </body>
 </html>

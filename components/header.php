@@ -65,6 +65,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -95,6 +96,13 @@
         }
     </script>
     <script>
+        // Inisialisasi Tema Gelap/Terang Instan (Mencegah Flashing Layar)
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
         // Watermark Sistem & Hak Cipta Pengembang
         console.log("%c=======================================================", "color:#0284c7;font-weight:bold;");
         console.log("%c BABEL TOURISM SPATIAL INTELLIGENCE & DECISION SUPPORT SYSTEM %c", "background:#0284c7;color:#ffffff;font-weight:bold;padding:4px 8px;border-radius:4px;", "");
@@ -123,6 +131,43 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #f8fafc;
+            color: #1e293b;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+        .dark body {
+            background-color: #0b0f19;
+            color: #f1f5f9;
+        }
+        .dark .bg-white {
+            background-color: #111827 !important;
+            color: #f3f4f6;
+            border-color: #1f2937;
+        }
+        .dark .bg-slate-50 {
+            background-color: #1a2234 !important;
+            color: #f3f4f6;
+            border-color: #26334d;
+        }
+        .dark .border-slate-200 {
+            border-color: #1f2937 !important;
+        }
+        .dark .border-slate-100 {
+            border-color: #1e293b !important;
+        }
+        .dark .text-slate-900 {
+            color: #f8fafc !important;
+        }
+        .dark .text-slate-800 {
+            color: #f1f5f9 !important;
+        }
+        .dark .text-slate-700 {
+            color: #cbd5e1 !important;
+        }
+        .dark .text-slate-600 {
+            color: #94a3b8 !important;
+        }
+        .dark .text-slate-500 {
+            color: #94a3b8 !important;
         }
         /* Custom scrollbar */
         ::-webkit-scrollbar {

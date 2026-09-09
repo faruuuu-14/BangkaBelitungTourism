@@ -48,6 +48,10 @@ $places = $pdo->query($sql)->fetchAll();
 // Daftar Kabupaten unik untuk dropdown filter
 $kabList = array_unique(array_column($places, 'kabupaten'));
 sort($kabList);
+
+// Simpul Transportasi (Bandara & Pelabuhan) & Statistik Aksesibilitas
+$hubs = getTransportHubs();
+$catchmentStats = getAccessibilityCatchmentStats();
 ?>
 
 <!-- ============================================================== -->

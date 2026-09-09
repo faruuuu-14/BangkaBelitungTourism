@@ -66,10 +66,16 @@
                 </button>
             </div>
 
-            <!-- Tombol Toggle Buffer 5 km -->
-            <button id="btnBuffer" onclick="toggleBuffer()" class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[11px] font-bold transition-all shadow-xs flex items-center gap-1">
+            <!-- Tombol Toggle Buffer 5 km Amenitas -->
+            <button id="btnBuffer" onclick="toggleBuffer()" class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[11px] font-bold transition-all shadow-xs flex items-center gap-1" title="Buffer Radius 5 km Fasilitas Hotel & Restoran">
                 <i class="fa-solid fa-bullseye text-ocean-600 text-[10px]"></i>
-                <span class="hidden sm:inline">Buffer 5 km</span>
+                <span class="hidden md:inline">Radius 5 km</span>
+            </button>
+
+            <!-- Tombol Toggle Buffer Cincin Kemenparekraf (15, 30, 50 km) -->
+            <button id="btnCatchment" onclick="toggleCatchmentRings()" class="px-2.5 py-1.5 rounded-xl border border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-800 text-[11px] font-bold transition-all shadow-xs flex items-center gap-1" title="Buffer Aksesibilitas Bandara/Pelabuhan (15, 30, 50 km)">
+                <i class="fa-solid fa-plane-departure text-purple-600 text-[10px]"></i>
+                <span class="hidden md:inline">Buffer Akses</span>
             </button>
 
             <!-- Tombol Perencana Rute Cerdas -->
@@ -105,6 +111,14 @@
             <?php foreach ($kabList as $kab): ?>
             <option value="<?= htmlspecialchars($kab) ?>"><?= htmlspecialchars($kab) ?></option>
             <?php endforeach; ?>
+        </select>
+
+        <!-- Filter Simpul Gerbang Transportasi (Bandara & Pelabuhan) -->
+        <select id="hubFilter" onchange="onHubFilterChange()" class="text-xs rounded-xl border border-purple-200 bg-purple-50/90 py-1.5 px-2.5 font-bold text-purple-900 focus:ring-1 focus:ring-purple-500">
+            <option value="all">✈️⚓ Semua Simpul (Bandara & Pelabuhan)</option>
+            <option value="bandara">✈️ Bandara Udara (PGK & TJQ)</option>
+            <option value="pelabuhan">⚓ Pelabuhan Laut (5 Pintu Masuk)</option>
+            <option value="none">Sembunyikan Simpul</option>
         </select>
 
         <!-- Filter Kategori Chip Buttons -->
