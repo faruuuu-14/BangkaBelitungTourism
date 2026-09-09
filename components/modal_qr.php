@@ -336,34 +336,17 @@ function resetCopyQrBtn() {
 function printQrPoster() {
     const printContents = document.getElementById('printableQrCard').innerHTML;
     const printWindow = window.open('', '_blank', 'width=600,height=700');
-    printWindow.document.write(`
-        <html>
-            <head>
-                <title>Cetak Papan Petunjuk Wisata - ${document.getElementById('qrNamaDestinasi').innerText}</title>
-                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-                <style>
-                    body { font-family: sans-serif; padding: 40px; background: white; text-align: center; }
-                    .print-box { border: 2px solid #0284c7; border-radius: 20px; padding: 30px; max-width: 480px; margin: 0 auto; }
-                    canvas, img { margin: 20px auto !important; max-width: 200px; display: inline-block; }
-                </style>
-            </head>
-            <body>
-                <div class="print-box">
-                    <div style="font-size: 11px; font-weight: bold; color: #0284c7; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
-                        DINAS PARIWISATA &bull; KEPULAUAN BANGKA BELITUNG
-                    </div>
-                    ${printContents}
-                    <div style="font-size: 10px; color: #64748b; margin-top: 20px;">
-                        Diproduksi oleh Babel Tourism Hub &bull; Pengembang: Fathurrahman Safari Lubis (NIM: 2411500025)
-                    </div>
-                </div>
-                <script>
-                    window.onload = function() { window.print(); window.close(); }
-                </script>
-            </body>
-        </html>
-    `);
+    if (!printWindow) return;
+    const namaWisata = document.getElementById('qrNamaDestinasi') ? document.getElementById('qrNamaDestinasi').innerText : 'Destinasi Babel';
+    printWindow.document.write('<!DOCTYPE html><html><head><title>Cetak Papan Petunjuk Wisata - ' + namaWisata + '</title><style>body { font-family: sans-serif; padding: 40px; background: white; text-align: center; } .print-box { border: 2px solid #0284c7; border-radius: 20px; padding: 30px; max-width: 480px; margin: 0 auto; } canvas, img { margin: 20px auto !important; max-width: 200px; display: inline-block; }</style></head><body><div class="print-box"><div style="font-size: 11px; font-weight: bold; color: #0284c7; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">DINAS PARIWISATA &bull; KEPULAUAN BANGKA BELITUNG</div>' + printContents + '<div style="font-size: 10px; color: #64748b; margin-top: 20px;">Diproduksi oleh Babel Tourism Hub &bull; Pengembang: Fathurrahman Safari Lubis (NIM: 2411500025)</div></div></body></html>');
     printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+        try {
+            printWindow.print();
+            printWindow.close();
+        } catch (e) {}
+    }, 500);
 }
 
 // Tutup modal jika tombol ESC ditekan

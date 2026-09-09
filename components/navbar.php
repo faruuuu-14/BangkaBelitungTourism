@@ -76,7 +76,7 @@ if (!function_exists('navActive')) {
     </div>
 </div>
 
-<header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 w-full max-w-full overflow-hidden">
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 w-full">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 w-full">
         <div class="flex items-center justify-between h-14 sm:h-16 gap-2 w-full min-w-0">
             
@@ -86,36 +86,36 @@ if (!function_exists('navActive')) {
                     <i class="fa-solid fa-compass text-sm sm:text-lg"></i>
                 </div>
                 <div class="min-w-0">
-                    <span class="text-sm sm:text-lg font-extrabold bg-gradient-to-r from-ocean-800 to-slate-900 bg-clip-text text-transparent leading-none block truncate">Pariwisata Babel</span>
-                    <span class="block text-[9px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-wider mt-0.5 truncate">Portal Intelijen &amp; Spasial</span>
+                    <span class="text-sm sm:text-base font-extrabold bg-gradient-to-r from-ocean-800 to-slate-900 bg-clip-text text-transparent leading-none block truncate">Pariwisata Babel</span>
+                    <span class="hidden xl:block text-[9px] sm:text-[10px] font-semibold text-slate-500 uppercase tracking-wider mt-0.5 truncate">Portal Intelijen &amp; Spasial</span>
                 </div>
             </a>
 
-            <!-- Menu Navigasi Desktop (Responsif & Rapi Berbahasa Indonesia) -->
+            <!-- Menu Navigasi Desktop (Responsif, Ringkas & Rapi Berbahasa Indonesia) -->
             <nav class="hidden lg:flex items-center gap-0.5 xl:gap-1 bg-slate-100/90 p-1 rounded-2xl border border-slate-200/70 flex-shrink-0">
-                <a href="index.php?page=beranda" class="px-2.5 xl:px-3.5 py-1.5 xl:py-2 rounded-xl text-xs xl:text-sm transition-all flex items-center gap-1.5 <?= navActive('beranda', $currentPage) ?>">
+                <a href="index.php?page=beranda" class="px-2 xl:px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 <?= navActive('beranda', $currentPage) ?>">
                     <i class="fa-solid fa-house text-xs"></i>
                     <span>Beranda</span>
                 </a>
-                <a href="index.php?page=peta" class="px-2.5 xl:px-3.5 py-1.5 xl:py-2 rounded-xl text-xs xl:text-sm transition-all flex items-center gap-1.5 <?= navActive('peta', $currentPage) ?>">
+                <a href="index.php?page=peta" class="px-2 xl:px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 <?= navActive('peta', $currentPage) ?>">
                     <i class="fa-solid fa-map-location-dot text-xs"></i>
-                    <span>Peta Wisata</span>
+                    <span>Peta<span class="hidden xl:inline"> Wisata</span></span>
                 </a>
-                <a href="index.php?page=analisis" class="px-2.5 xl:px-3.5 py-1.5 xl:py-2 rounded-xl text-xs xl:text-sm transition-all flex items-center gap-1.5 <?= navActive('analisis', $currentPage) ?>">
+                <a href="index.php?page=analisis" class="px-2 xl:px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 <?= navActive('analisis', $currentPage) ?>">
                     <i class="fa-solid fa-chart-line text-xs"></i>
-                    <span>Analisis &amp; BPS</span>
+                    <span>Analisis<span class="hidden xl:inline"> BPS</span></span>
                 </a>
-                <a href="index.php?page=rekomendasi" class="px-2.5 xl:px-3.5 py-1.5 xl:py-2 rounded-xl text-xs xl:text-sm transition-all flex items-center gap-1.5 <?= navActive('rekomendasi', $currentPage) ?>">
+                <a href="index.php?page=rekomendasi" class="px-2 xl:px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 <?= navActive('rekomendasi', $currentPage) ?>">
                     <i class="fa-solid fa-ranking-star text-xs"></i>
-                    <span>Rekomendasi TOPSIS</span>
+                    <span>SPK<span class="hidden xl:inline"> TOPSIS</span></span>
                 </a>
-                <a href="index.php?page=tambah" class="px-2.5 xl:px-3.5 py-1.5 xl:py-2 rounded-xl text-xs xl:text-sm transition-all flex items-center gap-1.5 <?= navActive('tambah', $currentPage) ?>">
+                <a href="index.php?page=tambah" class="px-2 xl:px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 <?= navActive('tambah', $currentPage) ?>">
                     <i class="fa-solid fa-circle-plus text-xs"></i>
-                    <span>Usulkan Tempat</span>
+                    <span>Usulkan</span>
                 </a>
-                <a href="index.php?page=verifikasi" class="px-2 xl:px-3 py-1.5 xl:py-2 rounded-xl text-xs xl:text-sm transition-all flex items-center gap-1 <?= navActive('verifikasi', $currentPage) ?>">
+                <a href="index.php?page=verifikasi" class="px-2 xl:px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1 <?= navActive('verifikasi', $currentPage) ?>">
                     <i class="fa-solid fa-shield-halved text-xs"></i>
-                    <span>Moderasi Dinas</span>
+                    <span>Moderasi</span>
                     <?php if ($pendingSubmissions > 0): ?>
                     <span class="px-1.5 py-0.2 rounded-full text-[10px] font-extrabold bg-purple-600 text-white animate-pulse">
                         <?= $pendingSubmissions ?>
@@ -124,8 +124,8 @@ if (!function_exists('navActive')) {
                 </a>
             </nav>
 
-            <!-- Aksi Kanan & Profil Pengembang -->
-            <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+            <!-- Aksi Kanan & Profil Pengembang (Ukuran Seragam, Rapi & Elegan) -->
+            <div class="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
                 <!-- Tombol Pembuat Kode QR Wisata Pintar (Smart Tourism QR Generator) -->
                 <button onclick="openGenericQrModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-ocean-50 hover:bg-ocean-100 text-ocean-700 flex items-center justify-center border border-ocean-200 transition-all shadow-xs cursor-pointer" title="Pembuat Kode QR Wisata Pintar (Navigasi HP Langsung)">
                     <i class="fa-solid fa-qrcode text-xs sm:text-sm"></i>
@@ -143,15 +143,16 @@ if (!function_exists('navActive')) {
                 </button>
 
                 <!-- Tombol Buku Panduan Pengguna -->
-                <button onclick="openGuideModal()" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 hover:text-ocean-700 text-xs font-bold border border-slate-200 transition-all shadow-xs" title="Buku Panduan, Sumber Data &amp; Metodologi">
-                    <i class="fa-solid fa-circle-question text-ocean-600 text-sm"></i>
-                    <span class="hidden sm:inline">Panduan</span>
+                <button onclick="openGuideModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 hover:text-ocean-700 flex items-center justify-center border border-slate-200 transition-all shadow-xs cursor-pointer" title="Buku Panduan, Sumber Data &amp; Metodologi">
+                    <i class="fa-solid fa-circle-question text-ocean-600 text-xs sm:text-sm"></i>
                 </button>
 
-                <!-- Avatar Profil Pengembang (Faru) -->
-                <button onclick="openGuideModal('gtab-policy')" class="flex items-center gap-2 p-1 pr-2 sm:pr-2.5 rounded-full bg-slate-100 hover:bg-ocean-50 border border-slate-200 transition-all text-xs" title="Profil Pengembang: Fathurrahman Safari Lubis (NIM: 2411500025)">
-                    <img src="assets/img/fathurrahman.jpg" alt="Fathurrahman" class="w-7 h-7 rounded-full object-cover object-center border border-ocean-500 shadow-xs">
-                    <span class="hidden xl:inline text-[11px] font-bold text-slate-700">Fathurrahman S.L.</span>
+                <!-- Avatar Profil Pengembang (Fathurrahman Safari Lubis) -->
+                <button onclick="openGuideModal('gtab-policy')" class="relative flex items-center justify-center p-0.5 rounded-full bg-slate-100 hover:bg-ocean-50 border border-slate-200 hover:border-ocean-300 transition-all cursor-pointer group" title="Profil Pengembang: Fathurrahman Safari Lubis (NIM: 2411500025)">
+                    <img src="assets/img/fathurrahman.jpg" alt="Fathurrahman Safari Lubis" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover object-center border border-ocean-500 shadow-xs group-hover:scale-105 transition-transform">
+                    <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center text-[7px] text-white">
+                        <i class="fa-solid fa-check"></i>
+                    </span>
                 </button>
             </div>
 
