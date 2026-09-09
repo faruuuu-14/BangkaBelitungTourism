@@ -106,7 +106,7 @@ function getCorrelationBadge($r) {
                     <span class="text-xs font-normal text-slate-300">YoY 2026</span>
                 </div>
                 <p class="text-slate-400 text-[11px] leading-relaxed">
-                    Total <?= number_format($prov['kunjungan_2026']) ?> wisatawan nusantara telah berkunjung ke Babel pada triwulan awal 2026.
+                    Total <?= number_format($prov['total_2026'] ?? 0) ?> wisatawan nusantara telah berkunjung ke Babel pada triwulan awal 2026.
                 </p>
             </div>
 

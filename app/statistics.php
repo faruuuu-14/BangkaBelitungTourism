@@ -155,10 +155,12 @@ function getBpsYoYGrowth(): array {
 
     $provGrowth = $totalProv2025 > 0 ? round((($totalProv2026 - $totalProv2025) / $totalProv2025) * 100, 2) : 0;
     $result['provinsi'] = [
-        'total_2025' => $totalProv2025,
-        'total_2026' => $totalProv2026,
-        'selisih'    => $totalProv2026 - $totalProv2025,
-        'growth'     => $provGrowth
+        'total_2025'     => $totalProv2025,
+        'total_2026'     => $totalProv2026,
+        'kunjungan_2026' => $totalProv2026,
+        'kunjungan_2025' => $totalProv2025,
+        'selisih'        => $totalProv2026 - $totalProv2025,
+        'growth'         => $provGrowth
     ];
 
     return $result;
