@@ -357,9 +357,9 @@ function createPopupContent(place) {
     const color = getMarkerColor(place.sub_kategori);
     const access = getNearestHubClient(parseFloat(place.latitude), parseFloat(place.longitude));
 
-    const safeNama = place.nama.replace(/'/g, "\\'");
-    const safeSub = (place.sub_kategori || '').replace(/'/g, "\\'");
-    const safeKab = (place.kabupaten || '').replace(/'/g, "\\'");
+    const safeNama = (place.nama || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    const safeSub = (place.sub_kategori || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    const safeKab = (place.kabupaten || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
     // Tombol Radar Amenitas (Khusus kelompok Daya Tarik / Wisata)
     let radarButtonHtml = '';

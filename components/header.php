@@ -61,6 +61,9 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- Generator Kode QR Mandiri (Offline / Instant QR Code Engine) -->
+    <script src="assets/qrcode.min.js"></script>
+
     <!-- Tailwind CSS CDN dengan Konfigurasi Kustom -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>

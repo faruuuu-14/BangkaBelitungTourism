@@ -125,6 +125,7 @@ if (!function_exists('navActive')) {
             </nav>
 
             <!-- Aksi Kanan & Profil Pengembang -->
+            <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
                 <!-- Tombol Pembuat Kode QR Wisata Pintar (Smart Tourism QR Generator) -->
                 <button onclick="openGenericQrModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-ocean-50 hover:bg-ocean-100 text-ocean-700 flex items-center justify-center border border-ocean-200 transition-all shadow-xs cursor-pointer" title="Pembuat Kode QR Wisata Pintar (Navigasi HP Langsung)">
                     <i class="fa-solid fa-qrcode text-xs sm:text-sm"></i>
@@ -150,17 +151,8 @@ if (!function_exists('navActive')) {
                 <!-- Avatar Profil Pengembang (Faru) -->
                 <button onclick="openGuideModal('gtab-policy')" class="flex items-center gap-2 p-1 pr-2 sm:pr-2.5 rounded-full bg-slate-100 hover:bg-ocean-50 border border-slate-200 transition-all text-xs" title="Profil Pengembang: Fathurrahman Safari Lubis (NIM: 2411500025)">
                     <img src="assets/img/fathurrahman.jpg" alt="Fathurrahman" class="w-7 h-7 rounded-full object-cover object-center border border-ocean-500 shadow-xs">
-                    <span class="hidden 2xl:inline text-[11px] font-bold text-slate-700">Fathurrahman S.L.</span>
+                    <span class="hidden xl:inline text-[11px] font-bold text-slate-700">Fathurrahman S.L.</span>
                 </button>
-
-                <!-- Status 875 Data Wisata Terverifikasi -->
-                <div class="hidden 2xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-700 text-xs font-semibold">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                    </span>
-                    <span>875 Data Terverifikasi</span>
-                </div>
             </div>
 
         </div>

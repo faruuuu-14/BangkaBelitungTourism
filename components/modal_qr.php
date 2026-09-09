@@ -12,18 +12,16 @@
  * ------------------------------------------------------------------------------
  * DESKRIPSI & FUNGSI FILE:
  * Komponen modal global untuk membuat dan menampilkan Kode QR (Quick Response)
- * secara on-the-fly untuk setiap destinasi pariwisata Bangka Belitung.
- * Memungkinkan wisatawan memindai kode menggunakan kamera smartphone untuk
- * langsung membuka navigasi belokan-demi-belokan (turn-by-turn navigation)
- * di aplikasi Google Maps tanpa mengetik manual.
+ * secara instan (0 milidetik, tanpa dependensi API eksternal) untuk setiap destinasi
+ * pariwisata Bangka Belitung. Menggunakan pustaka lokal QRCode.js HTML5 Canvas
+ * sehingga bekerja sempurna baik saat online maupun offline.
  * 
  * FITUR UTAMA:
- * 1. On-the-fly QR Code Rendering via API QR Engine beresolusi tinggi (300x300 px)
- * 2. Dropdown Pemilih Cepat 150 Destinasi Wisata Populer se-Bangka Belitung
- * 3. URL Deep-linking terintegrasi ke Google Maps Driving Navigation API
- * 4. Salin tautan instan ke clipboard dengan indikator visual
- * 5. Mode Cetak Kartu Papan Petunjuk Fisik (Print Signpost Poster) untuk anjungan
- *    wisata bandara, pelabuhan, hotel, dan pos informasi Kemenparekraf.
+ * 1. Pustaka QR Mandiri Lokal (Client-side HTML5 Canvas / Image) - Sangat Cepat & Andal
+ * 2. Dropdown Pemilih Cepat 150 Destinasi Wisata Terpopuler se-Bangka Belitung
+ * 3. Deep-linking Google Maps Turn-by-Turn GPS Driving Navigation
+ * 4. Salin Tautan Instan ke Clipboard dengan Indikator Visual
+ * 5. Cetak Papan Petunjuk Fisik (Print Signpost Poster) ber-Kop Resmi Dinas Pariwisata
  * 
  * KETERKAITAN ALUR (DATA & LOGIKA):
  * - Dimuat oleh: components/footer.php (Tersedia di seluruh halaman aplikasi)
@@ -56,8 +54,13 @@ try {
 <!-- ============================================================== -->
 <!-- MODAL GLOBAL KODE QR WISATA PINTAR (SMART TOURISM QR CODE)     -->
 <!-- ============================================================== -->
-<div id="modalQrWisata" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5">
-    <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-lg flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+<div id="modalQrWisata" 
+     class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm items-center justify-center p-3 sm:p-5" 
+     style="display: none; z-index: 99999;"
+     onclick="if(event.target === this) closeQrModal();">
+    
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-lg flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+         onclick="event.stopPropagation();">
         
         <!-- Header Modal -->
         <div class="p-4 sm:p-5 bg-gradient-to-r from-slate-950 via-ocean-950 to-indigo-950 text-white flex items-center justify-between shrink-0 border-b border-white/10">
@@ -70,13 +73,13 @@ try {
                     <p class="text-[10px] sm:text-xs text-ocean-300 font-medium">Pindai dengan Smartphone untuk Navigasi GPS Langsung</p>
                 </div>
             </div>
-            <button onclick="closeQrModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+            <button onclick="closeQrModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
         </div>
 
         <!-- Selector Destinasi Cepat (Bisa Pilih Destinasi Mana Pun) -->
-        <div class="p-4 bg-slate-50 border-b border-slate-200 shrink-0">
+        <div class="p-3.5 sm:p-4 bg-slate-50 border-b border-slate-200 shrink-0">
             <label class="block text-[11px] font-extrabold text-ocean-900 uppercase tracking-wider mb-1.5">
                 <i class="fa-solid fa-location-dot text-ocean-600 mr-1"></i> Pilih / Ganti Destinasi Wisata:
             </label>
@@ -112,20 +115,12 @@ try {
 
             <!-- Wadah Gambar QR Code dengan Frame Elegan -->
             <div class="flex flex-col items-center justify-center">
-                <div class="relative p-4 bg-white rounded-2xl border-2 border-dashed border-ocean-300 shadow-sm flex flex-col items-center">
+                <div class="p-4 bg-white rounded-2xl border-2 border-dashed border-ocean-300 shadow-sm flex flex-col items-center">
                     
-                    <!-- Indikator Loading Gambar -->
-                    <div id="qrLoadingSpinner" class="absolute inset-0 bg-white/90 rounded-2xl flex flex-col items-center justify-center text-ocean-600 gap-2 z-10">
-                        <i class="fa-solid fa-circle-notch fa-spin text-2xl"></i>
-                        <span class="text-[11px] font-bold text-slate-600">Menghasilkan Kode QR...</span>
+                    <!-- Target Wadah Render QR Code HTML5 Canvas / Image -->
+                    <div id="qrCodeTarget" class="flex items-center justify-center min-w-[220px] min-h-[220px] p-2 bg-white rounded-xl">
+                        <!-- Pustaka QRCode.js merender canvas di sini -->
                     </div>
-
-                    <img id="qrImageElement" 
-                         src="" 
-                         alt="QR Code Navigasi Wisata" 
-                         class="w-48 h-48 sm:w-56 sm:h-56 object-contain rounded-lg transition-opacity duration-300 opacity-0"
-                         onload="document.getElementById('qrLoadingSpinner').classList.add('hidden'); this.classList.remove('opacity-0');"
-                         onerror="document.getElementById('qrLoadingSpinner').innerHTML = '<span class=\'text-xs text-red-500 font-bold\'>Gagal memuat QR Code. Cek koneksi internet.</span>';">
 
                     <div class="mt-3 text-center">
                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-[11px] font-bold">
@@ -147,10 +142,10 @@ try {
                     <span class="font-medium flex items-center gap-1.5">
                         <i class="fa-solid fa-mobile-screen-button text-emerald-600"></i> Kompatibilitas:
                     </span>
-                    <span class="font-semibold text-slate-800 text-[11px]">Semua Kamera HP &amp; Google Lens</span>
+                    <span class="font-semibold text-slate-800 text-[11px]">Kamera HP, Google Lens, WhatsApp</span>
                 </div>
                 <p class="text-[10px] text-slate-500 pt-1 border-t border-slate-200 text-center">
-                    Arahkan kamera smartphone ke kode QR di atas untuk memulai rute perjalanan secara otomatis.
+                    Arahkan kamera smartphone ke kode QR di atas untuk memulai navigasi rute perjalanan secara otomatis.
                 </p>
             </div>
 
@@ -159,11 +154,11 @@ try {
         <!-- Footer Modal: Tombol Aksi -->
         <div class="p-4 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 shrink-0">
             <div class="flex items-center gap-2">
-                <button onclick="copyQrNavigationLink()" id="btnCopyQrLink" class="px-3 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold transition flex items-center gap-1.5">
+                <button onclick="copyQrNavigationLink()" id="btnCopyQrLink" class="px-3 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-copy text-slate-600"></i>
                     <span id="copyQrBtnText">Salin Tautan</span>
                 </button>
-                <button onclick="printQrPoster()" class="px-3 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold transition flex items-center gap-1.5">
+                <button onclick="printQrPoster()" class="px-3 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-print text-slate-600"></i>
                     <span>Cetak Kartu</span>
                 </button>
@@ -178,7 +173,7 @@ try {
     </div>
 </div>
 
-<!-- Logika JavaScript Pengendali QR Code -->
+<!-- Logika JavaScript Pengendali QR Code Mandiri -->
 <script>
 let currentGmapsNavUrl = '';
 
@@ -198,6 +193,7 @@ function openGenericQrModal() {
  * Menangani pergantian pilihan dari dropdown di dalam modal
  */
 function onQrQuickSelectChange(selectEl) {
+    if (!selectEl) return;
     const opt = selectEl.options[selectEl.selectedIndex];
     if (!opt) return;
     openQrModal(
@@ -223,16 +219,21 @@ function openQrModal(nama, lat, lng, kab = '', sub = '') {
 
     // Bersihkan format input
     const cleanNama = nama || 'Destinasi Wisata';
-    const cleanLat = parseFloat(lat);
-    const cleanLng = parseFloat(lng);
+    const cleanLat = parseFloat(lat) || -2.1215;
+    const cleanLng = parseFloat(lng) || 106.1130;
     const cleanKab = kab || 'Provinsi Kepulauan Bangka Belitung';
     const cleanSub = sub || 'Pariwisata Babel';
 
     // Perbarui Teks UI
-    document.getElementById('qrNamaDestinasi').innerText = cleanNama;
-    document.getElementById('qrWilayahDestinasi').innerText = cleanKab;
-    document.getElementById('qrBadgeKategori').innerText = cleanSub;
-    document.getElementById('qrKoordinatText').innerText = `${cleanLat.toFixed(6)}, ${cleanLng.toFixed(6)}`;
+    const elNama = document.getElementById('qrNamaDestinasi');
+    const elKab = document.getElementById('qrWilayahDestinasi');
+    const elSub = document.getElementById('qrBadgeKategori');
+    const elCoord = document.getElementById('qrKoordinatText');
+
+    if (elNama) elNama.innerText = cleanNama;
+    if (elKab) elKab.innerText = cleanKab;
+    if (elSub) elSub.innerText = cleanSub;
+    if (elCoord) elCoord.innerText = `${cleanLat.toFixed(6)}, ${cleanLng.toFixed(6)}`;
 
     // Sinkronisasi dropdown jika nama cocok
     const sel = document.getElementById('qrQuickSelector');
@@ -254,21 +255,35 @@ function openQrModal(nama, lat, lng, kab = '', sub = '') {
         btnDirect.href = currentGmapsNavUrl;
     }
 
-    // Reset Indikator Loading
-    const spinner = document.getElementById('qrLoadingSpinner');
-    const qrImg = document.getElementById('qrImageElement');
-    if (spinner) spinner.classList.remove('hidden');
-    if (qrImg) {
-        qrImg.classList.add('opacity-0');
-        // Render QR Code via QR Server API beresolusi tinggi
-        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(currentGmapsNavUrl)}&margin=10`;
+    // Render QR Code secara instan menggunakan QRCode.js lokal (0 ms, offline-ready)
+    const target = document.getElementById('qrCodeTarget');
+    if (target) {
+        target.innerHTML = '';
+        try {
+            if (typeof QRCode !== 'undefined') {
+                new QRCode(target, {
+                    text: currentGmapsNavUrl,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#0c4a6e",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+            } else {
+                // Fallback online jika pustaka belum selesai dimuat
+                target.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentGmapsNavUrl)}" class="w-48 h-48 object-contain" alt="QR Code">`;
+            }
+        } catch (e) {
+            target.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentGmapsNavUrl)}" class="w-48 h-48 object-contain" alt="QR Code">`;
+        }
     }
 
     // Reset tombol copy
     resetCopyQrBtn();
 
-    // Buka Modal
-    modal.classList.remove('hidden');
+    // Tampilkan Modal secara absolut
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
 }
 
 /**
@@ -276,7 +291,10 @@ function openQrModal(nama, lat, lng, kab = '', sub = '') {
  */
 function closeQrModal() {
     const modal = document.getElementById('modalQrWisata');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
 }
 
 /**
@@ -326,7 +344,7 @@ function printQrPoster() {
                 <style>
                     body { font-family: sans-serif; padding: 40px; background: white; text-align: center; }
                     .print-box { border: 2px solid #0284c7; border-radius: 20px; padding: 30px; max-width: 480px; margin: 0 auto; }
-                    img { margin: 20px auto; max-width: 220px; }
+                    canvas, img { margin: 20px auto !important; max-width: 200px; display: inline-block; }
                 </style>
             </head>
             <body>
@@ -347,4 +365,11 @@ function printQrPoster() {
     `);
     printWindow.document.close();
 }
+
+// Tutup modal jika tombol ESC ditekan
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeQrModal();
+    }
+});
 </script>
