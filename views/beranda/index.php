@@ -116,7 +116,10 @@ $searchPlaces = $pdo->query("
     <!-- 1. Hero Banner Utama (Latar Belakang Penuh Foto Lengkuas) -->
     <?php include __DIR__ . '/banner_utama.php'; ?>
 
-    <!-- 2. Kartu Panduan Ringkas Pengguna Sistem -->
+    <!-- 2. Widget Cerdas Musim Bahari & Keselamatan Pesisir Babel -->
+    <?php include __DIR__ . '/widget_musim.php'; ?>
+
+    <!-- 3. Kartu Panduan Ringkas Pengguna Sistem -->
     <?php include __DIR__ . '/panduan_pengguna.php'; ?>
 
     <!-- 3. Kartu Metrik Kunci Pariwisata Babel -->

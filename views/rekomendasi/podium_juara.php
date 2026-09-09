@@ -78,10 +78,15 @@ $juara3 = $top10[2] ?? null;
                     <div>Amenitas: <strong class="text-slate-900"><?= $juara2['amenities'] ?> Unit</strong></div>
                 </div>
             </div>
-            <a href="index.php?page=peta&search=<?= urlencode($juara2['nama']) ?>" class="w-full py-2 rounded-xl bg-slate-100 hover:bg-ocean-600 text-slate-700 hover:text-white text-xs font-bold transition-all text-center flex items-center justify-center gap-1">
-                <i class="fa-solid fa-location-crosshairs text-xs"></i>
-                <span>Buka di Peta</span>
-            </a>
+            <div class="flex gap-2">
+                <button onclick="openQrModal('<?= htmlspecialchars(addslashes($juara2['nama'])) ?>', <?= (float)($juara2['latitude'] ?? -2.1215) ?>, <?= (float)($juara2['longitude'] ?? 106.1130) ?>, '<?= htmlspecialchars(addslashes($juara2['kabupaten'])) ?>', '<?= htmlspecialchars(addslashes($juara2['sub_kategori'])) ?>')" class="p-2 px-3 rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 hover:text-ocean-700 text-xs font-bold transition-all flex items-center justify-center" title="Kode QR Navigasi">
+                    <i class="fa-solid fa-qrcode text-sm"></i>
+                </button>
+                <a href="index.php?page=peta&search=<?= urlencode($juara2['nama']) ?>" class="flex-1 py-2 rounded-xl bg-slate-100 hover:bg-ocean-600 text-slate-700 hover:text-white text-xs font-bold transition-all text-center flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-location-crosshairs text-xs"></i>
+                    <span>Buka di Peta</span>
+                </a>
+            </div>
         </div>
         <?php endif; ?>
 
@@ -114,10 +119,15 @@ $juara3 = $top10[2] ?? null;
                     <div>Amenitas: <strong class="text-amber-900 font-black"><?= $juara1['amenities'] ?> Unit</strong></div>
                 </div>
             </div>
-            <a href="index.php?page=peta&search=<?= urlencode($juara1['nama']) ?>" class="w-full py-2.5 rounded-xl bg-ocean-600 hover:bg-ocean-500 text-white text-xs font-extrabold shadow-md shadow-ocean-600/20 transition-all text-center flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-route"></i>
-                <span>Eksplorasi Rute Destinasi Terbaik</span>
-            </a>
+            <div class="flex gap-2">
+                <button onclick="openQrModal('<?= htmlspecialchars(addslashes($juara1['nama'])) ?>', <?= (float)($juara1['latitude'] ?? -2.1215) ?>, <?= (float)($juara1['longitude'] ?? 106.1130) ?>, '<?= htmlspecialchars(addslashes($juara1['kabupaten'])) ?>', '<?= htmlspecialchars(addslashes($juara1['sub_kategori'])) ?>')" class="p-2.5 px-3 rounded-xl bg-white hover:bg-ocean-50 text-slate-800 hover:text-ocean-700 text-xs font-bold border border-amber-300 transition-all flex items-center justify-center shadow-xs" title="Kode QR Navigasi">
+                    <i class="fa-solid fa-qrcode text-base text-ocean-600"></i>
+                </button>
+                <a href="index.php?page=peta&search=<?= urlencode($juara1['nama']) ?>" class="flex-1 py-2.5 rounded-xl bg-ocean-600 hover:bg-ocean-500 text-white text-xs font-extrabold shadow-md shadow-ocean-600/20 transition-all text-center flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-route"></i>
+                    <span>Eksplorasi Rute Destinasi Terbaik</span>
+                </a>
+            </div>
         </div>
         <?php endif; ?>
 
@@ -149,10 +159,15 @@ $juara3 = $top10[2] ?? null;
                     <div>Amenitas: <strong class="text-slate-900"><?= $juara3['amenities'] ?> Unit</strong></div>
                 </div>
             </div>
-            <a href="index.php?page=peta&search=<?= urlencode($juara3['nama']) ?>" class="w-full py-2 rounded-xl bg-slate-100 hover:bg-ocean-600 text-slate-700 hover:text-white text-xs font-bold transition-all text-center flex items-center justify-center gap-1">
-                <i class="fa-solid fa-location-crosshairs text-xs"></i>
-                <span>Buka di Peta</span>
-            </a>
+            <div class="flex gap-2">
+                <button onclick="openQrModal('<?= htmlspecialchars(addslashes($juara3['nama'])) ?>', <?= (float)($juara3['latitude'] ?? -2.1215) ?>, <?= (float)($juara3['longitude'] ?? 106.1130) ?>, '<?= htmlspecialchars(addslashes($juara3['kabupaten'])) ?>', '<?= htmlspecialchars(addslashes($juara3['sub_kategori'])) ?>')" class="p-2 px-3 rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 hover:text-ocean-700 text-xs font-bold transition-all flex items-center justify-center" title="Kode QR Navigasi">
+                    <i class="fa-solid fa-qrcode text-sm"></i>
+                </button>
+                <a href="index.php?page=peta&search=<?= urlencode($juara3['nama']) ?>" class="flex-1 py-2 rounded-xl bg-slate-100 hover:bg-ocean-600 text-slate-700 hover:text-white text-xs font-bold transition-all text-center flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-location-crosshairs text-xs"></i>
+                    <span>Buka di Peta</span>
+                </a>
+            </div>
         </div>
         <?php endif; ?>
 

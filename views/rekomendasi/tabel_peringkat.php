@@ -117,12 +117,17 @@
                         </span>
                     </td>
 
-                    <!-- Aksi Peta -->
+                    <!-- Aksi Peta & QR -->
                     <td class="px-4 py-3.5 text-right">
-                        <a href="index.php?page=peta&search=<?= urlencode($item['nama']) ?>" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-ocean-600 text-slate-700 hover:text-white font-bold text-xs transition-all shadow-xs">
-                            <i class="fa-solid fa-location-dot text-[11px]"></i>
-                            <span>Peta</span>
-                        </a>
+                        <div class="inline-flex items-center gap-1.5 justify-end">
+                            <button onclick="openQrModal('<?= htmlspecialchars(addslashes($item['nama'])) ?>', <?= (float)($item['latitude'] ?? -2.1215) ?>, <?= (float)($item['longitude'] ?? 106.1130) ?>, '<?= htmlspecialchars(addslashes($item['kabupaten'])) ?>', '<?= htmlspecialchars(addslashes($item['sub_kategori'])) ?>')" class="p-1.5 px-2 rounded-xl bg-ocean-50 hover:bg-ocean-100 text-ocean-700 font-bold text-xs transition-all shadow-xs" title="Kode QR Navigasi Pintar">
+                                <i class="fa-solid fa-qrcode text-[12px]"></i>
+                            </button>
+                            <a href="index.php?page=peta&search=<?= urlencode($item['nama']) ?>" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-ocean-600 text-slate-700 hover:text-white font-bold text-xs transition-all shadow-xs">
+                                <i class="fa-solid fa-location-dot text-[11px]"></i>
+                                <span>Peta</span>
+                            </a>
+                        </div>
                     </td>
 
                 </tr>

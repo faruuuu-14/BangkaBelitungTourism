@@ -110,5 +110,6 @@ function scrollToTop() {
 </script>
 
 <?php include __DIR__ . '/guide_modal.php'; ?>
+<?php include __DIR__ . '/modal_qr.php'; ?>
 </body>
 </html>

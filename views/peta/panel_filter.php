@@ -90,9 +90,41 @@
                 <i class="fa-solid fa-layer-group text-slate-600"></i>
             </button>
 
+            <!-- Tombol Unduh Data Spasial (GeoJSON & CSV) -->
+            <div class="relative inline-block text-left" id="exportDropdownContainer">
+                <button onclick="toggleExportMenu()" class="p-1.5 px-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5" title="Unduh Data Spasial (Satu Data Babel)">
+                    <i class="fa-solid fa-cloud-arrow-down text-emerald-600"></i>
+                    <span class="hidden xl:inline text-[11px]">Unduh Data</span>
+                </button>
+                <div id="exportMenu" class="hidden absolute right-0 mt-1 w-48 rounded-2xl bg-white shadow-xl border border-slate-200 py-1.5 z-50 text-xs font-semibold">
+                    <a href="api/geojson.php" download class="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700 transition">
+                        <i class="fa-solid fa-map-location-dot text-emerald-600"></i>
+                        <span>GeoJSON (QGIS/ArcGIS)</span>
+                    </a>
+                    <a href="api/ekspor_csv.php" download class="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700 border-t border-slate-100 transition">
+                        <i class="fa-solid fa-file-excel text-emerald-600"></i>
+                        <span>CSV Tabular (Excel)</span>
+                    </a>
+                </div>
+            </div>
+
         </div>
 
     </div>
+
+    <script>
+    function toggleExportMenu() {
+        const menu = document.getElementById('exportMenu');
+        if (menu) menu.classList.toggle('hidden');
+    }
+    document.addEventListener('click', function(e) {
+        const container = document.getElementById('exportDropdownContainer');
+        const menu = document.getElementById('exportMenu');
+        if (container && menu && !container.contains(e.target)) {
+            menu.classList.add('hidden');
+        }
+    });
+    </script>
 
     <!-- Baris 2: Pencarian Cepat & Filter Kategori -->
     <div class="flex items-center gap-2 overflow-x-auto pb-0.5">

@@ -417,6 +417,10 @@ function createPopupContent(place) {
                             class="flex-1 py-1.5 px-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-[10px] transition-colors flex items-center justify-center gap-1">
                             <i class="fa-solid fa-plus text-amber-300"></i> Tambah Rute
                         </button>
+                        <button onclick="openQrModal('${safeNama}', ${place.latitude}, ${place.longitude}, '${safeKab}', '${safeSub}')" 
+                            class="p-1.5 px-2.5 rounded-xl bg-ocean-50 hover:bg-ocean-100 text-ocean-700 text-[10px] font-bold transition-colors flex items-center justify-center" title="Kode QR Navigasi Pintar">
+                            <i class="fa-solid fa-qrcode text-xs"></i>
+                        </button>
                         <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.nama + ' ' + place.kabupaten)}" target="_blank"
                             class="p-1.5 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold transition-colors flex items-center justify-center" title="Buka di Google Maps">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i>

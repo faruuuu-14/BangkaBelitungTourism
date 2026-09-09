@@ -48,10 +48,16 @@
                 <h3 id="photoModalTitle" class="text-base sm:text-lg font-black text-white"></h3>
                 <p id="photoModalDesc" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
             </div>
-            <a id="photoModalMapBtn" href="index.php?page=peta" class="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-ocean-600 hover:bg-ocean-500 text-white font-bold text-xs shadow-lg shadow-ocean-600/30 flex items-center gap-2 shrink-0 transition">
-                <i class="fa-solid fa-map-location-dot"></i>
-                <span>Jelajahi di Peta</span>
-            </a>
+            <div class="flex items-center gap-2 self-start sm:self-auto shrink-0">
+                <button onclick="triggerPhotoModalQr()" class="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/15 flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-qrcode text-amber-300"></i>
+                    <span>Kode QR</span>
+                </button>
+                <a id="photoModalMapBtn" href="index.php?page=peta" class="px-4 py-2.5 rounded-xl bg-ocean-600 hover:bg-ocean-500 text-white font-bold text-xs shadow-lg shadow-ocean-600/30 flex items-center gap-2 transition">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span>Jelajahi di Peta</span>
+                </a>
+            </div>
         </div>
 
     </div>
@@ -59,6 +65,20 @@
 
 <!-- Logika JavaScript Pengendali Buka-Tutup Lightbox Modal -->
 <script>
+let currentPhotoTitle = '';
+let currentPhotoKeyword = '';
+
+const iconSpotCoords = {
+    'tikus emas': { lat: -1.8617, lng: 106.1264, kab: 'Kabupaten Bangka', sub: 'Wisata Bahari' },
+    'tanjung ular': { lat: -1.9730, lng: 105.1585, kab: 'Kabupaten Bangka Barat', sub: 'Wisata Bahari & Cagar Sejarah' },
+    'kaolin': { lat: -2.5186, lng: 106.4172, kab: 'Kabupaten Bangka Tengah', sub: 'Wisata Alam & Geowisata' },
+    'batu perahu': { lat: -3.0034, lng: 106.4485, kab: 'Kabupaten Bangka Selatan', sub: 'Wisata Bahari' },
+    'tanjung tinggi': { lat: -2.5519, lng: 107.7128, kab: 'Kabupaten Belitung', sub: 'UNESCO Global Geopark' },
+    'laskar pelangi': { lat: -2.9644, lng: 108.1561, kab: 'Kabupaten Belitung Timur', sub: 'Wisata Edukasi & Budaya' },
+    'timah': { lat: -2.1215, lng: 106.1130, kab: 'Kota Pangkalpinang', sub: 'Wisata Sejarah & Cagar Budaya' },
+    'lengkuas': { lat: -2.5312, lng: 107.6213, kab: 'Kabupaten Belitung', sub: 'Wisata Bahari & Mercusuar' }
+};
+
 /**
  * Membuka dialog penampil foto layar penuh
  * @param {string} src Jalur path file gambar
@@ -75,18 +95,41 @@ function openPhotoModal(src, title, desc, searchKeyword = '') {
 
     if (!modal || !img) return;
 
+    currentPhotoTitle = title;
+    currentPhotoKeyword = searchKeyword || title.split('&bull;')[0].trim();
+
     img.src = src;
     img.alt = title;
     t.innerHTML = title;
     d.innerHTML = desc;
 
     if (mapBtn) {
-        const query = searchKeyword || title.split('&bull;')[0].trim();
-        mapBtn.href = `index.php?page=peta&search=${encodeURIComponent(query)}`;
+        mapBtn.href = `index.php?page=peta&search=${encodeURIComponent(currentPhotoKeyword)}`;
     }
 
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden'; // Mencegah scrolling latar belakang
+}
+
+/**
+ * Memicu modal QR Code dari dialog foto beranda
+ */
+function triggerPhotoModalQr() {
+    const raw = (currentPhotoKeyword || currentPhotoTitle).toLowerCase();
+    let found = null;
+    for (const key in iconSpotCoords) {
+        if (raw.includes(key)) {
+            found = iconSpotCoords[key];
+            break;
+        }
+    }
+
+    const cleanTitle = currentPhotoTitle.replace(/<[^>]*>?/gm, '').split('•')[0].trim();
+    if (found && typeof openQrModal === 'function') {
+        openQrModal(cleanTitle, found.lat, found.lng, found.kab, found.sub);
+    } else if (typeof openQrModal === 'function') {
+        openQrModal(cleanTitle, -2.1215, 106.1130, 'Kepulauan Bangka Belitung', 'Pariwisata Babel');
+    }
 }
 
 /**

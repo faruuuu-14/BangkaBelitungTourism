@@ -99,6 +99,9 @@ $kabList = [
     <!-- 5. Modal Transparansi Rumus Matematis TOPSIS -->
     <?php include __DIR__ . '/transparansi_rumus.php'; ?>
 
+    <!-- 6. Modal Komparasi Berdampingan 2 Destinasi Wisata -->
+    <?php include __DIR__ . '/komparasi_destinasi.php'; ?>
+
 </main>
 
 <!-- Skrip Ekspor CSV Hasil TOPSIS -->

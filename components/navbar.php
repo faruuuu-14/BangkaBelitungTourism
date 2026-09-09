@@ -50,6 +50,32 @@ if (!function_exists('navActive')) {
 }
 ?>
 
+<!-- BANNER ATAS MODE KIOSK BANDARA (TOUCHSCREEN AIRPORT DISPLAY) -->
+<div id="airportKioskTopBar" class="hidden bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 text-white px-3 sm:px-6 py-2.5 z-50 sticky top-0 border-b border-purple-500/40 shadow-xl w-full">
+    <div class="max-w-7xl mx-auto flex items-center justify-between text-xs">
+        <div class="flex items-center gap-2.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-plane-arrival text-purple-400 text-sm"></i>
+                <span class="font-extrabold uppercase tracking-wider text-[10px] sm:text-xs">Anjungan Kiosk Wisata &bull; Bandara Depati Amir (PGK) &amp; Hanandjoeddin (TJQ)</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="hidden md:flex items-center gap-1.5 font-mono text-[11px] text-purple-200">
+                <i class="fa-solid fa-cloud-sun text-amber-300"></i>
+                <span>29°C Pesisir Babel</span>
+            </div>
+            <div class="font-mono text-amber-300 font-bold text-xs" id="kioskLiveClock">
+                00:00:00 WIB
+            </div>
+            <button onclick="toggleAirportKioskMode()" class="px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 text-white font-bold text-[10px] border border-white/20 transition flex items-center gap-1">
+                <i class="fa-solid fa-compress"></i>
+                <span class="hidden sm:inline">Keluar</span>
+            </button>
+        </div>
+    </div>
+</div>
+
 <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 w-full max-w-full overflow-hidden">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 w-full">
         <div class="flex items-center justify-between h-14 sm:h-16 gap-2 w-full min-w-0">
@@ -100,6 +126,11 @@ if (!function_exists('navActive')) {
 
             <!-- Aksi Kanan & Profil Pengembang -->
             <div class="flex items-center gap-2 flex-shrink-0">
+                <!-- Tombol Mode Kiosk Bandara (Touchscreen Kiosk Display) -->
+                <button onclick="toggleAirportKioskMode()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 flex items-center justify-center border border-purple-200 transition-all shadow-xs cursor-pointer" title="Mode Layar Sentuh Kiosk Bandara (Touchscreen Display)">
+                    <i class="fa-solid fa-tv text-xs sm:text-sm"></i>
+                </button>
+
                 <!-- Sakelar Tema Gelap / Terang (Dark / Light Mode) -->
                 <button id="themeToggleBtn" onclick="toggleAppTheme()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 flex items-center justify-center border border-slate-200 transition-all shadow-xs cursor-pointer" title="Ganti Mode Tampilan (Gelap / Terang)">
                     <i id="themeIconMoon" class="fa-solid fa-moon text-sm text-slate-600"></i>
@@ -193,4 +224,49 @@ function toggleAppTheme() {
 
 // Inisialisasi ikon saat DOM siap
 document.addEventListener('DOMContentLoaded', updateThemeIcon);
+
+// ==============================================================
+// LOGIKA MODE KIOSK LAYAR SENTUH BANDARA (TOUCHSCREEN DISPLAY)
+// ==============================================================
+let kioskClockInterval = null;
+
+function updateKioskClock() {
+    const el = document.getElementById('kioskLiveClock');
+    if (!el) return;
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
+    el.innerText = timeStr;
+}
+
+function toggleAirportKioskMode() {
+    const topBar = document.getElementById('airportKioskTopBar');
+    if (!topBar) return;
+    const isCurrentlyKiosk = !topBar.classList.contains('hidden');
+
+    if (!isCurrentlyKiosk) {
+        topBar.classList.remove('hidden');
+        document.body.classList.add('kiosk-active');
+        if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().catch(() => {});
+        }
+        updateKioskClock();
+        if (!kioskClockInterval) kioskClockInterval = setInterval(updateKioskClock, 1000);
+    } else {
+        topBar.classList.add('hidden');
+        document.body.classList.remove('kiosk-active');
+        if (document.fullscreenElement && document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+        }
+        if (kioskClockInterval) {
+            clearInterval(kioskClockInterval);
+            kioskClockInterval = null;
+        }
+    }
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.body.classList.contains('kiosk-active')) {
+        toggleAirportKioskMode();
+    }
+});
 </script>

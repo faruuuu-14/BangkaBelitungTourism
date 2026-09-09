@@ -57,6 +57,10 @@
 
         <!-- Tombol Aksi Cepat -->
         <div class="flex flex-wrap items-center gap-2.5 pt-1">
+            <button onclick="openModalKomparasi()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black transition-all flex items-center gap-1.5 shadow-md hover:shadow-amber-500/20">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <span>Bandingkan 2 Destinasi</span>
+            </button>
             <button onclick="openGuideModal('rekomendasi')" class="px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold border border-white/20 backdrop-blur-md transition-all flex items-center gap-1.5 shadow-xs">
                 <i class="fa-solid fa-circle-question text-ocean-400"></i>
                 <span>Panduan &amp; Rumus TOPSIS</span>
