@@ -50,47 +50,125 @@ $topDestinasi = $pdo->query("
     ORDER BY ulasan DESC
     LIMIT 5
 ")->fetchAll();
+
+// Helper thumbnail foto destinasi
+if (!function_exists('getDestinationPhoto')) {
+    function getDestinationPhoto($nama, $subKategori = '') {
+        $n = strtolower($nama);
+        if (str_contains($n, 'lengkuas') || str_contains($n, 'mercusuar')) {
+            return 'assets/img/pantai_lengkuas.jpg';
+        }
+        if (str_contains($n, 'tanjung tinggi') || str_contains($n, 'kelayang') || str_contains($n, 'granit') || str_contains($n, 'parai')) {
+            return 'assets/img/pantai_tanjung_tinggi.jpg';
+        }
+        if (str_contains($n, 'laskar pelangi') || str_contains($n, 'gantong') || str_contains($n, 'kata')) {
+            return 'assets/img/laskar_pelangi_gantong.jpg';
+        }
+        if (str_contains($n, 'museum') || str_contains($n, 'timah') || str_contains($n, 'sejarah')) {
+            return 'assets/img/museum_timah_babel.jpg';
+        }
+        if ($subKategori === 'Kebudayaan') {
+            return 'assets/img/kain_cual_bangka.jpg';
+        }
+        return 'assets/img/pantai_tanjung_tinggi.jpg';
+    }
+}
 ?>
 
 <main class="flex-grow max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 pb-24 lg:pb-8 w-full max-w-full overflow-hidden space-y-6 sm:space-y-8">
     
     <!-- ============================================================== -->
-    <!-- 1. HERO BANNER: SELAMAT DATANG & IDENTITAS SISTEM              -->
+    <!-- 1. HERO BANNER: VISUAL SHOWCASE KAYA WARNA KHAS BABEL          -->
     <!-- ============================================================== -->
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-ocean-950 to-slate-900 text-white p-5 sm:p-8 lg:p-10 shadow-xl border border-white/10">
-        <div class="relative z-10 max-w-3xl">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-ocean-300 border border-white/10 mb-3 sm:mb-4 backdrop-blur-sm">
-                <i class="fa-solid fa-compass text-ocean-400"></i>
-                <span>Sistem Informasi Geospasial &amp; Intelijen Pariwisata Babel</span>
-            </div>
-            <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-2 sm:mb-3 leading-tight text-white">
-                Dashboard Pariwisata Kepulauan Bangka Belitung
-            </h1>
-            <p class="text-slate-300 text-xs sm:text-sm lg:text-base leading-relaxed">
-                Platform satu pintu untuk memantau sebaran 875 objek pariwisata, menganalisis keseimbangan daya tarik dengan hotel/restoran, dan meranking destinasi unggulan berbasis standar ilmiah Kemenparekraf &amp; BPS RI.
-            </p>
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-ocean-950 text-white p-5 sm:p-8 lg:p-10 shadow-2xl border border-white/15">
+        
+        <!-- Background subtle glow -->
+        <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-ocean-600/25 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-20 -top-20 w-80 h-80 bg-emerald-600/15 rounded-full blur-3xl pointer-events-none"></div>
 
-            <!-- Aksi Cepat Menuju 3 Fitur Utama -->
-            <div class="mt-5 sm:mt-7 flex flex-wrap gap-2 sm:gap-3">
-                <a href="index.php?page=peta" class="px-4 py-2.5 rounded-xl bg-ocean-600 hover:bg-ocean-500 text-white font-bold text-xs shadow-lg shadow-ocean-600/30 transition-all flex items-center gap-2">
-                    <i class="fa-solid fa-map-location-dot"></i>
-                    <span>Eksplorasi Peta GIS</span>
-                </a>
-                <a href="index.php?page=analisis" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/15 transition-all flex items-center gap-2">
-                    <i class="fa-solid fa-chart-pie text-amber-400"></i>
-                    <span>Analisis Beban &amp; Gap</span>
-                </a>
-                <a href="index.php?page=rekomendasi" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/15 transition-all flex items-center gap-2">
-                    <i class="fa-solid fa-ranking-star text-emerald-400"></i>
-                    <span>SPK Rekomendasi TOPSIS</span>
-                </a>
-                <button onclick="openGuideModal('dashboard')" class="px-3.5 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold text-xs border border-white/10 transition-all flex items-center gap-1.5">
-                    <i class="fa-solid fa-circle-question text-xs"></i>
-                    <span>Panduan Ringkas</span>
-                </button>
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+            
+            <!-- Kolom Kiri: Teks & Aksi Utama (7 Cols) -->
+            <div class="lg:col-span-7 space-y-3 sm:space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-ocean-300 border border-white/15 backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Satu Data Geospasial &amp; Intelijen Pariwisata Babel</span>
+                </div>
+                
+                <h1 class="text-2xl sm:text-4xl lg:text-4xl font-extrabold tracking-tight leading-tight text-white">
+                    Eksplorasi Keindahan Alam &amp; Warisan Budaya <span class="bg-gradient-to-r from-ocean-400 via-sky-300 to-emerald-400 bg-clip-text text-transparent">Bangka Belitung</span>
+                </h1>
+                
+                <p class="text-slate-300 text-xs sm:text-sm lg:text-base leading-relaxed">
+                    Platform resmi untuk memetakan 875 objek pariwisata, menganalisis rasio kebutuhan hotel/restoran, dan meranking destinasi unggulan berbasis standar ilmiah Kemenparekraf &amp; BPS RI.
+                </p>
+
+                <!-- Tombol Navigasi Cepat -->
+                <div class="pt-2 flex flex-wrap gap-2 sm:gap-3">
+                    <a href="index.php?page=peta" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-ocean-600 to-emerald-600 hover:from-ocean-500 hover:to-emerald-500 text-white font-bold text-xs shadow-lg shadow-ocean-600/30 transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        <span>Eksplorasi Peta GIS</span>
+                    </a>
+                    <a href="index.php?page=analisis" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/15 transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-amber-400"></i>
+                        <span>Analisis Beban BPS</span>
+                    </a>
+                    <a href="index.php?page=rekomendasi" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/15 transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-ranking-star text-emerald-400"></i>
+                        <span>Rekomendasi TOPSIS</span>
+                    </a>
+                    <button onclick="openGuideModal('dashboard')" class="px-3 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold text-xs border border-white/10 transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-question text-xs"></i>
+                        <span>Panduan</span>
+                    </button>
+                </div>
             </div>
+
+            <!-- Kolom Kanan: Visual Showcase Foto Khas Babel (5 Cols) -->
+            <div class="lg:col-span-5 relative w-full">
+                
+                <!-- Kartu Showcase Utama: Pantai Pulau Lengkuas -->
+                <div class="group relative rounded-3xl overflow-hidden border-2 border-white/20 shadow-2xl bg-slate-900 aspect-video sm:aspect-[4/3] lg:aspect-[16/11]">
+                    <img src="assets/img/pantai_lengkuas.jpg" alt="Pulau Lengkuas Belitung" 
+                        class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+                    
+                    <!-- Overlay Badge Khas -->
+                    <div class="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-[10px] font-extrabold text-amber-300">
+                        <i class="fa-solid fa-award"></i>
+                        <span>UNESCO Global Geopark</span>
+                    </div>
+
+                    <div class="absolute bottom-3 inset-x-3 p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white">
+                        <div class="font-extrabold text-xs sm:text-sm truncate">Mercusuar 1882 Pulau Lengkuas</div>
+                        <div class="text-[10px] text-slate-300 flex items-center justify-between mt-0.5">
+                            <span>Kec. Sijuk, Belitung</span>
+                            <span class="text-emerald-300 font-bold">★ 4.8 (3.8k ulasan)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Mini Badge 1: Kain Cual (Kiri Bawah) -->
+                <div class="hidden sm:flex absolute -bottom-3 -left-3 z-20 items-center gap-2 p-2 pr-3 rounded-2xl bg-slate-900/95 backdrop-blur-md border border-white/20 shadow-xl text-white">
+                    <img src="assets/img/kain_cual_bangka.jpg" alt="Kain Cual" class="w-9 h-9 rounded-xl object-cover border border-amber-400">
+                    <div class="text-[10px]">
+                        <div class="font-bold text-amber-300">Tenun Kain Cual</div>
+                        <div class="text-slate-400">Warisan Khas Bangka</div>
+                    </div>
+                </div>
+
+                <!-- Floating Mini Badge 2: Laskar Pelangi (Kanan Atas) -->
+                <div class="hidden sm:flex absolute -top-3 -right-3 z-20 items-center gap-2 p-2 pr-3 rounded-2xl bg-slate-900/95 backdrop-blur-md border border-white/20 shadow-xl text-white">
+                    <img src="assets/img/laskar_pelangi_gantong.jpg" alt="SD Laskar Pelangi" class="w-9 h-9 rounded-xl object-cover border border-emerald-400">
+                    <div class="text-[10px]">
+                        <div class="font-bold text-emerald-300">SD Laskar Pelangi</div>
+                        <div class="text-slate-400">Gantong, Belitung Timur</div>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
-        <div class="absolute -right-12 -bottom-12 w-80 h-80 bg-ocean-500/20 rounded-full blur-3xl pointer-events-none"></div>
     </div>
 
     <!-- ============================================================== -->
@@ -272,9 +350,8 @@ $topDestinasi = $pdo->query("
 
     </div>
 
-    
     <!-- ============================================================== -->
-    <!-- 5. GALERI PESONA BAHARI, SENI BUDAYA & ALAT MUSIK KHAS BABEL   -->
+    <!-- 5. GALERI WARISAN BAHARI, SENI BUDAYA, MUSIK & SEJARAH BABEL   -->
     <!-- ============================================================== -->
     <div class="bg-white rounded-3xl p-5 sm:p-7 border border-slate-200/80 shadow-xs space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-2">
@@ -284,187 +361,202 @@ $topDestinasi = $pdo->query("
                     <span>Warisan Budaya &amp; Geopark UNESCO Bangka Belitung</span>
                 </div>
                 <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">
-                    Pesona Bahari, Seni Budaya &amp; Alat Musik Tradisional
+                    Pesona Bahari, Seni Budaya, Alat Musik &amp; Jejak Sejarah
                 </h2>
                 <p class="text-xs text-slate-500 mt-0.5">
-                    Mengenal kekayaan alam gugusan granit purba, dawai alat musik dambus, keelokan tari tradisional, dan tradisi luhur Sepintu Sedulang.
+                    Gugusan granit purba, kain cual, dawai dambus, replika SD Laskar Pelangi, dan museum sejarah kebanggaan Negeri Serumpun Sebalai.
                 </p>
             </div>
             <a href="index.php?page=peta&cat=Kebudayaan" class="self-start sm:self-auto text-xs font-bold text-ocean-600 hover:text-ocean-700 flex items-center gap-1.5 transition-colors">
-                <span>Eksplorasi Objek Budaya di Peta</span>
+                <span>Lihat Objek Budaya di Peta</span>
                 <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </a>
         </div>
 
-        <!-- Grid 5 Kartu Galeri Budaya & Lanskap -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+        <!-- Grid 8 Kartu Galeri Budaya & Lanskap Lengkap -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             
-            <!-- 1. Pantai & Mercusuar Pulau Lengkuas (Featured Wide) -->
-            <div class="lg:col-span-2 group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-900 border border-slate-200 flex flex-col justify-end min-h-[260px] sm:min-h-[300px]">
-                <img src="assets/img/pantai_lengkuas.jpg" alt="Pulau Lengkuas Belitung" 
+            <!-- 1. Pantai Tanjung Tinggi (Batu Granit Laskar Pelangi) -->
+            <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-900 border border-slate-200 flex flex-col justify-end min-h-[260px]">
+                <img src="assets/img/pantai_tanjung_tinggi.jpg" alt="Pantai Tanjung Tinggi Belitung" 
                     class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-90">
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
                 
-                <div class="relative z-10 p-5 sm:p-6 space-y-2 text-white">
-                    <div class="flex items-center gap-2">
-                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500 text-white shadow-sm">
-                            <i class="fa-solid fa-umbrella-beach mr-1"></i> Geowisata Bahari
-                        </span>
-                        <span class="text-xs text-slate-300">&bull; Kab. Belitung</span>
-                    </div>
-                    <h3 class="text-lg sm:text-2xl font-black leading-tight text-white group-hover:text-ocean-300 transition-colors">
-                        Pulau Lengkuas: Mercusuar Bersejarah 1882 &amp; Batu Granit Purba
+                <div class="relative z-10 p-4 space-y-1.5 text-white">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500 text-white shadow-sm inline-block">
+                        <i class="fa-solid fa-umbrella-beach mr-1"></i> Pantai Granit
+                    </span>
+                    <h3 class="text-sm font-extrabold leading-snug text-white group-hover:text-emerald-300 transition-colors line-clamp-1">
+                        Pantai Tanjung Tinggi
                     </h3>
-                    <p class="text-slate-200 text-xs sm:text-sm line-clamp-2 leading-relaxed">
-                        Ikon bahari Belitung dengan mercusuar putih setinggi 62 meter peninggalan kolonial Belanda, dikelilingi perairan toska sebening kaca dan formasi batuan granit raksasa berumur jutaan tahun.
+                    <p class="text-slate-300 text-[11px] line-clamp-2 leading-relaxed">
+                        Formasi batu granit raksasa di tepi laut toska yang menjadi lokasi syuting film Laskar Pelangi.
                     </p>
-                    <div class="pt-2 flex items-center gap-2">
-                        <a href="index.php?page=peta&q=Pulau+Lengkuas" class="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold text-xs transition-colors inline-flex items-center gap-1.5">
-                            <i class="fa-solid fa-location-dot text-emerald-400"></i> Buka di Peta
-                        </a>
-                        <button onclick="openPhotoModal('assets/img/pantai_lengkuas.jpg', 'Pulau Lengkuas &amp; Mercusuar 1882', 'Ikon pariwisata bahari Belitung dengan menara suar kolonial, perairan toska jernih, dan batuan granit khas gugusan UNESCO Geopark.')" class="px-3 py-1.5 rounded-xl bg-black/40 hover:bg-black/60 text-white text-xs font-semibold transition-colors">
-                            <i class="fa-solid fa-expand mr-1"></i> Perbesar Foto
-                        </button>
-                    </div>
+                    <button onclick="openPhotoModal('assets/img/pantai_tanjung_tinggi.jpg', 'Pantai Tanjung Tinggi Belitung', 'Pantai berpasir putih dengan gugusan batu granit megah setinggi gedung 2-3 lantai, magnet utama pariwisata Belitung.')" class="pt-1 text-[11px] font-bold text-ocean-300 hover:text-white flex items-center gap-1">
+                        <span>Lihat Foto</span> <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                    </button>
                 </div>
             </div>
 
-            <!-- 2. Alat Musik Tradisional Dambus -->
-            <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-900 border border-slate-200 flex flex-col justify-end min-h-[260px] sm:min-h-[300px]">
+            <!-- 2. SD Laskar Pelangi Gantong -->
+            <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-900 border border-slate-200 flex flex-col justify-end min-h-[260px]">
+                <img src="assets/img/laskar_pelangi_gantong.jpg" alt="SD Laskar Pelangi Gantong" 
+                    class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-90">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                
+                <div class="relative z-10 p-4 space-y-1.5 text-white">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-slate-950 shadow-sm inline-block">
+                        <i class="fa-solid fa-school mr-1"></i> Ikon Literasi
+                    </span>
+                    <h3 class="text-sm font-extrabold leading-snug text-white group-hover:text-amber-300 transition-colors line-clamp-1">
+                        SD Laskar Pelangi Gantong
+                    </h3>
+                    <p class="text-slate-300 text-[11px] line-clamp-2 leading-relaxed">
+                        Replika sekolah kayu bersejarah di Belitung Timur yang menjadi simbol perjuangan pendidikan anak-anak pulau.
+                    </p>
+                    <button onclick="openPhotoModal('assets/img/laskar_pelangi_gantong.jpg', 'Replika SD Laskar Pelangi Gantong', 'Sekolah kayu sederhana yang menjadi latar kisah fenomenal karya Andrea Hirata di Belitung Timur.')" class="pt-1 text-[11px] font-bold text-amber-300 hover:text-white flex items-center gap-1">
+                        <span>Lihat Foto</span> <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3. Kain Tenun Cual Bangka -->
+            <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-900 border border-slate-200 flex flex-col justify-end min-h-[260px]">
+                <img src="assets/img/kain_cual_bangka.jpg" alt="Kain Cual Bangka" 
+                    class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-90">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                
+                <div class="relative z-10 p-4 space-y-1.5 text-white">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500 text-white shadow-sm inline-block">
+                        <i class="fa-solid fa-scroll mr-1"></i> Tekstil Tradisional
+                    </span>
+                    <h3 class="text-sm font-extrabold leading-snug text-white group-hover:text-rose-300 transition-colors line-clamp-1">
+                        Kain Tenun Cual Bangka
+                    </h3>
+                    <p class="text-slate-300 text-[11px] line-clamp-2 leading-relaxed">
+                        Kain tenun sutra tradisional bermotif Bebek Berseluk dan benang emas bernilai sejarah tinggi.
+                    </p>
+                    <button onclick="openPhotoModal('assets/img/kain_cual_bangka.jpg', 'Kain Cual Tradisional Bangka', 'Tenunan khas Bangka Belitung dengan teknik tenun ikat lungsi yang rumit dan benang emas murni.')" class="pt-1 text-[11px] font-bold text-rose-300 hover:text-white flex items-center gap-1">
+                        <span>Lihat Foto</span> <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 4. Alat Musik Tradisional Dambus -->
+            <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-900 border border-slate-200 flex flex-col justify-end min-h-[260px]">
                 <img src="assets/img/alat_musik_dambus.jpg" alt="Alat Musik Dambus Bangka" 
                     class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-90">
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
                 
-                <div class="relative z-10 p-5 space-y-1.5 text-white">
-                    <div class="flex items-center gap-2">
-                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500 text-slate-950 shadow-sm">
-                            <i class="fa-solid fa-guitar mr-1"></i> Alat Musik Tradisional
-                        </span>
-                    </div>
-                    <h3 class="text-base sm:text-lg font-extrabold leading-snug text-white group-hover:text-amber-300 transition-colors">
-                        Dambus: Alat Musik Petik Khas Melayu Bangka
-                    </h3>
-                    <p class="text-slate-200 text-xs line-clamp-2 leading-relaxed">
-                        Instrumen dawai akustik dengan ukiran kepala rusa (kijang) yang khas pada pucuknya, menjadi nyawa utama dalam melodi lagu dan tarian Melayu Bangka.
-                    </p>
-                    <div class="pt-2 flex items-center gap-2">
-                        <button onclick="openPhotoModal('assets/img/alat_musik_dambus.jpg', 'Dambus Tradisional Bangka', 'Alat musik petik khas Bangka dengan ciri khas ukiran kepala rusa di ujungnya. Dimainkan sebagai pengiring seni tari dan tembang Melayu.')" class="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold text-xs transition-colors inline-flex items-center gap-1.5">
-                            <i class="fa-solid fa-expand"></i> Detail Musik
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 3. Tari Sambut Paksian Bangka Belitung -->
-            <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-900 border border-slate-200 flex flex-col justify-end min-h-[260px] sm:min-h-[300px]">
-                <img src="assets/img/budaya_tari_paksian.jpg" alt="Tari Paksian Bangka Belitung" 
-                    class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-90">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-                
-                <div class="relative z-10 p-5 space-y-1.5 text-white">
-                    <div class="flex items-center gap-2">
-                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-purple-500 text-white shadow-sm">
-                            <i class="fa-solid fa-crown mr-1"></i> Busana Adat Paksian
-                        </span>
-                    </div>
-                    <h3 class="text-base sm:text-lg font-extrabold leading-snug text-white group-hover:text-purple-300 transition-colors">
-                        Kemegahan Mahkota Paksian &amp; Busana Pengantin
-                    </h3>
-                    <p class="text-slate-200 text-xs line-clamp-2 leading-relaxed">
-                        Busana adat kebesaran Bangka Belitung dengan akulturasi Melayu, Tionghoa, dan Arab. Mahkota emas Paksian melambangkan keanggunan wanita negeri Serumpun Sebalai.
-                    </p>
-                    <div class="pt-2 flex items-center gap-2">
-                        <button onclick="openPhotoModal('assets/img/budaya_tari_paksian.jpg', 'Kemegahan Adat Paksian Bangka Belitung', 'Pakaian adat Paksian memadukan baju kurung sutra merah/ungu dengan ornamen mahkota emas goyang, kalung dokoh, dan kain cual tenun khas Bangka.')" class="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold text-xs transition-colors inline-flex items-center gap-1.5">
-                            <i class="fa-solid fa-expand"></i> Detail Paksian
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4. Tari Campak Tradisional Pesisir -->
-            <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-900 border border-slate-200 flex flex-col justify-end min-h-[260px] sm:min-h-[300px]">
-                <img src="assets/img/budaya_tari_campak.jpg" alt="Tari Campak Bangka Belitung" 
-                    class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-90">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-                
-                <div class="relative z-10 p-5 space-y-1.5 text-white">
-                    <div class="flex items-center gap-2">
-                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-sky-500 text-white shadow-sm">
-                            <i class="fa-solid fa-masks-theater mr-1"></i> Seni Tari Campak
-                        </span>
-                    </div>
-                    <h3 class="text-base sm:text-lg font-extrabold leading-snug text-white group-hover:text-sky-300 transition-colors">
-                        Tari Campak: Ceria &amp; Kehangatan Rakyat Babel
-                    </h3>
-                    <p class="text-slate-200 text-xs line-clamp-2 leading-relaxed">
-                        Tarian pergaulan tradisional yang riang gembira diiringi tabuhan gendang dan petikan dambus, dibawakan oleh penari dengan busana pesisir penuh warna.
-                    </p>
-                    <div class="pt-2 flex items-center gap-2">
-                        <button onclick="openPhotoModal('assets/img/budaya_tari_campak.jpg', 'Tari Campak Tradisional Bangka Belitung', 'Tarian rakyat pesisir yang mengekspresikan sukacita menyambut panen padi atau pesta adat, diiringi instrumen dambus dan pantun bersahut-sahutan.')" class="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold text-xs transition-colors inline-flex items-center gap-1.5">
-                            <i class="fa-solid fa-expand"></i> Detail Tari
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 5. Tradisi Nganggung Sepintu Sedulang -->
-            <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-900 border border-slate-200 flex flex-col justify-end min-h-[260px] sm:min-h-[300px]">
-                <img src="assets/img/budaya_nganggung.jpg" alt="Tradisi Nganggung Bangka" 
-                    class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-90">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-                
-                <div class="relative z-10 p-5 space-y-1.5 text-white">
-                    <div class="flex items-center gap-2">
-                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-500 text-white shadow-sm">
-                            <i class="fa-solid fa-hand-holding-heart mr-1"></i> Tradisi Luhur
-                        </span>
-                    </div>
-                    <h3 class="text-base sm:text-lg font-extrabold leading-snug text-white group-hover:text-rose-300 transition-colors">
-                        Tradisi Nganggung: Semangat Sepintu Sedulang
-                    </h3>
-                    <p class="text-slate-200 text-xs line-clamp-2 leading-relaxed">
-                        Kearifan lokal membawa dulang berisi makanan tertutup Tudung Saji merah bermotif khas untuk dinikmati bersama di balai adat, simbol kerukunan abadi masyarakat Babel.
-                    </p>
-                    <div class="pt-2 flex items-center gap-2">
-                        <button onclick="openPhotoModal('assets/img/budaya_nganggung.jpg', 'Tradisi Nganggung Sepintu Sedulang', 'Tradisi gotong royong khas masyarakat Bangka di mana setiap rumah membawa satu dulang makanan ke balai desa atau masjid untuk disantap bersama secara kekeluargaan.')" class="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold text-xs transition-colors inline-flex items-center gap-1.5">
-                            <i class="fa-solid fa-expand"></i> Detail Adat
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- ============================================================== -->
-    <!-- MODAL LIGHTBOX FOTO BUDAYA & LANSKAP                           -->
-    <!-- ============================================================== -->
-    <div id="photoLightboxModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-        <div class="relative max-w-3xl w-full bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden shadow-2xl space-y-0 text-white">
-            <button onclick="closePhotoModal()" class="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center text-sm transition-colors border border-white/20">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div class="relative w-full max-h-[55vh] bg-black flex items-center justify-center overflow-hidden">
-                <img id="photoModalImg" src="" alt="Detail Foto" class="w-full h-auto max-h-[55vh] object-contain">
-            </div>
-            <div class="p-5 sm:p-6 space-y-2 bg-slate-900 border-t border-slate-800">
-                <h3 id="photoModalTitle" class="text-lg sm:text-xl font-extrabold text-white"></h3>
-                <p id="photoModalDesc" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
-                <div class="pt-2 flex items-center justify-between text-xs text-slate-400">
-                    <span class="flex items-center gap-1.5">
-                        <i class="fa-solid fa-camera text-ocean-400"></i> Dokumentasi Budaya Kepulauan Bangka Belitung
+                <div class="relative z-10 p-4 space-y-1.5 text-white">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500 text-white shadow-sm inline-block">
+                        <i class="fa-solid fa-guitar mr-1"></i> Alat Musik Petik
                     </span>
-                    <button onclick="closePhotoModal()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition-colors">
-                        Tutup
+                    <h3 class="text-sm font-extrabold leading-snug text-white group-hover:text-purple-300 transition-colors line-clamp-1">
+                        Dambus Melayu Bangka
+                    </h3>
+                    <p class="text-slate-300 text-[11px] line-clamp-2 leading-relaxed">
+                        Alat musik petik khas berukir kepala rusa kijang, instrumen utama melodi tari dan lagu daerah.
+                    </p>
+                    <button onclick="openPhotoModal('assets/img/alat_musik_dambus.jpg', 'Alat Musik Tradisional Dambus', 'Alat musik petik khas Melayu Bangka Belitung yang memiliki ujung ukiran kepala rusa (kijang).')" class="pt-1 text-[11px] font-bold text-purple-300 hover:text-white flex items-center gap-1">
+                        <span>Lihat Foto</span> <i class="fa-solid fa-arrow-right text-[9px]"></i>
                     </button>
                 </div>
             </div>
+
+            <!-- 5. Museum Timah Indonesia Pangkalpinang -->
+            <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-900 border border-slate-200 flex flex-col justify-end min-h-[260px]">
+                <img src="assets/img/museum_timah_babel.jpg" alt="Museum Timah Indonesia" 
+                    class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-90">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                
+                <div class="relative z-10 p-4 space-y-1.5 text-white">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-500 text-white shadow-sm inline-block">
+                        <i class="fa-solid fa-landmark mr-1"></i> Museum Sejarah
+                    </span>
+                    <h3 class="text-sm font-extrabold leading-snug text-white group-hover:text-sky-300 transition-colors line-clamp-1">
+                        Museum Timah Indonesia
+                    </h3>
+                    <p class="text-slate-300 text-[11px] line-clamp-2 leading-relaxed">
+                        Gedung kolonial di Pangkalpinang yang mendokumentasikan sejarah penambangan timah dunia.
+                    </p>
+                    <button onclick="openPhotoModal('assets/img/museum_timah_babel.jpg', 'Museum Timah Indonesia Pangkalpinang', 'Satu-satunya museum pertambangan timah di Asia Tenggara, terletak di Kota Pangkalpinang.')" class="pt-1 text-[11px] font-bold text-sky-300 hover:text-white flex items-center gap-1">
+                        <span>Lihat Foto</span> <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 6. Mahkota Paksian & Baju Kurung Adat -->
+            <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-900 border border-slate-200 flex flex-col justify-end min-h-[260px]">
+                <img src="assets/img/budaya_tari_paksian.jpg" alt="Pakaian Adat Paksian" 
+                    class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-90">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                
+                <div class="relative z-10 p-4 space-y-1.5 text-white">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-slate-950 shadow-sm inline-block">
+                        <i class="fa-solid fa-crown mr-1"></i> Busana Adat
+                    </span>
+                    <h3 class="text-sm font-extrabold leading-snug text-white group-hover:text-amber-300 transition-colors line-clamp-1">
+                        Busana Adat Paksian
+                    </h3>
+                    <p class="text-slate-300 text-[11px] line-clamp-2 leading-relaxed">
+                        Mahkota emas bermotif kembang goyang dan baju kurung Melayu, lambang keanggunan adat Babel.
+                    </p>
+                    <button onclick="openPhotoModal('assets/img/budaya_tari_paksian.jpg', 'Busana Pengantin &amp; Mahkota Paksian', 'Busana kebesaran adat perkawinan Bangka Belitung perpaduan harmonis budaya Melayu, Tionghoa, dan Arab.')" class="pt-1 text-[11px] font-bold text-amber-300 hover:text-white flex items-center gap-1">
+                        <span>Lihat Foto</span> <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 7. Tari Campak Tradisional Pesisir -->
+            <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-900 border border-slate-200 flex flex-col justify-end min-h-[260px]">
+                <img src="assets/img/budaya_tari_campak.jpg" alt="Tari Campak" 
+                    class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-90">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                
+                <div class="relative z-10 p-4 space-y-1.5 text-white">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500 text-white shadow-sm inline-block">
+                        <i class="fa-solid fa-masks-theater mr-1"></i> Seni Pertunjukan
+                    </span>
+                    <h3 class="text-sm font-extrabold leading-snug text-white group-hover:text-emerald-300 transition-colors line-clamp-1">
+                        Tari Campak Pesisir
+                    </h3>
+                    <p class="text-slate-300 text-[11px] line-clamp-2 leading-relaxed">
+                        Tarian kegembiraan rakyat menyambut panen dan pesta adat di pesisir pantai Bangka Belitung.
+                    </p>
+                    <button onclick="openPhotoModal('assets/img/budaya_tari_campak.jpg', 'Tari Campak Tradisional Pesisir', 'Tarian rakyat pesisir yang dinamis dan riang gembira diiringi tabuhan gendang dan petikan dambus.')" class="pt-1 text-[11px] font-bold text-emerald-300 hover:text-white flex items-center gap-1">
+                        <span>Lihat Foto</span> <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 8. Tradisi Nganggung Sepintu Sedulang -->
+            <div class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-900 border border-slate-200 flex flex-col justify-end min-h-[260px]">
+                <img src="assets/img/budaya_nganggung.jpg" alt="Tradisi Nganggung" 
+                    class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-90">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                
+                <div class="relative z-10 p-4 space-y-1.5 text-white">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500 text-white shadow-sm inline-block">
+                        <i class="fa-solid fa-hand-holding-heart mr-1"></i> Kearifan Lokal
+                    </span>
+                    <h3 class="text-sm font-extrabold leading-snug text-white group-hover:text-rose-300 transition-colors line-clamp-1">
+                        Tradisi Nganggung
+                    </h3>
+                    <p class="text-slate-300 text-[11px] line-clamp-2 leading-relaxed">
+                        Membawa dulang bertudung saji merah ke balai desa untuk disantap bersama secara kekeluargaan.
+                    </p>
+                    <button onclick="openPhotoModal('assets/img/budaya_nganggung.jpg', 'Tradisi Nganggung Sepintu Sedulang', 'Tradisi gotong royong membawa dulang makanan bertutup tudung saji merah sebagai wujud kebersamaan abadi masyarakat Babel.')" class="pt-1 text-[11px] font-bold text-rose-300 hover:text-white flex items-center gap-1">
+                        <span>Lihat Foto</span> <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
 
-
     <!-- ============================================================== -->
-    <!-- 5. TOP 5 DESTINASI TERPOPULER                                   -->
+    <!-- 6. TOP 5 DESTINASI TERPOPULER (DENGAN AVATAR FOTO ASLI)        -->
     <!-- ============================================================== -->
     <div class="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
         <div class="p-4 sm:p-6 border-b border-slate-100 flex items-center justify-between">
@@ -482,11 +574,16 @@ $topDestinasi = $pdo->query("
         </div>
 
         <div class="divide-y divide-slate-100">
-            <?php foreach ($topDestinasi as $index => $row): ?>
-            <div class="p-4 sm:px-6 flex items-center justify-between hover:bg-slate-50/70 transition-colors gap-3">
-                <div class="flex items-center gap-3.5 min-w-0">
-                    <div class="w-8 h-8 rounded-xl <?= $index === 0 ? 'bg-amber-100 text-amber-700 border border-amber-300' : 'bg-slate-100 text-slate-600' ?> flex items-center justify-center font-extrabold text-xs shrink-0">
-                        #<?= $index + 1 ?>
+            <?php foreach ($topDestinasi as $index => $row): 
+                $photoThumb = getDestinationPhoto($row['nama'], $row['sub_kategori']);
+            ?>
+            <div class="p-3.5 sm:px-6 flex items-center justify-between hover:bg-slate-50/70 transition-colors gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="relative">
+                        <img src="<?= $photoThumb ?>" alt="<?= htmlspecialchars($row['nama']) ?>" class="w-12 h-12 rounded-2xl object-cover border border-slate-200 shadow-2xs shrink-0">
+                        <span class="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full <?= $index === 0 ? 'bg-amber-500 text-white font-black' : 'bg-slate-900 text-white font-bold' ?> text-[10px] flex items-center justify-center shadow-sm">
+                            <?= $index + 1 ?>
+                        </span>
                     </div>
                     <div class="min-w-0">
                         <div class="text-xs sm:text-sm font-bold text-slate-900 truncate">
@@ -495,14 +592,14 @@ $topDestinasi = $pdo->query("
                         <div class="text-[11px] text-slate-500 flex items-center gap-2 mt-0.5">
                             <span><?= htmlspecialchars($row['kecamatan']) ?>, <?= htmlspecialchars(str_replace(['Kabupaten ', 'Kota '], '', $row['kabupaten'])) ?></span>
                             <span>&bull;</span>
-                            <span class="font-medium <?= $row['sub_kategori'] === 'Alam' ? 'text-emerald-600' : 'text-amber-600' ?>">
+                            <span class="font-semibold <?= $row['sub_kategori'] === 'Alam' ? 'text-emerald-600' : ($row['sub_kategori'] === 'Kebudayaan' ? 'text-purple-600' : 'text-amber-600') ?>">
                                 <?= htmlspecialchars($row['sub_kategori']) ?>
                             </span>
                         </div>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-4 shrink-0">
+                <div class="flex items-center gap-3 sm:gap-4 shrink-0">
                     <div class="text-right">
                         <div class="flex items-center justify-end gap-1 text-xs font-bold text-amber-500">
                             <i class="fa-solid fa-star text-[10px]"></i>
@@ -512,12 +609,38 @@ $topDestinasi = $pdo->query("
                             <?= number_format($row['ulasan']) ?> ulasan
                         </div>
                     </div>
-                    <a href="index.php?page=peta&q=<?= urlencode($row['nama']) ?>" class="hidden sm:inline-flex items-center justify-center w-8 h-8 rounded-xl bg-ocean-50 text-ocean-600 hover:bg-ocean-100 transition-colors" title="Buka di Peta">
+                    <a href="index.php?page=peta&q=<?= urlencode($row['nama']) ?>" class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-ocean-50 text-ocean-600 hover:bg-ocean-100 transition-colors" title="Buka di Peta">
                         <i class="fa-solid fa-location-crosshairs text-xs"></i>
                     </a>
                 </div>
             </div>
             <?php endforeach; ?>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL LIGHTBOX FOTO BUDAYA & LANSKAP                           -->
+    <!-- ============================================================== -->
+    <div id="photoLightboxModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+        <div class="relative max-w-3xl w-full bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden shadow-2xl space-y-0 text-white">
+            <button onclick="closePhotoModal()" class="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center text-sm transition-colors border border-white/20">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="relative w-full max-h-[55vh] bg-black flex items-center justify-center overflow-hidden">
+                <img id="photoModalImg" src="" alt="Detail Foto" class="w-full h-auto max-h-[55vh] object-contain">
+            </div>
+            <div class="p-5 sm:p-6 space-y-2 bg-slate-900 border-t border-slate-800">
+                <h3 id="photoModalTitle" class="text-lg sm:text-xl font-extrabold text-white"></h3>
+                <p id="photoModalDesc" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
+                <div class="pt-2 flex items-center justify-between text-xs text-slate-400">
+                    <span class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-camera text-ocean-400"></i> Dokumentasi Budaya Kepulauan Bangka Belitung
+                    </span>
+                    <button onclick="closePhotoModal()" class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition-colors">
+                        Tutup
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -602,4 +725,18 @@ new Chart(propCtx, {
         cutout: '72%'
     }
 });
+
+// Modal Lightbox Foto
+function openPhotoModal(src, title, desc) {
+    document.getElementById('photoModalImg').src = src;
+    document.getElementById('photoModalTitle').innerHTML = title;
+    document.getElementById('photoModalDesc').innerHTML = desc;
+    document.getElementById('photoLightboxModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePhotoModal() {
+    document.getElementById('photoLightboxModal').classList.add('hidden');
+    document.body.style.overflow = '';
+}
 </script>

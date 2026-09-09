@@ -145,6 +145,47 @@ function getCorrelationBadge($r) {
         </div>
     </div>
 
+    <!-- ============================================================== -->
+    <!-- SPOTLIGHT VISUAL: 4 PILAR IDENTITAS PARIWISATA BANGKA BELITUNG  -->
+    <!-- ============================================================== -->
+    <div class="mb-6 sm:mb-8 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+        <div class="relative h-28 sm:h-36 rounded-2xl overflow-hidden shadow-xs border border-slate-200/80 group">
+            <img src="assets/img/pantai_lengkuas.jpg" alt="Pulau Lengkuas" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent"></div>
+            <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                <span class="text-[9px] font-bold text-amber-300 uppercase tracking-wider block">Bahari &amp; Geopark</span>
+                <span class="text-xs font-bold text-white block truncate">Pulau Lengkuas 1882</span>
+            </div>
+        </div>
+
+        <div class="relative h-28 sm:h-36 rounded-2xl overflow-hidden shadow-xs border border-slate-200/80 group">
+            <img src="assets/img/kain_cual_bangka.jpg" alt="Kain Cual Bangka" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent"></div>
+            <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                <span class="text-[9px] font-bold text-purple-300 uppercase tracking-wider block">Warisan Kriya</span>
+                <span class="text-xs font-bold text-white block truncate">Tenun Cual Sutra Emas</span>
+            </div>
+        </div>
+
+        <div class="relative h-28 sm:h-36 rounded-2xl overflow-hidden shadow-xs border border-slate-200/80 group">
+            <img src="assets/img/laskar_pelangi_gantong.jpg" alt="SD Laskar Pelangi" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent"></div>
+            <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                <span class="text-[9px] font-bold text-sky-300 uppercase tracking-wider block">Wisata Sastra</span>
+                <span class="text-xs font-bold text-white block truncate">Laskar Pelangi Gantong</span>
+            </div>
+        </div>
+
+        <div class="relative h-28 sm:h-36 rounded-2xl overflow-hidden shadow-xs border border-slate-200/80 group">
+            <img src="assets/img/museum_timah_babel.jpg" alt="Museum Timah Babel" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent"></div>
+            <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                <span class="text-[9px] font-bold text-emerald-300 uppercase tracking-wider block">Sejarah &amp; Edukasi</span>
+                <span class="text-xs font-bold text-white block truncate">Museum Timah Pangkalpinang</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Tab Navigasi Analisis (8 Pilar Standar Kemenpar & Akademik) -->
     <div class="w-full max-w-full min-w-0 border-b border-slate-200 mb-6 sm:mb-8 pb-1">
         <div class="w-full max-w-full min-w-0 overflow-x-auto no-scrollbar touch-scroll py-1">

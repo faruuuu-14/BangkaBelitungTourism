@@ -64,8 +64,10 @@ $maxAmenityPOI = !empty($rankedList) ? array_reduce($rankedList, fn($carry, $ite
         <div class="absolute -right-16 -top-16 w-80 h-80 bg-ocean-500/20 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute right-32 -bottom-20 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div class="space-y-2 sm:space-y-3 max-w-3xl">
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            
+            <!-- Kolom Kiri: Teks & Aksi Utama (7 Cols) -->
+            <div class="lg:col-span-7 space-y-3 sm:space-y-4">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-ocean-300 text-xs font-semibold">
                     <i class="fa-solid fa-ranking-star text-ocean-400"></i>
                     <span>Sistem Pendukung Keputusan (SPK) &bull; Multi-Criteria Decision Making (MCDM)</span>
@@ -76,18 +78,72 @@ $maxAmenityPOI = !empty($rankedList) ? array_reduce($rankedList, fn($carry, $ite
                 <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
                     Menentukan peringkat destinasi wisata secara objektif menggunakan metode ilmiah TOPSIS (Hwang &amp; Yoon, 1981) berdasarkan 4 pilar standar Kemenparekraf RI: Kualitas Rating, Jarak Akses Transportasi, Ketersediaan Hotel/Restoran, dan Popularitas Wisatawan.
                 </p>
+
+                <div class="flex flex-wrap items-center gap-2.5 pt-1">
+                    <button onclick="openGuideModal('rekomendasi')" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/15 transition-all shadow-sm">
+                        <i class="fa-solid fa-circle-question text-ocean-400 text-xs"></i>
+                        <span>Panduan &amp; Rumus TOPSIS</span>
+                    </button>
+                    <button onclick="exportTopsisCSV()" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-sm">
+                        <i class="fa-solid fa-file-csv text-xs"></i>
+                        <span>Ekspor Hasil CSV</span>
+                    </button>
+                    <a href="index.php?page=peta" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-ocean-600/80 hover:bg-ocean-600 text-white text-xs font-bold transition-all shadow-sm">
+                        <i class="fa-solid fa-map-location-dot text-xs"></i>
+                        <span>Buka Peta Spasial</span>
+                    </a>
+                </div>
             </div>
 
-            <div class="grid grid-cols-2 sm:flex sm:flex-col gap-2 shrink-0 w-full md:w-auto">
-                <button onclick="openGuideModal('rekomendasi')" class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/15 transition-all shadow-sm">
-                    <i class="fa-solid fa-circle-question text-ocean-400 text-xs"></i>
-                    <span>Panduan Fitur</span>
-                </button>
-                <button onclick="exportTopsisCSV()" class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-sm">
-                    <i class="fa-solid fa-file-csv text-xs"></i>
-                    <span>Ekspor CSV</span>
-                </button>
+            <!-- Kolom Kanan: Visual Card Showcase Geopark & Budaya (5 Cols) -->
+            <div class="lg:col-span-5 relative mt-4 lg:mt-0">
+                <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-white/20 group">
+                    <img src="assets/img/pantai_tanjung_tinggi.jpg" 
+                         alt="Pantai Tanjung Tinggi Belitung" 
+                         class="w-full h-52 sm:h-64 object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
+
+                    <!-- Badge Kemenpar & Geopark -->
+                    <div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                        <span class="px-2.5 py-1 rounded-full bg-slate-900/85 backdrop-blur-md text-[10px] font-bold text-amber-300 border border-amber-400/30 flex items-center gap-1.5 shadow">
+                            <i class="fa-solid fa-earth-asia text-amber-400"></i>
+                            <span>UNESCO Global Geopark</span>
+                        </span>
+                        <span class="px-2 py-1 rounded-full bg-ocean-600/80 backdrop-blur-md text-[10px] font-semibold text-white shadow">
+                            4 Kriteria Kemenpar
+                        </span>
+                    </div>
+
+                    <!-- Overlay Info & Thumbnail Mini -->
+                    <div class="absolute bottom-3 left-3 right-3 space-y-2">
+                        <div>
+                            <h3 class="text-sm sm:text-base font-extrabold text-white drop-shadow">
+                                Destinasi Unggulan Kep. Bangka Belitung
+                            </h3>
+                            <p class="text-[11px] text-slate-300 drop-shadow line-clamp-1">
+                                Geopark Belitong, Bentang Alam Granit &amp; Pusaka Budaya Bahari
+                            </p>
+                        </div>
+
+                        <!-- Mini Thumbnail Slider Preview -->
+                        <div class="flex items-center gap-2 pt-1 border-t border-white/15">
+                            <div class="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-2 py-1 rounded-xl border border-white/10">
+                                <img src="assets/img/kain_cual_bangka.jpg" alt="Kain Cual" class="w-5 h-5 rounded-md object-cover">
+                                <span class="text-[10px] font-medium text-slate-200">Kain Cual</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-2 py-1 rounded-xl border border-white/10">
+                                <img src="assets/img/laskar_pelangi_gantong.jpg" alt="Laskar Pelangi" class="w-5 h-5 rounded-md object-cover">
+                                <span class="text-[10px] font-medium text-slate-200">Laskar Pelangi</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-2 py-1 rounded-xl border border-white/10">
+                                <img src="assets/img/alat_musik_dambus.jpg" alt="Dambus" class="w-5 h-5 rounded-md object-cover">
+                                <span class="text-[10px] font-medium text-slate-200">Dambus</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 
@@ -317,40 +373,58 @@ $maxAmenityPOI = !empty($rankedList) ? array_reduce($rankedList, fn($carry, $ite
                 $item = $top10[$i];
                 $m = $medals[$i];
             ?>
-            <div class="rounded-3xl p-5 border <?= $m['border'] ?> bg-gradient-to-b <?= $m['bg'] ?> shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4">
+            <div class="rounded-3xl p-4 sm:p-5 border <?= $m['border'] ?> bg-gradient-to-b <?= $m['bg'] ?> shadow-xs hover:shadow-lg transition-all flex flex-col justify-between space-y-3 sm:space-y-4 group">
                 <div>
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold <?= $m['badge'] ?>">
-                            <i class="fa-solid <?= $m['icon'] ?>"></i>
-                            <span><?= $m['title'] ?></span>
-                        </span>
-                        <span class="text-xs font-black text-ocean-700 bg-ocean-50 border border-ocean-200/80 px-2 py-0.5 rounded-lg">
-                            Skor: <?= number_format($item['score_v'], 4) ?>
-                        </span>
+                    <!-- Foto Destinasi Unggulan Podium -->
+                    <div class="relative h-44 w-full rounded-2xl overflow-hidden mb-3.5 shadow-sm border border-black/5">
+                        <img src="<?= htmlspecialchars(getDestinationPhoto($item['nama'], $item['sub_kategori'])) ?>" 
+                             alt="<?= htmlspecialchars($item['nama']) ?>"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent"></div>
+                        <div class="absolute top-2.5 left-2.5">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold shadow-md <?= $m['badge'] ?>">
+                                <i class="fa-solid <?= $m['icon'] ?>"></i>
+                                <span><?= $m['title'] ?></span>
+                            </span>
+                        </div>
+                        <div class="absolute top-2.5 right-2.5">
+                            <span class="text-xs font-black text-slate-900 bg-white/95 backdrop-blur-md px-2 py-0.5 rounded-lg shadow-md border border-white/50">
+                                Skor: <?= number_format($item['score_v'], 4) ?>
+                            </span>
+                        </div>
+                        <div class="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[11px] text-white font-semibold drop-shadow">
+                            <span class="flex items-center gap-1 truncate max-w-[140px]">
+                                <i class="fa-solid fa-location-dot text-amber-300 text-[10px]"></i>
+                                <?= htmlspecialchars($item['kabupaten']) ?>
+                            </span>
+                            <span class="bg-white/25 backdrop-blur-xs px-2 py-0.5 rounded-full text-[10px] text-white">
+                                <?= htmlspecialchars($item['sub_kategori']) ?>
+                            </span>
+                        </div>
                     </div>
 
                     <h3 class="text-base font-extrabold text-slate-900 line-clamp-1" title="<?= htmlspecialchars($item['nama']) ?>">
                         <?= htmlspecialchars($item['nama']) ?>
                     </h3>
-                    <div class="text-xs text-slate-500 mt-1 flex items-center gap-1.5">
-                        <span class="font-medium text-slate-700"><?= htmlspecialchars($item['kabupaten']) ?></span>
+                    <div class="text-xs text-slate-500 mt-0.5 flex items-center gap-1.5">
+                        <span class="font-medium text-slate-700">Kec. <?= htmlspecialchars($item['kecamatan']) ?></span>
                         <span>&bull;</span>
-                        <span class="text-emerald-600 font-semibold"><?= htmlspecialchars($item['sub_kategori']) ?></span>
+                        <span class="text-emerald-600 font-semibold"><?= round($item['score_v'] * 100, 1) ?>% Ideal TOPSIS</span>
                     </div>
 
                     <!-- Indikator 4 Kriteria -->
-                    <div class="grid grid-cols-2 gap-2 mt-4 text-[11px]">
-                        <div class="bg-white/80 p-2 rounded-xl border border-slate-100">
-                            <span class="text-slate-400 block text-[10px]">Rating:</span>
+                    <div class="grid grid-cols-2 gap-2 mt-3.5 text-[11px]">
+                        <div class="bg-white/90 p-2 rounded-xl border border-slate-100 shadow-2xs">
+                            <span class="text-slate-400 block text-[10px] font-medium">Rating &amp; Ulasan:</span>
                             <span class="font-bold text-amber-600">★ <?= $item['rating'] ?> (<?= number_format($item['ulasan']) ?>)</span>
                         </div>
-                        <div class="bg-white/80 p-2 rounded-xl border border-slate-100">
-                            <span class="text-slate-400 block text-[10px]">Akses Transport:</span>
-                            <span class="font-bold text-purple-700"><?= $item['hub_dist'] ?> km ke Hub</span>
+                        <div class="bg-white/90 p-2 rounded-xl border border-slate-100 shadow-2xs">
+                            <span class="text-slate-400 block text-[10px] font-medium">Akses Hub:</span>
+                            <span class="font-bold text-purple-700"><?= $item['hub_dist'] ?> km</span>
                         </div>
-                        <div class="bg-white/80 p-2 rounded-xl border border-slate-100 col-span-2">
-                            <span class="text-slate-400 block text-[10px]">Amenitas Pendukung (Radius 5 km):</span>
-                            <span class="font-bold text-sky-700"><?= $item['amenities'] ?> Unit Hotel &amp; Restoran</span>
+                        <div class="bg-white/90 p-2 rounded-xl border border-slate-100 shadow-2xs col-span-2">
+                            <span class="text-slate-400 block text-[10px] font-medium">Amenitas 5 km Sekitar:</span>
+                            <span class="font-bold text-sky-700"><?= $item['amenities'] ?> Unit Hotel &amp; Resto</span>
                         </div>
                     </div>
                 </div>
@@ -413,8 +487,15 @@ $maxAmenityPOI = !empty($rankedList) ? array_reduce($rankedList, fn($carry, $ite
                             </span>
                         </td>
                         <td class="px-4 py-3.5">
-                            <div class="font-bold text-slate-900"><?= htmlspecialchars($item['nama']) ?></div>
-                            <div class="text-[11px] text-slate-400"><?= htmlspecialchars($item['sub_kategori']) ?></div>
+                            <div class="flex items-center gap-3">
+                                <img src="<?= htmlspecialchars(getDestinationPhoto($item['nama'], $item['sub_kategori'])) ?>" 
+                                     alt="<?= htmlspecialchars($item['nama']) ?>"
+                                     class="w-11 h-11 rounded-xl object-cover border border-slate-200 shadow-2xs shrink-0">
+                                <div>
+                                    <div class="font-bold text-slate-900 leading-snug"><?= htmlspecialchars($item['nama']) ?></div>
+                                    <div class="text-[11px] text-slate-400 mt-0.5"><?= htmlspecialchars($item['sub_kategori']) ?></div>
+                                </div>
+                            </div>
                         </td>
                         <td class="px-4 py-3.5 whitespace-nowrap">
                             <div class="text-slate-800"><?= htmlspecialchars($item['kabupaten']) ?></div>

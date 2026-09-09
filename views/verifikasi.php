@@ -103,12 +103,19 @@ $totalPending = count($pendingPlaces);
                     <?php foreach ($pendingPlaces as $row): ?>
                     <tr class="hover:bg-slate-50/70 transition-colors">
                         <td class="px-6 py-4">
-                            <div class="font-bold text-slate-900 text-base"><?= htmlspecialchars($row['nama']) ?></div>
-                            <div class="flex items-center gap-2 mt-1">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
-                                    <?= htmlspecialchars($row['sub_kategori']) ?> (<?= htmlspecialchars($row['kelompok']) ?>)
-                                </span>
-                                <span class="text-xs text-slate-400">★ <?= $row['rating'] ?: '0.0' ?> (<?= $row['ulasan'] ?> ulasan)</span>
+                            <div class="flex items-center gap-3">
+                                <img src="<?= htmlspecialchars(getDestinationPhoto($row['nama'], $row['sub_kategori'])) ?>" 
+                                     alt="<?= htmlspecialchars($row['nama']) ?>"
+                                     class="w-12 h-12 rounded-xl object-cover border border-slate-200 shadow-2xs shrink-0">
+                                <div>
+                                    <div class="font-bold text-slate-900 text-sm leading-snug"><?= htmlspecialchars($row['nama']) ?></div>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
+                                            <?= htmlspecialchars($row['sub_kategori']) ?> (<?= htmlspecialchars($row['kelompok']) ?>)
+                                        </span>
+                                        <span class="text-xs text-slate-400">★ <?= $row['rating'] ?: '0.0' ?> (<?= $row['ulasan'] ?> ulasan)</span>
+                                    </div>
+                                </div>
                             </div>
                         </td>
                         <td class="px-6 py-4 text-xs">

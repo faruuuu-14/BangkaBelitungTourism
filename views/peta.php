@@ -615,6 +615,29 @@ function createCustomIcon(sub) {
     });
 }
 
+// Helper foto representatif otentik Babel untuk peta & popup
+function getClientPhoto(nama, sub) {
+    const n = (nama || '').toLowerCase();
+    const s = (sub || '').toLowerCase();
+
+    if (n.includes('lengkuas') || n.includes('mercusuar')) return 'assets/img/pantai_lengkuas.jpg';
+    if (n.includes('tanjung tinggi') || n.includes('kelayang') || n.includes('parai') || n.includes('granit') || n.includes('pasir padi') || n.includes('tanjung pesona') || n.includes('pantai') || n.includes('pulau')) return 'assets/img/pantai_tanjung_tinggi.jpg';
+    if (n.includes('laskar pelangi') || n.includes('gantong') || n.includes('kata') || n.includes('sekolah') || n.includes('andrea')) return 'assets/img/laskar_pelangi_gantong.jpg';
+    if (n.includes('museum') || n.includes('timah') || n.includes('sejarah') || n.includes('benteng') || n.includes('menumbing') || n.includes('prasasti') || n.includes('kota tua')) return 'assets/img/museum_timah_babel.jpg';
+    if (n.includes('cual') || n.includes('tenun') || n.includes('kain') || n.includes('batik') || n.includes('souvenir') || n.includes('kerajinan')) return 'assets/img/kain_cual_bangka.jpg';
+    if (n.includes('dambus') || n.includes('musik') || n.includes('sanggar') || n.includes('seni')) return 'assets/img/alat_musik_dambus.jpg';
+    if (n.includes('paksian') || n.includes('pengantin') || n.includes('pakaian')) return 'assets/img/budaya_tari_paksian.jpg';
+    if (n.includes('campak') || n.includes('tari') || n.includes('joget')) return 'assets/img/budaya_tari_campak.jpg';
+    if (n.includes('nganggung') || n.includes('sepintu') || n.includes('sedulang') || n.includes('dulang') || n.includes('lempah') || n.includes('otak-otak') || n.includes('kopi') || n.includes('makan') || n.includes('resto')) return 'assets/img/budaya_nganggung.jpg';
+
+    if (s === 'kebudayaan' || s.includes('budaya') || s.includes('sejarah')) return 'assets/img/kain_cual_bangka.jpg';
+    if (s === 'restoran' || s.includes('kuliner')) return 'assets/img/budaya_nganggung.jpg';
+    if (s === 'buatan') return 'assets/img/laskar_pelangi_gantong.jpg';
+    if (s === 'hotel') return 'assets/img/pantai_lengkuas.jpg';
+
+    return 'assets/img/pantai_tanjung_tinggi.jpg';
+}
+
 const markersLayer = L.layerGroup().addTo(map);
 const hubMarkersLayer = L.layerGroup().addTo(map);
 const catchmentRingsLayer = L.layerGroup().addTo(map);
@@ -999,13 +1022,12 @@ function onSearchDestinasiInput(keyword) {
     filtered.forEach(p => {
         const meta = getSubkategoriBadge(p.sub_kategori);
         const isAdded = tripPlaces.some(t => t.id === p.id);
+        const photo = getClientPhoto(p.nama, p.sub_kategori);
 
         html += `
             <div onclick="addSearchedPlaceToTrip(${p.id})" class="p-2.5 hover:bg-ocean-50/80 active:bg-ocean-100 flex items-center justify-between gap-2.5 cursor-pointer transition-colors group w-full min-w-0">
                 <div class="flex items-center gap-2.5 min-w-0 flex-1">
-                    <span class="w-6 h-6 rounded-lg ${meta.bg} text-white flex items-center justify-center flex-shrink-0 text-[10px] shadow-sm">
-                        <i class="fa-solid ${meta.icon}"></i>
-                    </span>
+                    <img src="${photo}" alt="${p.nama}" class="w-8 h-8 rounded-lg object-cover border border-slate-200 flex-shrink-0 shadow-2xs">
                     <div class="min-w-0 flex-1">
                         <div class="font-bold text-slate-800 text-xs truncate group-hover:text-ocean-700" title="${p.nama}">
                             ${p.nama}
@@ -1145,19 +1167,21 @@ function renderTripList() {
 
     let html = '';
     tripPlaces.forEach((p, idx) => {
+        const photo = getClientPhoto(p.nama, p.sub);
         html += `
-            <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2 w-full min-w-0 overflow-hidden">
+            <div class="p-2 rounded-xl bg-slate-50 border border-slate-200/90 flex items-center justify-between gap-2.5 w-full min-w-0 overflow-hidden shadow-2xs hover:bg-white transition-colors">
                 <div class="flex items-center gap-2.5 min-w-0 flex-1 overflow-hidden">
-                    <span class="w-5 h-5 flex-shrink-0 rounded-full bg-slate-800 text-white font-bold text-[10px] flex items-center justify-center">
+                    <span class="w-5 h-5 flex-shrink-0 rounded-full bg-slate-800 text-white font-bold text-[10px] flex items-center justify-center shadow-2xs">
                         ${idx + 1}
                     </span>
+                    <img src="${photo}" alt="${p.nama}" class="w-9 h-9 rounded-lg object-cover border border-slate-200 flex-shrink-0 shadow-2xs">
                     <div class="min-w-0 flex-1">
                         <div class="font-bold text-slate-800 text-xs truncate" title="${p.nama}">${p.nama}</div>
                         <div class="text-[10px] text-slate-400 truncate">${p.sub} &bull; ${p.kec}</div>
                     </div>
                 </div>
-                <button onclick="removeFromTrip(${idx})" class="flex-shrink-0 text-slate-400 hover:text-rose-600 p-1" title="Hapus">
-                    <i class="fa-solid fa-xmark text-xs"></i>
+                <button onclick="removeFromTrip(${idx})" class="flex-shrink-0 text-slate-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition-colors" title="Hapus dari Rute">
+                    <i class="fa-solid fa-trash-can text-xs"></i>
                 </button>
             </div>
         `;
@@ -1502,17 +1526,24 @@ function renderMarkers() {
                 </button>
             `;
 
+            const photoUrl = getClientPhoto(p.nama, p.sub_kategori);
             const popupContent = `
-                <div class="p-1 min-w-[220px]">
-                    <div class="flex items-center justify-between gap-1 mb-1.5">
-                        <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold text-white" style="background-color: ${getMarkerColor(p.sub_kategori)}">
-                            ${p.sub_kategori} (${p.kelompok})
-                        </span>
-                        <span class="px-1.5 py-0.5 rounded text-[9px] font-bold border ${access.zoneBadge}">
-                            ${access.zoneLabel}
-                        </span>
+                <div class="min-w-[240px] max-w-[270px]">
+                    <div class="relative h-28 w-full -mx-0 -mt-0 mb-2 rounded-xl overflow-hidden shadow-xs border border-black/5">
+                        <img src="${photoUrl}" alt="${p.nama}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-transparent"></div>
+                        <div class="absolute top-2 left-2">
+                            <span class="inline-block px-2 py-0.5 rounded-full text-[9px] font-bold text-white shadow" style="background-color: ${getMarkerColor(p.sub_kategori)}">
+                                ${p.sub_kategori} (${p.kelompok})
+                            </span>
+                        </div>
+                        <div class="absolute top-2 right-2">
+                            <span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-white/95 text-slate-800 shadow">
+                                ${access.zoneLabel}
+                            </span>
+                        </div>
                     </div>
-                    <h4 class="font-bold text-slate-900 text-sm mb-1 leading-snug">${p.nama}</h4>
+                    <h4 class="font-bold text-slate-900 text-sm mb-0.5 leading-snug">${p.nama}</h4>
                     <p class="text-xs text-slate-500 mb-2">${p.kecamatan}, ${p.kabupaten}</p>
                     <div class="flex items-center justify-between text-xs pt-1.5 border-t border-slate-100">
                         <span class="font-bold text-amber-500 flex items-center gap-1">

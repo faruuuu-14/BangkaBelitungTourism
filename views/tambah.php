@@ -51,16 +51,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <main class="flex-grow w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 pb-24 lg:pb-8 min-w-0 overflow-hidden">
 
-    <div class="mb-8">
-        <span class="text-xs font-semibold text-ocean-600 uppercase tracking-wider block mb-1">
-            <i class="fa-solid fa-users"></i> Partisipasi Masyarakat & Pengelola
-        </span>
-        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Pendaftaran Objek Wisata & Amenitas Baru
-        </h1>
-        <p class="text-slate-500 text-sm mt-1">
-            Daftarkan destinasi wisata atau fasilitas penginapan/kuliner lokal baru. Klik pada peta untuk memilih titik lokasi secara otomatis.
-        </p>
+    <!-- Header Section with Visual Banner -->
+    <div class="relative overflow-hidden bg-gradient-to-br from-slate-950 via-ocean-950 to-slate-900 rounded-3xl p-5 sm:p-7 text-white shadow-xl border border-white/10 mb-8">
+        <div class="absolute -right-16 -top-16 w-80 h-80 bg-ocean-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            <div class="md:col-span-8 space-y-2">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-ocean-300 text-xs font-semibold">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Partisipasi Masyarakat, Komunitas &amp; Pelaku Usaha</span>
+                </span>
+                <h1 class="text-xl sm:text-3xl font-extrabold text-white tracking-tight leading-tight">
+                    Pendaftaran Objek Wisata &amp; Amenitas Baru
+                </h1>
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                    Daftarkan destinasi daya tarik alam, pusaka budaya, maupun amenitas penginapan/kuliner lokal di Bangka Belitung. Klik pada peta interaktif untuk menentukan titik koordinat GPS secara otomatis.
+                </p>
+            </div>
+            <div class="md:col-span-4 flex justify-end">
+                <div class="relative h-28 w-full max-w-[260px] rounded-2xl overflow-hidden shadow-lg border border-white/20 group">
+                    <img src="assets/img/pantai_lengkuas.jpg" alt="Pulau Lengkuas" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                    <div class="absolute bottom-2 left-3 right-3 flex items-center justify-between text-[10px] font-bold text-white drop-shadow">
+                        <span>Babel Tourism Registry</span>
+                        <span class="bg-white/20 px-2 py-0.5 rounded backdrop-blur-xs">Resmi</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Notifikasi Alert -->
