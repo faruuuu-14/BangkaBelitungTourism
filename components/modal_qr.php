@@ -19,21 +19,38 @@
  * 
  * FITUR UTAMA:
  * 1. On-the-fly QR Code Rendering via API QR Engine beresolusi tinggi (300x300 px)
- * 2. URL Deep-linking terintegrasi ke Google Maps Driving Navigation API
- * 3. Salin tautan instan ke clipboard dengan indikator visual
- * 4. Mode Cetak Kartu Papan Petunjuk Fisik (Print Signpost Poster) untuk anjungan
+ * 2. Dropdown Pemilih Cepat 150 Destinasi Wisata Populer se-Bangka Belitung
+ * 3. URL Deep-linking terintegrasi ke Google Maps Driving Navigation API
+ * 4. Salin tautan instan ke clipboard dengan indikator visual
+ * 5. Mode Cetak Kartu Papan Petunjuk Fisik (Print Signpost Poster) untuk anjungan
  *    wisata bandara, pelabuhan, hotel, dan pos informasi Kemenparekraf.
  * 
  * KETERKAITAN ALUR (DATA & LOGIKA):
  * - Dimuat oleh: components/footer.php (Tersedia di seluruh halaman aplikasi)
- * - Dipanggil oleh: views/peta/skrip_peta.php (Marker popup), views/beranda/modal_dialog.php,
- *   dan views/rekomendasi/tabel_peringkat.php.
- * 
- * TUJUAN DIBUATNYA FILE:
- * Meningkatkan aksesibilitas informasi lapangan bagi turis domestik dan mancanegara
- * dalam mewujudkan ekosistem pariwisata cerdas (Smart Tourism 5.0) di Kepulauan Bangka Belitung.
+ * - Dipanggil oleh: 
+ *   a. Tombol QR di Navbar Header (openGenericQrModal)
+ *   b. Balon Popup Titik di Peta WebGIS (openQrModal)
+ *   c. Dialog Lightbox Foto Beranda (triggerPhotoModalQr)
+ *   d. Kartu Podium Juara & Tabel SPK TOPSIS (openQrModal)
  * ==============================================================================
  */
+
+require_once __DIR__ . '/../app/database.php';
+
+$qrDestList = [];
+try {
+    $qrPdo = getDbConnection();
+    $stmtQr = $qrPdo->query("
+        SELECT id, nama, kabupaten, sub_kategori, latitude, longitude 
+        FROM tempat_wisata 
+        WHERE latitude IS NOT NULL AND longitude IS NOT NULL 
+        ORDER BY ulasan DESC 
+        LIMIT 150
+    ");
+    $qrDestList = $stmtQr->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $qrDestList = [];
+}
 ?>
 
 <!-- ============================================================== -->
@@ -56,6 +73,25 @@
             <button onclick="closeQrModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
+        </div>
+
+        <!-- Selector Destinasi Cepat (Bisa Pilih Destinasi Mana Pun) -->
+        <div class="p-4 bg-slate-50 border-b border-slate-200 shrink-0">
+            <label class="block text-[11px] font-extrabold text-ocean-900 uppercase tracking-wider mb-1.5">
+                <i class="fa-solid fa-location-dot text-ocean-600 mr-1"></i> Pilih / Ganti Destinasi Wisata:
+            </label>
+            <select id="qrQuickSelector" onchange="onQrQuickSelectChange(this)" class="w-full text-xs font-semibold rounded-xl border border-slate-300 bg-white p-2.5 text-slate-800 focus:ring-2 focus:ring-ocean-500 shadow-2xs">
+                <?php foreach ($qrDestList as $idx => $qd): ?>
+                <option value="<?= htmlspecialchars($qd['id']) ?>" 
+                    data-nama="<?= htmlspecialchars($qd['nama']) ?>"
+                    data-lat="<?= (float)$qd['latitude'] ?>"
+                    data-lng="<?= (float)$qd['longitude'] ?>"
+                    data-kab="<?= htmlspecialchars($qd['kabupaten']) ?>"
+                    data-sub="<?= htmlspecialchars($qd['sub_kategori']) ?>">
+                    <?= htmlspecialchars($qd['nama']) ?> &bull; <?= htmlspecialchars($qd['kabupaten']) ?> (<?= htmlspecialchars($qd['sub_kategori']) ?>)
+                </option>
+                <?php endforeach; ?>
+            </select>
         </div>
 
         <!-- Body Modal: Papan Tanda Wisata yang Dapat Dicetak -->
@@ -147,6 +183,33 @@
 let currentGmapsNavUrl = '';
 
 /**
+ * Pemanggil Generator QR umum dari Menu Navbar
+ */
+function openGenericQrModal() {
+    const sel = document.getElementById('qrQuickSelector');
+    if (sel && sel.options.length > 0) {
+        onQrQuickSelectChange(sel);
+    } else {
+        openQrModal('Pantai Tikus Emas', -1.8617, 106.1264, 'Kabupaten Bangka', 'Wisata Bahari');
+    }
+}
+
+/**
+ * Menangani pergantian pilihan dari dropdown di dalam modal
+ */
+function onQrQuickSelectChange(selectEl) {
+    const opt = selectEl.options[selectEl.selectedIndex];
+    if (!opt) return;
+    openQrModal(
+        opt.getAttribute('data-nama'),
+        opt.getAttribute('data-lat'),
+        opt.getAttribute('data-lng'),
+        opt.getAttribute('data-kab'),
+        opt.getAttribute('data-sub')
+    );
+}
+
+/**
  * Membuka Modal QR Code Wisata Pintar
  * @param {string} nama Nama destinasi wisata
  * @param {number|string} lat Latitude koordinat
@@ -170,6 +233,17 @@ function openQrModal(nama, lat, lng, kab = '', sub = '') {
     document.getElementById('qrWilayahDestinasi').innerText = cleanKab;
     document.getElementById('qrBadgeKategori').innerText = cleanSub;
     document.getElementById('qrKoordinatText').innerText = `${cleanLat.toFixed(6)}, ${cleanLng.toFixed(6)}`;
+
+    // Sinkronisasi dropdown jika nama cocok
+    const sel = document.getElementById('qrQuickSelector');
+    if (sel) {
+        for (let i = 0; i < sel.options.length; i++) {
+            if (sel.options[i].getAttribute('data-nama') === cleanNama) {
+                sel.selectedIndex = i;
+                break;
+            }
+        }
+    }
 
     // Konstruksi URL Navigasi Google Maps Turn-by-Turn
     currentGmapsNavUrl = `https://www.google.com/maps/dir/?api=1&destination=${cleanLat},${cleanLng}&travelmode=driving`;

@@ -125,7 +125,11 @@ if (!function_exists('navActive')) {
             </nav>
 
             <!-- Aksi Kanan & Profil Pengembang -->
-            <div class="flex items-center gap-2 flex-shrink-0">
+                <!-- Tombol Pembuat Kode QR Wisata Pintar (Smart Tourism QR Generator) -->
+                <button onclick="openGenericQrModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-ocean-50 hover:bg-ocean-100 text-ocean-700 flex items-center justify-center border border-ocean-200 transition-all shadow-xs cursor-pointer" title="Pembuat Kode QR Wisata Pintar (Navigasi HP Langsung)">
+                    <i class="fa-solid fa-qrcode text-xs sm:text-sm"></i>
+                </button>
+
                 <!-- Tombol Mode Kiosk Bandara (Touchscreen Kiosk Display) -->
                 <button onclick="toggleAirportKioskMode()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 flex items-center justify-center border border-purple-200 transition-all shadow-xs cursor-pointer" title="Mode Layar Sentuh Kiosk Bandara (Touchscreen Display)">
                     <i class="fa-solid fa-tv text-xs sm:text-sm"></i>
