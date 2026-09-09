@@ -615,27 +615,83 @@ function createCustomIcon(sub) {
     });
 }
 
-// Helper foto representatif otentik Babel untuk peta & popup
-function getClientPhoto(nama, sub) {
+// Helper foto representatif otentik Babel untuk peta & popup (Seimbang di 7 Kabupaten/Kota)
+function getClientPhoto(nama, sub, kab) {
     const n = (nama || '').toLowerCase();
     const s = (sub || '').toLowerCase();
+    const k = (kab || '').toLowerCase();
 
-    if (n.includes('lengkuas') || n.includes('mercusuar')) return 'assets/img/pantai_lengkuas.jpg';
-    if (n.includes('tanjung tinggi') || n.includes('kelayang') || n.includes('parai') || n.includes('granit') || n.includes('pasir padi') || n.includes('tanjung pesona') || n.includes('pantai') || n.includes('pulau')) return 'assets/img/pantai_tanjung_tinggi.jpg';
-    if (n.includes('laskar pelangi') || n.includes('gantong') || n.includes('kata') || n.includes('sekolah') || n.includes('andrea')) return 'assets/img/laskar_pelangi_gantong.jpg';
-    if (n.includes('museum') || n.includes('timah') || n.includes('sejarah') || n.includes('benteng') || n.includes('menumbing') || n.includes('prasasti') || n.includes('kota tua')) return 'assets/img/museum_timah_babel.jpg';
-    if (n.includes('cual') || n.includes('tenun') || n.includes('kain') || n.includes('batik') || n.includes('souvenir') || n.includes('kerajinan')) return 'assets/img/kain_cual_bangka.jpg';
-    if (n.includes('dambus') || n.includes('musik') || n.includes('sanggar') || n.includes('seni')) return 'assets/img/alat_musik_dambus.jpg';
-    if (n.includes('paksian') || n.includes('pengantin') || n.includes('pakaian')) return 'assets/img/budaya_tari_paksian.jpg';
-    if (n.includes('campak') || n.includes('tari') || n.includes('joget')) return 'assets/img/budaya_tari_campak.jpg';
-    if (n.includes('nganggung') || n.includes('sepintu') || n.includes('sedulang') || n.includes('dulang') || n.includes('lempah') || n.includes('otak-otak') || n.includes('kopi') || n.includes('makan') || n.includes('resto')) return 'assets/img/budaya_nganggung.jpg';
+    // 1. Landmark Khusus Bangka Barat (Muntok & sekitarnya)
+    if (n.includes('tanjung ular') || n.includes('batu rakit') || n.includes('siangau') || n.includes('menumbing') || n.includes('pesanggrahan') || n.includes('muntok') || n.includes('mentok') || n.includes('benteng')) {
+        return 'assets/img/pantai_tanjung_ular.jpg';
+    }
 
+    // 2. Landmark Khusus Bangka (Sungailiat & sekitarnya)
+    if (n.includes('tikus emas') || n.includes('tikus') || n.includes('puri tri agung') || n.includes('tongaci') || n.includes('matras') || n.includes('rambak') || n.includes('parai') || n.includes('bedukang') || n.includes('rebo') || n.includes('teluk uber') || n.includes('air anyir')) {
+        return 'assets/img/pantai_tikus_emas.jpg';
+    }
+
+    // 3. Landmark Khusus Bangka Tengah (Koba, Air Bara & sekitarnya)
+    if (n.includes('kaolin') || n.includes('air bara') || n.includes('koba') || n.includes('terentang') || n.includes('ketawai') || n.includes('tapak antu') || n.includes('danau')) {
+        return 'assets/img/danau_kaolin_koba.jpg';
+    }
+
+    // 4. Landmark Khusus Bangka Selatan (Toboali & sekitarnya)
+    if (n.includes('batu perahu') || n.includes('nek aji') || n.includes('toboali') || n.includes('kerasak') || n.includes('lepar') || n.includes('pongok') || n.includes('tanjung labu')) {
+        return 'assets/img/pantai_batu_perahu.jpg';
+    }
+
+    // 5. Landmark Khusus Belitung & Belitung Timur
+    if (n.includes('lengkuas') || n.includes('mercusuar') || n.includes('kepayang') || n.includes('batu berlayar') || n.includes('batu garuda')) {
+        return 'assets/img/pantai_lengkuas.jpg';
+    }
+    if (n.includes('tanjung tinggi') || n.includes('kelayang') || n.includes('bukit berahu') || n.includes('mabai') || n.includes('granit') || n.includes('punai')) {
+        return 'assets/img/pantai_tanjung_tinggi.jpg';
+    }
+    if (n.includes('laskar pelangi') || n.includes('gantong') || n.includes('kata') || n.includes('sekolah') || n.includes('andrea') || n.includes('kirana') || n.includes('manggar') || n.includes('serdang') || n.includes('burung mandi')) {
+        return 'assets/img/laskar_pelangi_gantong.jpg';
+    }
+
+    // 6. Museum & Heritage Kota
+    if (n.includes('museum') || n.includes('timah') || n.includes('sejarah') || n.includes('prasasti') || n.includes('merdeka') || n.includes('residen')) {
+        return 'assets/img/museum_timah_babel.jpg';
+    }
+
+    // 7. Busana & Kriya Tradisional
+    if (n.includes('cual') || n.includes('tenun') || n.includes('kain') || n.includes('batik') || n.includes('souvenir') || n.includes('kerajinan')) {
+        return 'assets/img/kain_cual_bangka.jpg';
+    }
+
+    // 8. Kesenian Musik & Tari
+    if (n.includes('dambus') || n.includes('musik') || n.includes('sanggar') || n.includes('seni')) {
+        return 'assets/img/alat_musik_dambus.jpg';
+    }
+    if (n.includes('paksian') || n.includes('pengantin') || n.includes('pakaian')) {
+        return 'assets/img/budaya_tari_paksian.jpg';
+    }
+    if (n.includes('campak') || n.includes('tari') || n.includes('joget')) {
+        return 'assets/img/budaya_tari_campak.jpg';
+    }
+
+    // 9. Kuliner Khas
+    if (n.includes('nganggung') || n.includes('sepintu') || n.includes('sedulang') || n.includes('dulang') || n.includes('lempah') || n.includes('otak-otak') || n.includes('kopi') || n.includes('makan') || n.includes('resto') || s === 'restoran') {
+        return 'assets/img/budaya_nganggung.jpg';
+    }
+
+    // 10. Wilayah-based Distribution
+    if (k.includes('bangka barat')) return 'assets/img/pantai_tanjung_ular.jpg';
+    if (k.includes('bangka tengah')) return 'assets/img/danau_kaolin_koba.jpg';
+    if (k.includes('bangka selatan')) return 'assets/img/pantai_batu_perahu.jpg';
+    if (k.includes('belitung timur')) return 'assets/img/laskar_pelangi_gantong.jpg';
+    if (k.includes('belitung')) return 'assets/img/pantai_tanjung_tinggi.jpg';
+    if (k.includes('pangkalpinang')) return s === 'kebudayaan' ? 'assets/img/museum_timah_babel.jpg' : 'assets/img/pantai_tikus_emas.jpg';
+
+    // 11. Fallbacks
     if (s === 'kebudayaan' || s.includes('budaya') || s.includes('sejarah')) return 'assets/img/kain_cual_bangka.jpg';
-    if (s === 'restoran' || s.includes('kuliner')) return 'assets/img/budaya_nganggung.jpg';
     if (s === 'buatan') return 'assets/img/laskar_pelangi_gantong.jpg';
-    if (s === 'hotel') return 'assets/img/pantai_lengkuas.jpg';
+    if (s === 'hotel') return 'assets/img/pantai_tanjung_tinggi.jpg';
 
-    return 'assets/img/pantai_tanjung_tinggi.jpg';
+    return 'assets/img/pantai_tikus_emas.jpg';
 }
 
 const markersLayer = L.layerGroup().addTo(map);
@@ -1133,7 +1189,8 @@ function addToTripDirect(id) {
         lat: parseFloat(p.latitude),
         lng: parseFloat(p.longitude),
         sub: p.sub_kategori,
-        kec: p.kecamatan
+        kec: p.kecamatan,
+        kab: p.kabupaten
     });
     renderTripList();
     document.getElementById('itineraryDrawer').classList.remove('hidden');
@@ -1167,7 +1224,7 @@ function renderTripList() {
 
     let html = '';
     tripPlaces.forEach((p, idx) => {
-        const photo = getClientPhoto(p.nama, p.sub);
+        const photo = getClientPhoto(p.nama, p.sub, p.kab);
         html += `
             <div class="p-2 rounded-xl bg-slate-50 border border-slate-200/90 flex items-center justify-between gap-2.5 w-full min-w-0 overflow-hidden shadow-2xs hover:bg-white transition-colors">
                 <div class="flex items-center gap-2.5 min-w-0 flex-1 overflow-hidden">
@@ -1526,7 +1583,7 @@ function renderMarkers() {
                 </button>
             `;
 
-            const photoUrl = getClientPhoto(p.nama, p.sub_kategori);
+            const photoUrl = getClientPhoto(p.nama, p.sub_kategori, p.kabupaten);
             const popupContent = `
                 <div class="min-w-[240px] max-w-[270px]">
                     <div class="relative h-28 w-full -mx-0 -mt-0 mb-2 rounded-xl overflow-hidden shadow-xs border border-black/5">
