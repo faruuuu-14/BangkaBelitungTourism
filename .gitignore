@@ -1,4 +1,4 @@
-﻿# Python
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
@@ -24,3 +24,6 @@ desktop.ini
 
 # Logs
 *.log
+
+# Scratch & Temporary Audit Files
+scratch/

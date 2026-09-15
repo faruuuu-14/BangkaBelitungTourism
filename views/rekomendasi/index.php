@@ -82,7 +82,7 @@ $kabList = [
 <!-- ============================================================== -->
 <!-- STRUKTUR TATA LETAK UTAMA FITUR REKOMENDASI TOPSIS            -->
 <!-- ============================================================== -->
-<main class="flex-grow w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 pb-24 lg:pb-8 min-w-0 overflow-hidden space-y-6 sm:space-y-8">
+<main class="flex-grow w-full max-w-[1720px] mx-auto px-3 sm:px-6 lg:px-10 py-3 sm:py-8 pb-20 lg:pb-8 min-w-0 overflow-hidden space-y-3.5 sm:space-y-8">
 
     <!-- 1. Banner Visual Header SPK -->
     <?php include __DIR__ . '/banner_rekomendasi.php'; ?>

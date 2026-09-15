@@ -69,8 +69,8 @@ try {
                     <i class="fa-solid fa-qrcode"></i>
                 </div>
                 <div>
-                    <h3 class="font-black text-sm sm:text-base text-white">Kode QR Wisata Pintar</h3>
-                    <p class="text-[10px] sm:text-xs text-ocean-300 font-medium">Pindai dengan Smartphone untuk Navigasi GPS Langsung</p>
+                    <h3 class="font-black text-sm sm:text-base text-white">Kode QR Lokasi &amp; Wisata Babel</h3>
+                    <p class="text-[10px] sm:text-xs text-ocean-300 font-medium">Pindai dengan Smartphone untuk Navigasi Google Maps Langsung</p>
                 </div>
             </div>
             <button onclick="closeQrModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer">
@@ -81,9 +81,17 @@ try {
         <!-- Selector Destinasi Cepat (Bisa Pilih Destinasi Mana Pun) -->
         <div class="p-3.5 sm:p-4 bg-slate-50 border-b border-slate-200 shrink-0">
             <label class="block text-[11px] font-extrabold text-ocean-900 uppercase tracking-wider mb-1.5">
-                <i class="fa-solid fa-location-dot text-ocean-600 mr-1"></i> Pilih / Ganti Destinasi Wisata:
+                <i class="fa-solid fa-location-dot text-ocean-600 mr-1"></i> Pilih Lokasi Wilayah / Destinasi Wisata:
             </label>
             <select id="qrQuickSelector" onchange="onQrQuickSelectChange(this)" class="w-full text-xs font-semibold rounded-xl border border-slate-300 bg-white p-2.5 text-slate-800 focus:ring-2 focus:ring-ocean-500 shadow-2xs">
+                <option value="babel_provinsi" 
+                    data-nama="Provinsi Kepulauan Bangka Belitung"
+                    data-lat="-2.1465"
+                    data-lng="106.1472"
+                    data-kab="Negeri Serumpun Sebalai (Pulau Bangka &amp; Belitung)"
+                    data-sub="Pusat Wilayah Provinsi">
+                    ⭐ Provinsi Kepulauan Bangka Belitung (Letak Geografis &amp; Titik Koordinat)
+                </option>
                 <?php foreach ($qrDestList as $idx => $qd): ?>
                 <option value="<?= htmlspecialchars($qd['id']) ?>" 
                     data-nama="<?= htmlspecialchars($qd['nama']) ?>"
@@ -178,15 +186,28 @@ try {
 let currentGmapsNavUrl = '';
 
 /**
- * Pemanggil Generator QR umum dari Menu Navbar
+ * Pemanggil Generator QR dari Menu Header Navbar
+ * Secara default langsung menampilkan Kode QR Letak Provinsi Kepulauan Bangka Belitung
  */
 function openGenericQrModal() {
+    openBabelProvinsiQrModal();
+}
+
+/**
+ * Membuka Kode QR khusus Letak Geografis Provinsi Kepulauan Bangka Belitung
+ */
+function openBabelProvinsiQrModal() {
     const sel = document.getElementById('qrQuickSelector');
-    if (sel && sel.options.length > 0) {
-        onQrQuickSelectChange(sel);
-    } else {
-        openQrModal('Pantai Tikus Emas', -1.8617, 106.1264, 'Kabupaten Bangka', 'Wisata Bahari');
+    if (sel) {
+        sel.selectedIndex = 0;
     }
+    openQrModal(
+        'Provinsi Kepulauan Bangka Belitung',
+        -2.1465,
+        106.1472,
+        'Negeri Serumpun Sebalai (Pulau Bangka & Belitung)',
+        'Letak Geografis Provinsi'
+    );
 }
 
 /**
@@ -207,7 +228,7 @@ function onQrQuickSelectChange(selectEl) {
 
 /**
  * Membuka Modal QR Code Wisata Pintar
- * @param {string} nama Nama destinasi wisata
+ * @param {string} nama Nama destinasi wisata / provinsi
  * @param {number|string} lat Latitude koordinat
  * @param {number|string} lng Longitude koordinat
  * @param {string} kab Nama Kabupaten/Kota
@@ -218,11 +239,11 @@ function openQrModal(nama, lat, lng, kab = '', sub = '') {
     if (!modal) return;
 
     // Bersihkan format input
-    const cleanNama = nama || 'Destinasi Wisata';
-    const cleanLat = parseFloat(lat) || -2.1215;
-    const cleanLng = parseFloat(lng) || 106.1130;
-    const cleanKab = kab || 'Provinsi Kepulauan Bangka Belitung';
-    const cleanSub = sub || 'Pariwisata Babel';
+    const cleanNama = nama || 'Provinsi Kepulauan Bangka Belitung';
+    const cleanLat = parseFloat(lat) || -2.1465;
+    const cleanLng = parseFloat(lng) || 106.1472;
+    const cleanKab = kab || 'Negeri Serumpun Sebalai (Pulau Bangka & Belitung)';
+    const cleanSub = sub || 'Pusat Wilayah Provinsi';
 
     // Perbarui Teks UI
     const elNama = document.getElementById('qrNamaDestinasi');
@@ -246,8 +267,12 @@ function openQrModal(nama, lat, lng, kab = '', sub = '') {
         }
     }
 
-    // Konstruksi URL Navigasi Google Maps Turn-by-Turn
-    currentGmapsNavUrl = `https://www.google.com/maps/dir/?api=1&destination=${cleanLat},${cleanLng}&travelmode=driving`;
+    // Konstruksi URL Navigasi Google Maps
+    if (cleanNama.includes('Provinsi Kepulauan Bangka Belitung')) {
+        currentGmapsNavUrl = `https://www.google.com/maps/search/?api=1&query=Provinsi+Kepulauan+Bangka+Belitung`;
+    } else {
+        currentGmapsNavUrl = `https://www.google.com/maps/dir/?api=1&destination=${cleanLat},${cleanLng}&travelmode=driving`;
+    }
     
     // Tautan tombol langsung
     const btnDirect = document.getElementById('btnBukaGmapsDirect');

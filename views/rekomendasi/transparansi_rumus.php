@@ -56,6 +56,18 @@
         <!-- Isi Modal Rincian 6 Tahapan -->
         <div class="p-5 sm:p-6 overflow-y-auto space-y-5 text-xs text-slate-600">
             
+            <!-- Landasan Teori Adopsi Kriteria 3A -->
+            <div class="p-3.5 rounded-2xl bg-ocean-50/80 border border-ocean-200 text-ocean-950 space-y-1">
+                <div class="font-bold flex items-center gap-1.5 text-ocean-800">
+                    <i class="fa-solid fa-circle-info text-xs"></i>
+                    <span>Landasan Teori Kriteria (Adopsi Konsep 3A Kemenparekraf RI)</span>
+                </div>
+                <p class="text-[11px] text-slate-600 leading-relaxed">
+                    Kriteria keputusan diadopsi dari pilar resmi pengembangan pariwisata <strong>3A (Atraksi, Aksesibilitas, Amenitas)</strong> Kemenparekraf RI:
+                    <strong>C1 Kualitas Rating</strong> (Atraksi/Pengalaman), <strong>C2 Jarak Transportasi</strong> (Aksesibilitas Geodesik Haversine ke Bandara/Pelabuhan), <strong>C3 Fasilitas Sekitar</strong> (Amenitas Hotel/Restoran radius 5 km), dan <strong>C4 Popularitas</strong> (Ulasan Publik).
+                </p>
+            </div>
+
             <!-- Tahap 1: Normalisasi Matriks R -->
             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                 <div class="font-bold text-slate-900 flex items-center gap-2">

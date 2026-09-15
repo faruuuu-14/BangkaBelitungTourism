@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!-- ============================================================== -->
 <!-- STRUKTUR TATA LETAK UTAMA FITUR PENDAFTARAN OBJEK BARU         -->
 <!-- ============================================================== -->
-<main class="flex-grow w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 pb-24 lg:pb-8 min-w-0 overflow-hidden space-y-6 sm:space-y-8">
+<main class="flex-grow w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 py-4 sm:py-8 pb-24 lg:pb-8 min-w-0 overflow-hidden space-y-6 sm:space-y-8">
 
     <!-- Header Section Pendaftaran -->
     <div class="relative overflow-hidden bg-gradient-to-r from-slate-950 via-ocean-950 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-slate-800">
@@ -115,8 +115,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- 1. Formulir Pendaftaran Objek & Pemilih Peta Leaflet -->
     <?php include __DIR__ . '/formulir_pendaftaran.php'; ?>
-
-    <!-- 2. Panduan Kriteria Validasi Data -->
-    <?php include __DIR__ . '/panduan_kriteria.php'; ?>
 
 </main>

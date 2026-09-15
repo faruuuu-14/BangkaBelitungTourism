@@ -106,15 +106,13 @@
             document.documentElement.classList.remove('dark');
         }
 
-        // Watermark Sistem & Hak Cipta Pengembang
+        // Info Pembuat Website
         console.log("%c=======================================================", "color:#0284c7;font-weight:bold;");
-        console.log("%c BABEL TOURISM SPATIAL INTELLIGENCE & DECISION SUPPORT SYSTEM %c", "background:#0284c7;color:#ffffff;font-weight:bold;padding:4px 8px;border-radius:4px;", "");
-        console.log("%c Arsitek & Pengembang : Fathurrahman Safari Lubis %c", "background:#0f172a;color:#38bdf8;font-weight:bold;padding:3px 6px;border-radius:3px;", "");
-        console.log("%c NIM                 : 2411500025 %c", "color:#0f172a;font-weight:bold;", "");
-        console.log("%c Program Studi       : Teknik Informatika %c", "color:#475569;", "");
-        console.log("%c Institusi           : Institut Sains dan Bisnis Atma Luhur Pangkalpinang %c", "color:#475569;", "");
-        console.log("%c Status Sistem       : Enterprise Spatial Decision Support System (SDSS) v2.4 %c", "color:#10b981;font-weight:bold;", "");
-        console.log("%c Hak Cipta Dilindungi Undang-Undang (c) 2026 Fathurrahman Safari Lubis %c", "color:#94a3b8;font-style:italic;", "");
+        console.log("%c SISTEM INFORMASI PARIWISATA BANGKA BELITUNG %c", "background:#0284c7;color:#ffffff;font-weight:bold;padding:4px 8px;border-radius:4px;", "");
+        console.log("%c Dibuat oleh    : Fathurrahman Safari Lubis %c", "color:#0f172a;font-weight:bold;", "");
+        console.log("%c NIM            : 2411500025 %c", "color:#0f172a;", "");
+        console.log("%c Program Studi  : Teknik Informatika %c", "color:#475569;", "");
+        console.log("%c Institusi      : ISB Atma Luhur Pangkalpinang %c", "color:#475569;", "");
         console.log("%c=======================================================", "color:#0284c7;font-weight:bold;");
     </script>
     <style>

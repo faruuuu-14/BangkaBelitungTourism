@@ -28,55 +28,55 @@
 ?>
 
 <!-- ============================================================== -->
-<!-- PANDUAN STRATEGIS 4 KUADRAN PRIORITAS KEBIJAKAN                -->
+<!-- PANDUAN STRATEGIS 4 KUADRAN PRIORITAS KEBIJAKAN BPS            -->
 <!-- ============================================================== -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
     
-    <!-- Kuadran I: Unggulan -->
+    <!-- Kuadran I: Destination Stayers -->
     <div class="bg-white rounded-3xl p-5 border border-emerald-200/80 shadow-xs space-y-2">
         <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
-            Kuadran I: Unggulan (Bintang)
+            Kuadran I: Destination Stayers
         </span>
-        <h4 class="text-sm font-black text-slate-900">Kunjungan &amp; Amenitas Tinggi</h4>
+        <h4 class="text-sm font-black text-slate-900">Stayers &amp; RLMT Tinggi</h4>
         <p class="text-xs text-slate-500 leading-relaxed">
-            <strong>Daerah:</strong> Pangkalpinang, Belitung, Bangka.<br>
-            <strong>Arahan:</strong> Pertahankan mutu layanan, perkuat kelestarian lingkungan, dan kembangkan wisata MICE (Meeting, Incentive, Convention, Exhibition).
+            <strong>Wilayah:</strong> Kab. Belitung (Stayers 62.3%, RLMT 2.08 Malam).<br>
+            <strong>Arahan:</strong> Pertahankan mutu amenitas bintang, kelola kapasitas daya dukung pesisir (*carrying capacity*), dan perluas rute ke Belitung Timur.
         </p>
     </div>
 
-    <!-- Kuadran II: Peluang Emas -->
+    <!-- Kuadran II: Corridor Stayers -->
+    <div class="bg-white rounded-3xl p-5 border border-indigo-200/80 shadow-xs space-y-2">
+        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-100 text-indigo-800">
+            Kuadran II: Corridor Stayers
+        </span>
+        <h4 class="text-sm font-black text-slate-900">RLMT Tinggi, Stayers Sedang</h4>
+        <p class="text-xs text-slate-500 leading-relaxed">
+            <strong>Wilayah:</strong> Kab. Bangka Tengah (RLMT 1.54 Malam).<br>
+            <strong>Arahan:</strong> Optimalkan fasilitas koridor bandara Depati Amir dan akomodasi pantai resort untuk menyerap limpahan perjalanan bisnis.
+        </p>
+    </div>
+
+    <!-- Kuadran III: Day-Trippers & Buffers -->
     <div class="bg-white rounded-3xl p-5 border border-amber-200/80 shadow-xs space-y-2">
         <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800">
-            Kuadran II: Peluang Investasi
+            Kuadran III: Day-Trippers &amp; Buffers
         </span>
-        <h4 class="text-sm font-black text-slate-900">Kunjungan Tinggi, Amenitas Kurang</h4>
+        <h4 class="text-sm font-black text-slate-900">Day-Tripper Masif (&gt;88%)</h4>
         <p class="text-xs text-slate-500 leading-relaxed">
-            <strong>Daerah:</strong> Bangka Tengah (Koba).<br>
-            <strong>Arahan:</strong> Prioritas utama pembangunan hotel bintang 3 dan sentra kuliner untuk menampung limpahan wisatawan Danau Kaolin dan pantai.
+            <strong>Wilayah:</strong> Bangka, Babar, Basel, Beltim (RLMT 1.06 - 1.27 Malam).<br>
+            <strong>Arahan:</strong> Standarisasi desa wisata dan homestay fleksibel untuk menampung lonjakan libur musiman tanpa membebani biaya modal hotel.
         </p>
     </div>
 
-    <!-- Kuadran III: Potensial -->
-    <div class="bg-white rounded-3xl p-5 border border-sky-200/80 shadow-xs space-y-2">
-        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-100 text-sky-800">
-            Kuadran III: Potensial Berkembang
+    <!-- Kuadran IV: Urban Hub & Transit Center -->
+    <div class="bg-white rounded-3xl p-5 border border-purple-200/80 shadow-xs space-y-2">
+        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-100 text-purple-800">
+            Kuadran IV: Urban Hub &amp; MICE
         </span>
-        <h4 class="text-sm font-black text-slate-900">Kunjungan &amp; Amenitas Rendah</h4>
+        <h4 class="text-sm font-black text-slate-900">Volume Stayers Tertinggi</h4>
         <p class="text-xs text-slate-500 leading-relaxed">
-            <strong>Daerah:</strong> Bangka Barat, Bangka Selatan, Belitung Timur.<br>
-            <strong>Arahan:</strong> Bangun infrastruktur jalan dan akses transportasi publik, kembangkan desa wisata, dan adakan festival budaya tahunan.
-        </p>
-    </div>
-
-    <!-- Kuadran IV: Optimalisasi -->
-    <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-2">
-        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-800">
-            Kuadran IV: Optimalisasi Pasar
-        </span>
-        <h4 class="text-sm font-black text-slate-900">Amenitas Siap, Kunjungan Rendah</h4>
-        <p class="text-xs text-slate-500 leading-relaxed">
-            <strong>Status:</strong> Belum ada kabupaten di kuadran ini.<br>
-            <strong>Arahan:</strong> Jika fasilitas melebihi kunjungan, gencarkan promosi digital pariwisata terarah dan paket wisata hemat terintegrasi.
+            <strong>Wilayah:</strong> Kota Pangkal Pinang (23.235 Stayers, RLMT 1.32 Malam).<br>
+            <strong>Arahan:</strong> Dorong event MICE, atraksi kuliner malam, dan museum heritage agar wisatawan transit memperpanjang masa tinggalnya.
         </p>
     </div>
 

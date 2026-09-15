@@ -72,6 +72,25 @@
             </div>
         </div>
 
+        <!-- Penjelasan Spektrum Panas Heatmap (Thermal Glow) -->
+        <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200 text-xs text-slate-700 space-y-1.5">
+            <div class="font-bold text-amber-950 flex items-center justify-between">
+                <div class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-fire text-amber-500"></i>
+                    <span>Spektrum Panas Heatmap Kepadatan:</span>
+                </div>
+                <span class="text-[10px] text-amber-800 font-bold">Kontras Tinggi</span>
+            </div>
+            <!-- Bar gradasi warna cerah -->
+            <div class="h-2.5 w-full rounded-full bg-gradient-to-r from-yellow-300 via-orange-500 via-red-500 via-rose-600 to-purple-800 shadow-xs"></div>
+            <div class="flex justify-between text-[10px] text-slate-500 font-semibold px-0.5">
+                <span>Rendah (Kuning)</span>
+                <span>Sedang (Oranye)</span>
+                <span>Tinggi (Merah)</span>
+                <span>Pusat Inti (Ungu)</span>
+            </div>
+        </div>
+
         <!-- Penjelasan Buffer Radius 5 km -->
         <div class="p-3.5 rounded-2xl bg-ocean-50/70 border border-ocean-200 text-xs text-slate-600 space-y-1">
             <div class="font-bold text-ocean-900 flex items-center gap-1.5">
@@ -84,7 +103,7 @@
         </div>
 
         <button onclick="closeModalLegenda()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-colors">
-            Mengerti, Tutup Panduan
+            Tutup Legenda Peta
         </button>
 
     </div>

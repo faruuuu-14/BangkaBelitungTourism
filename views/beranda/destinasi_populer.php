@@ -61,17 +61,34 @@
             </thead>
             <tbody class="divide-y divide-slate-100 font-medium">
                 <?php foreach ($topDestinasi as $idx => $item): 
-                    $photoUrl = getDestinationPhoto($item['nama'], $item['sub_kategori'], $item['kabupaten']);
+                    $sub = $item['sub_kategori'];
+                    $iconClass = 'fa-umbrella-beach';
+                    $iconColor = 'bg-emerald-50 text-emerald-600 border-emerald-200';
+                    if ($sub === 'Kebudayaan') {
+                        $iconClass = 'fa-landmark';
+                        $iconColor = 'bg-rose-50 text-rose-600 border-rose-200';
+                    } elseif ($sub === 'Buatan') {
+                        $iconClass = 'fa-camera';
+                        $iconColor = 'bg-amber-50 text-amber-600 border-amber-200';
+                    } elseif ($sub === 'Hotel') {
+                        $iconClass = 'fa-hotel';
+                        $iconColor = 'bg-sky-50 text-sky-600 border-sky-200';
+                    } elseif ($sub === 'Restoran') {
+                        $iconClass = 'fa-utensils';
+                        $iconColor = 'bg-teal-50 text-teal-600 border-teal-200';
+                    }
                 ?>
                 <tr class="hover:bg-slate-50/70 transition-colors">
                     
-                    <!-- Kolom 1: Peringkat, Avatar Foto, & Nama Tempat -->
+                    <!-- Kolom 1: Peringkat, Ikon Vektor, & Nama Tempat -->
                     <td class="px-4 sm:px-6 py-3.5">
                         <div class="flex items-center gap-3">
-                            <span class="w-6 h-6 rounded-full flex items-center justify-center font-black text-xs shrink-0 <?= $idx === 0 ? 'bg-amber-100 text-amber-800' : ($idx === 1 ? 'bg-slate-200 text-slate-700' : ($idx === 2 ? 'bg-amber-700/20 text-amber-900' : 'bg-slate-100 text-slate-500')) ?>">
+                            <span class="w-6 h-6 rounded-full flex items-center justify-center font-black text-xs shrink-0 <?= $idx === 0 ? 'bg-amber-400 text-slate-950 font-black shadow-xs' : ($idx === 1 ? 'bg-slate-300 text-slate-800' : ($idx === 2 ? 'bg-amber-200 text-amber-900' : 'bg-slate-100 text-slate-500')) ?>">
                                 <?= $idx + 1 ?>
                             </span>
-                            <img src="<?= $photoUrl ?>" alt="<?= htmlspecialchars($item['nama']) ?>" class="w-10 h-10 rounded-xl object-cover object-center border border-slate-200 shadow-xs shrink-0">
+                            <div class="w-9 h-9 rounded-xl <?= $iconColor ?> border flex items-center justify-center text-xs shrink-0 shadow-2xs">
+                                <i class="fa-solid <?= $iconClass ?>"></i>
+                            </div>
                             <div class="min-w-0">
                                 <div class="font-extrabold text-slate-900 text-xs sm:text-sm truncate">
                                     <?= htmlspecialchars($item['nama']) ?>

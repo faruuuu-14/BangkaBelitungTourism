@@ -7,37 +7,40 @@
  * @file      grafik_kuadran.php
  * @folder    views/analisis/matriks_kuadran/
  * @author    Fathurrahman Safari Lubis (NIM: 2411500025) - ISB Atma Luhur
- * @version   2.0.0 (Grafik Matriks 4 Kuadran Prioritas Investasi Pariwisata)
+ * @version   3.0.0 (Matriks 4 Kuadran Tipologi: Rasio Stayers vs Lama Menginap RLMT)
  * 
  * ------------------------------------------------------------------------------
  * DESKRIPSI & FUNGSI FILE:
- * Komponen matriks kuadran strategis (Boston Consulting Group / IPA Matrix Adaptation).
- * Memetakan 7 Kabupaten/Kota ke dalam 4 kuadran analitis:
- * - Kuadran I (Bintang / Wilayah Unggulan): Kunjungan Tinggi & Amenitas Tinggi
- * - Kuadran II (Peluang Emas Investasi): Kunjungan Tinggi namun Amenitas Rendah
- * - Kuadran III (Potensial Berkembang): Kunjungan Rendah & Amenitas Rendah
- * - Kuadran IV (Kelebihan Kapasitas Amenitas): Kunjungan Rendah namun Amenitas Tinggi
+ * Komponen matriks tipologi pariwisata daerah adaptasi BCG / IPA Matrix.
+ * Memetakan 7 Kabupaten/Kota secara data-driven berdasarkan data BPS April 2026:
+ * - Sumbu X: Rasio Tamu Menginap / Stayers (%) (Rentang 0% - 70%)
+ * - Sumbu Y: Rata-Rata Lama Menginap / RLMT (Malam) (Rentang 0.8 - 2.4 Malam)
+ * 
+ * 4 Kuadran Tipologi BPS:
+ * - Kuadran I (Kanan Atas): Destination Stayers (Belitung)
+ * - Kuadran II (Kiri Atas): Corridor Stayers (Bangka Tengah)
+ * - Kuadran III (Kiri Bawah): High-Volume Day-Trippers & Buffers (Bangka, Basel, Babar, Beltim)
+ * - Kuadran IV (Kanan Bawah): Urban Hub & Transit Center (Kota Pangkal Pinang)
  * 
  * KETERKAITAN ALUR (DATA & LOGIKA):
  * - Dimuat oleh: views/analisis/index.php pada Tab 4 (Matriks Kuadran)
  * - Pustaka: Chart.js Scatter Plot
- * 
- * TUJUAN DIBUATNYA FILE:
- * Menentukan arah alokasi anggaran dan sasaran investor secara tepat sasaran
- * (*evidence-based policy making*).
  * ==============================================================================
  */
 
-// Titik kuadran 7 Kabupaten/Kota (Sumbu X: Indeks Amenitas, Sumbu Y: Indeks Kunjungan BPS)
-$kuadranPoints = [
-    ['x' => 85, 'y' => 88, 'label' => 'Kota Pangkalpinang (Kuadran I: Unggulan)'],
-    ['x' => 80, 'y' => 82, 'label' => 'Kab. Belitung (Kuadran I: Unggulan)'],
-    ['x' => 55, 'y' => 58, 'label' => 'Kab. Bangka (Kuadran I: Unggulan)'],
-    ['x' => 35, 'y' => 65, 'label' => 'Kab. Bangka Tengah (Kuadran II: Peluang Investasi)'],
-    ['x' => 30, 'y' => 42, 'label' => 'Kab. Belitung Timur (Kuadran III: Potensial)'],
-    ['x' => 22, 'y' => 38, 'label' => 'Kab. Bangka Barat (Kuadran III: Potensial)'],
-    ['x' => 15, 'y' => 25, 'label' => 'Kab. Bangka Selatan (Kuadran III: Potensial)']
-];
+$kabData = getBpsKabupatenDataApril2026();
+$kuadranPoints = [];
+
+foreach ($kabData as $k => $item) {
+    $stayersPercent = round(($item['tamu_menginap'] / $item['wisnus_tujuan']) * 100, 2);
+    $kuadranPoints[] = [
+        'x' => $stayersPercent,
+        'y' => (float)$item['rlmt'],
+        'label' => $item['kabupaten'],
+        'karakter' => $item['karakter'],
+        'badge_color' => $item['badge_color']
+    ];
+}
 ?>
 
 <div class="bg-white rounded-3xl p-5 sm:p-7 border border-slate-200/80 shadow-xs space-y-4">
@@ -46,17 +49,17 @@ $kuadranPoints = [
         <div>
             <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-bold bg-violet-50 text-violet-700 border border-violet-200 mb-1">
                 <i class="fa-solid fa-table-cells-large text-[11px]"></i>
-                <span>Matriks Penentuan Kebijakan</span>
+                <span>Matriks Tipologi Kebijakan BPS 2026</span>
             </div>
             <h3 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">
-                Matriks 4 Kuadran Prioritas Pengembangan Amenitas Pariwisata
+                Matriks 4 Kuadran Tipologi: Rasio Stayers vs Lama Menginap (RLMT)
             </h3>
             <p class="text-xs text-slate-500">
-                Pemetaan posisi strategis 7 Kabupaten/Kota berdasarkan daya serap kunjungan terhadap ketersediaan fasilitas
+                Memetakan posisi empiris 7 Kabupaten/Kota berdasarkan proporsi tamu menginap terhadap durasi tinggal
             </p>
         </div>
         <span class="text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1 rounded-full self-start sm:self-auto">
-            Garis Ambang Batas Rata-rata (50, 50)
+            Ambang Batas: Stayers 18% | RLMT 1.40 Malam
         </span>
     </div>
 
@@ -78,15 +81,14 @@ document.addEventListener('DOMContentLoaded', function() {
         type: 'scatter',
         data: {
             datasets: [{
-                label: 'Posisi Kabupaten/Kota',
+                label: 'Posisi Tipologi Daerah',
                 data: kPoints,
                 backgroundColor: '#7c3aed',
-                borderColor: '#6d28d9',
-                pointRadius: 9,
-                pointHoverRadius: 13,
-                pointBackgroundColor: '#8b5cf6',
-                pointBorderColor: '#ffffff',
-                pointBorderWidth: 2
+                borderColor: '#ffffff',
+                borderWidth: 2,
+                pointRadius: 10,
+                pointHoverRadius: 14,
+                pointBackgroundColor: '#8b5cf6'
             }]
         },
         options: {
@@ -97,7 +99,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            return context.raw.label || 'Daerah';
+                            const p = context.raw;
+                            return `${p.label}: Stayers ${p.x}%, RLMT ${p.y} Malam (${p.karakter})`;
                         }
                     },
                     padding: 10,
@@ -108,30 +111,40 @@ document.addEventListener('DOMContentLoaded', function() {
             scales: {
                 x: {
                     min: 0,
-                    max: 100,
+                    max: 70,
                     title: {
                         display: true,
-                        text: 'Tingkat Ketersediaan Amenitas Hotel & Restoran (0 - 100)',
+                        text: 'Proporsi Tamu Menginap / Stayers (%)',
                         font: { family: 'Plus Jakarta Sans', size: 11, weight: '700' },
                         color: '#334155'
                     },
                     grid: {
-                        color: context => context.tick.value === 50 ? '#94a3b8' : '#f1f5f9',
-                        lineWidth: context => context.tick.value === 50 ? 2 : 1
+                        color: context => context.tick.value === 18 ? '#cbd5e1' : '#f1f5f9',
+                        lineWidth: context => context.tick.value === 18 ? 2 : 1
+                    },
+                    ticks: {
+                        font: { family: 'Plus Jakarta Sans', size: 10 },
+                        color: '#64748b',
+                        callback: val => val + '%'
                     }
                 },
                 y: {
-                    min: 0,
-                    max: 100,
+                    min: 0.8,
+                    max: 2.3,
                     title: {
                         display: true,
-                        text: 'Tingkat Kunjungan Wisatawan BPS (0 - 100)',
+                        text: 'Rata-Rata Lama Menginap / RLMT (Malam)',
                         font: { family: 'Plus Jakarta Sans', size: 11, weight: '700' },
                         color: '#334155'
                     },
                     grid: {
-                        color: context => context.tick.value === 50 ? '#94a3b8' : '#f1f5f9',
-                        lineWidth: context => context.tick.value === 50 ? 2 : 1
+                        color: context => context.tick.value === 1.4 ? '#cbd5e1' : '#f1f5f9',
+                        lineWidth: context => context.tick.value === 1.4 ? 2 : 1
+                    },
+                    ticks: {
+                        font: { family: 'Plus Jakarta Sans', size: 10 },
+                        color: '#64748b',
+                        callback: val => val.toFixed(1) + ' hr'
                     }
                 }
             }

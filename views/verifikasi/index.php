@@ -66,7 +66,7 @@ $totalPending = count($pendingPlaces);
 <!-- ============================================================== -->
 <!-- STRUKTUR TATA LETAK UTAMA MODUL PANEL MODERASI DINAS          -->
 <!-- ============================================================== -->
-<main class="flex-grow w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 pb-24 lg:pb-8 min-w-0 overflow-hidden space-y-6 sm:space-y-8">
+<main class="flex-grow w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 py-4 sm:py-8 pb-24 lg:pb-8 min-w-0 overflow-hidden space-y-6 sm:space-y-8">
 
     <!-- Header Section Panel Moderasi -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

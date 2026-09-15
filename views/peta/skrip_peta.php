@@ -70,59 +70,7 @@ let itineraryStops = [];
 let currentRadarData = { hotels: [], restos: [] };
 
 // --------------------------------------------------------------------------
-// 3. FUNGSI RESOLUSI FOTO OTENTIK SISI KLIEN
-// --------------------------------------------------------------------------
-function getClientPhoto(nama, sub, kab) {
-    const n = (nama || '').toLowerCase();
-    const s = (sub || '').toLowerCase();
-    const k = (kab || '').toLowerCase();
-
-    if (n.includes('tanjung ular') || n.includes('batu rakit') || n.includes('menumbing') || n.includes('pesanggrahan') || n.includes('muntok') || n.includes('mentok')) {
-        return 'assets/img/pantai_tanjung_ular.jpg';
-    }
-    if (n.includes('tikus emas') || n.includes('tongaci') || n.includes('parai') || n.includes('matras') || n.includes('puri tri agung') || n.includes('sungailiat')) {
-        return 'assets/img/pantai_tikus_emas.jpg';
-    }
-    if (n.includes('kaolin') || n.includes('air biru') || n.includes('koba') || n.includes('namang')) {
-        return 'assets/img/danau_kaolin_koba.jpg';
-    }
-    if (n.includes('batu perahu') || n.includes('toboali') || n.includes('nek aji') || n.includes('lepar')) {
-        return 'assets/img/pantai_batu_perahu.jpg';
-    }
-    if (n.includes('lengkuas') || n.includes('mercusuar') || n.includes('kepayang')) {
-        return 'assets/img/pantai_lengkuas.jpg';
-    }
-    if (n.includes('tanjung tinggi') || n.includes('geopark') || n.includes('kelayang')) {
-        return 'assets/img/pantai_tanjung_tinggi.jpg';
-    }
-    if (n.includes('gantong') || n.includes('gantung') || n.includes('laskar pelangi') || n.includes('andrea hirata') || n.includes('manggar')) {
-        return 'assets/img/laskar_pelangi_gantong.jpg';
-    }
-    if (n.includes('museum') || n.includes('timah') || n.includes('pasir padi') || n.includes('pangkalpinang')) {
-        return 'assets/img/museum_timah_babel.jpg';
-    }
-    if (n.includes('cual') || n.includes('tenun') || n.includes('batik')) {
-        return 'assets/img/kain_cual_bangka.jpg';
-    }
-    if (n.includes('dambus') || n.includes('musik')) {
-        return 'assets/img/alat_musik_dambus.jpg';
-    }
-
-    if (k.includes('barat')) return 'assets/img/pantai_tanjung_ular.jpg';
-    if (k.includes('selatan')) return 'assets/img/pantai_batu_perahu.jpg';
-    if (k.includes('tengah')) return 'assets/img/danau_kaolin_koba.jpg';
-    if (k.includes('timur')) return 'assets/img/laskar_pelangi_gantong.jpg';
-    if (k.includes('belitung')) return 'assets/img/pantai_tanjung_tinggi.jpg';
-
-    if (s === 'kebudayaan') return 'assets/img/budaya_tari_campak.jpg';
-    if (s === 'restoran' || n.includes('resto') || n.includes('warung') || n.includes('kuliner')) return 'assets/img/budaya_nganggung.jpg';
-    if (s === 'hotel') return 'assets/img/pantai_tanjung_tinggi.jpg';
-
-    return 'assets/img/pantai_tikus_emas.jpg';
-}
-
-// --------------------------------------------------------------------------
-// 4. IKON PIN KUSTOM (DESTINASI & SIMPUL TRANSPORTASI)
+// 3. IKON PIN KUSTOM (DESTINASI & SIMPUL TRANSPORTASI)
 // --------------------------------------------------------------------------
 function getMarkerColor(sub) {
     switch (sub) {
@@ -135,14 +83,22 @@ function getMarkerColor(sub) {
     }
 }
 
+function getSubCategoryIcon(sub) {
+    if (sub === 'Alam') return 'fa-umbrella-beach';
+    if (sub === 'Buatan') return 'fa-camera';
+    if (sub === 'Kebudayaan') return 'fa-landmark';
+    if (sub === 'Hotel') return 'fa-hotel';
+    if (sub === 'Restoran') return 'fa-utensils';
+    return 'fa-map-pin';
+}
+
+function getClientPhoto(nama, sub, kab) {
+    return 'assets/img/fathurrahman.jpg';
+}
+
 function createCustomIcon(sub) {
     const color = getMarkerColor(sub);
-    let iconClass = 'fa-map-pin';
-    if (sub === 'Alam') iconClass = 'fa-umbrella-beach';
-    else if (sub === 'Buatan') iconClass = 'fa-camera';
-    else if (sub === 'Kebudayaan') iconClass = 'fa-landmark';
-    else if (sub === 'Hotel') iconClass = 'fa-hotel';
-    else if (sub === 'Restoran') iconClass = 'fa-utensils';
+    const iconClass = getSubCategoryIcon(sub);
 
     const html = `
         <div style="background-color: ${color}; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.35);">
@@ -353,8 +309,8 @@ function onHubFilterChange() {
 // 7. RENDER POPUP DESTINASI DENGAN RADAR AMENITAS & SIMPUL
 // --------------------------------------------------------------------------
 function createPopupContent(place) {
-    const photo = getClientPhoto(place.nama, place.sub_kategori, place.kabupaten);
     const color = getMarkerColor(place.sub_kategori);
+    const icon = getSubCategoryIcon(place.sub_kategori);
     const access = getNearestHubClient(parseFloat(place.latitude), parseFloat(place.longitude));
 
     const safeNama = (place.nama || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
@@ -366,7 +322,7 @@ function createPopupContent(place) {
     if (place.kelompok === 'Daya Tarik') {
         radarButtonHtml = `
             <button onclick="findNearbyAmenities(${place.id})" 
-                class="w-full py-1.5 px-2 rounded-xl bg-gradient-to-r from-ocean-600 to-emerald-600 hover:from-ocean-700 hover:to-emerald-700 text-white font-bold text-[11px] transition shadow-xs flex items-center justify-center gap-1.5">
+                class="w-full py-1.5 px-2 rounded-xl bg-gradient-to-r from-ocean-600 to-emerald-600 hover:from-ocean-700 hover:to-emerald-700 text-white font-bold text-[11px] transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
                 <i class="fa-solid fa-radar text-amber-300"></i>
                 <span>Radar Amenitas Terdekat</span>
             </button>
@@ -374,25 +330,33 @@ function createPopupContent(place) {
     }
 
     return `
-        <div class="overflow-hidden rounded-2xl max-w-[270px] text-slate-800" style="font-family: 'Plus Jakarta Sans', sans-serif;">
-            <div class="relative h-28 w-full overflow-hidden bg-slate-900">
-                <img src="${photo}" alt="${place.nama}" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
-                <span class="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-bold text-white shadow" style="background-color: ${color};">
-                    ${place.sub_kategori}
-                </span>
-                <span class="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[9px] font-extrabold text-white shadow" style="background-color: ${access.zoneColor};">
-                    ${access.zoneLabel}
-                </span>
-                <span class="absolute bottom-2 right-2 text-amber-300 text-xs font-bold flex items-center gap-0.5 drop-shadow">
-                    ★ ${parseFloat(place.rating).toFixed(1)}
-                </span>
+        <div class="overflow-hidden rounded-2xl max-w-[280px] text-slate-800" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+            <div class="p-3.5 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 text-white relative">
+                <div class="flex items-start justify-between gap-2">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-8 h-8 rounded-xl flex items-center justify-center text-white shrink-0 shadow-sm" style="background-color: ${color};">
+                            <i class="fa-solid ${icon} text-xs"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-[9px] font-extrabold uppercase tracking-wider block" style="color: ${color};">${place.sub_kategori}</span>
+                            <h4 class="font-black text-xs text-white leading-snug line-clamp-2">${place.nama}</h4>
+                        </div>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <span class="text-amber-400 text-xs font-black flex items-center gap-0.5 justify-end">
+                            ★ ${parseFloat(place.rating).toFixed(1)}
+                        </span>
+                        <span class="px-1.5 py-0.5 rounded text-[8px] font-extrabold text-white mt-1 inline-block shadow-2xs" style="background-color: ${access.zoneColor};">
+                            ${access.zoneLabel}
+                        </span>
+                    </div>
+                </div>
+                <div class="text-[10px] text-slate-400 mt-2 flex items-center gap-1">
+                    <i class="fa-solid fa-location-dot text-[9px] text-slate-500"></i>
+                    <span class="truncate">${place.kabupaten} &bull; Kec. ${place.kecamatan}</span>
+                </div>
             </div>
             <div class="p-3 space-y-2 bg-white">
-                <div>
-                    <h4 class="font-extrabold text-xs text-slate-900 leading-snug">${place.nama}</h4>
-                    <p class="text-[10px] text-slate-400 mt-0.5">${place.kabupaten} &bull; Kec. ${place.kecamatan}</p>
-                </div>
 
                 <!-- Aksesibilitas Simpul Transportasi Kemenparekraf -->
                 <div class="p-2 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1 text-[10px]">
@@ -525,7 +489,8 @@ function renderRadarList(items, type) {
 
     let html = '';
     items.forEach(item => {
-        const photo = getClientPhoto(item.nama, item.sub_kategori, item.kabupaten);
+        const color = getMarkerColor(item.sub_kategori);
+        const icon = getSubCategoryIcon(item.sub_kategori);
         const safeNama = item.nama.replace(/'/g, "\\'");
         const safeSub = (item.sub_kategori || '').replace(/'/g, "\\'");
         const safeKab = (item.kabupaten || '').replace(/'/g, "\\'");
@@ -533,7 +498,9 @@ function renderRadarList(items, type) {
         html += `
             <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3 text-xs hover:bg-white transition-all shadow-2xs">
                 <div class="flex items-center gap-2.5 min-w-0 flex-1">
-                    <img src="${photo}" alt="${item.nama}" class="w-10 h-10 rounded-xl object-cover border border-slate-200 shrink-0">
+                    <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-xs" style="background-color: ${color};">
+                        <i class="fa-solid ${icon} text-xs"></i>
+                    </div>
                     <div class="min-w-0 flex-1">
                         <div class="font-extrabold text-slate-900 truncate">${item.nama}</div>
                         <div class="text-[10px] text-slate-500 flex items-center gap-1.5 mt-0.5">
@@ -619,7 +586,8 @@ function applyFilter() {
 function filterCategory(cat) {
     currentCategory = cat;
     document.querySelectorAll('.cat-chip').forEach(btn => {
-        if (btn.innerText.trim() === cat) {
+        const txt = btn.innerText.trim();
+        if (txt === cat || (cat === 'Kebudayaan' && txt === 'Budaya')) {
             btn.classList.remove('bg-emerald-50', 'bg-rose-50', 'bg-amber-50', 'bg-sky-50', 'bg-orange-50', 'border');
             btn.classList.add('bg-slate-900', 'text-white', 'shadow-xs');
         } else {
@@ -659,14 +627,27 @@ function renderHeatmap(data) {
 
     const heatPoints = data
         .filter(p => p.latitude && p.longitude)
-        .map(p => [parseFloat(p.latitude), parseFloat(p.longitude), Math.min(1.0, (p.ulasan || 10) / 1000)]);
+        .map(p => {
+            const ulasan = parseInt(p.ulasan) || 0;
+            // Skala logaritmik agar titik dengan ulasan puluhan/ratusan menyala terang & berkontras tinggi
+            // Bobot minimum 0.45 agar semua titik destinasi langsung terlihat cerah dan mencolok
+            const weight = Math.min(1.0, 0.45 + (Math.log10(Math.max(1, ulasan)) / 3.5) * 0.55);
+            return [parseFloat(p.latitude), parseFloat(p.longitude), weight];
+        });
 
     if (typeof L.heatLayer === 'function') {
         heatLayer = L.heatLayer(heatPoints, {
-            radius: 25,
-            blur: 15,
-            maxZoom: 14,
-            gradient: { 0.2: '#0284c7', 0.5: '#10b981', 0.8: '#f59e0b', 1.0: '#ef4444' }
+            radius: 28,
+            blur: 18,
+            maxZoom: 13,
+            minOpacity: 0.55, // Opasitas minimum 55% agar tidak ada titik pudar yang menyatu dengan latar laut/daratan
+            gradient: {
+                0.2:  '#facc15', // Kuning Emas Terang (Vivid Yellow) - Sangat kontras di atas laut & darat
+                0.45: '#fb923c', // Oranye Terang (Bright Flame)
+                0.7:  '#ef4444', // Merah Membara (Vivid Red)
+                0.88: '#be123c', // Merah Ruby Pekat (Deep Crimson)
+                1.0:  '#581c87'  // Ungu Elektrik Puncak Kepadatan (Electric Purple Core)
+            }
         }).addTo(map);
     }
 }
@@ -700,8 +681,7 @@ function addToItinerary(id, nama, lat, lng, sub, kab) {
         return;
     }
 
-    const photo = getClientPhoto(nama, sub, kab);
-    itineraryStops.push({ id, nama, lat: parseFloat(lat), lng: parseFloat(lng), sub, kab, photo });
+    itineraryStops.push({ id, nama, lat: parseFloat(lat), lng: parseFloat(lng), sub, kab });
     updateItineraryUI();
 
     const drawer = document.getElementById('itineraryDrawer');
@@ -783,19 +763,23 @@ function updateItineraryUI() {
     // Render HTML kartu perhentian
     let html = '';
     itineraryStops.forEach((stop, i) => {
+        const color = getMarkerColor(stop.sub);
+        const icon = getSubCategoryIcon(stop.sub);
         html += `
             <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2 text-xs">
                 <div class="flex items-center gap-2.5 min-w-0">
                     <span class="w-5 h-5 rounded-full bg-slate-900 text-white font-bold text-[10px] flex items-center justify-center shrink-0">
                         ${i + 1}
                     </span>
-                    <img src="${stop.photo}" alt="${stop.nama}" class="w-9 h-9 rounded-xl object-cover border border-slate-200 shrink-0">
+                    <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-2xs" style="background-color: ${color};">
+                        <i class="fa-solid ${icon} text-xs"></i>
+                    </div>
                     <div class="min-w-0">
                         <div class="font-extrabold text-slate-900 truncate">${stop.nama}</div>
-                        <div class="text-[10px] text-slate-400">${stop.kabupaten} &bull; ${stop.sub}</div>
+                        <div class="text-[10px] text-slate-400">${stop.kab || stop.kabupaten || ''} &bull; ${stop.sub}</div>
                     </div>
                 </div>
-                <button onclick="removeFromItinerary(${i})" class="w-6 h-6 rounded-full bg-slate-200 hover:bg-rose-100 hover:text-rose-600 text-slate-500 flex items-center justify-center transition-colors text-[10px] shrink-0">
+                <button onclick="removeFromItinerary(${i})" class="w-6 h-6 rounded-full bg-slate-200 hover:bg-rose-100 hover:text-rose-600 text-slate-500 flex items-center justify-center transition-colors text-[10px] shrink-0 cursor-pointer">
                     <i class="fa-solid fa-trash"></i>
                 </button>
             </div>

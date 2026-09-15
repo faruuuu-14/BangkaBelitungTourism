@@ -481,61 +481,41 @@
                         </div>
                     </div>
 
-                    <!-- Profil Pengembang & Hak Kekayaan Intelektual -->
-                    <div class="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-ocean-950 text-white space-y-4 border border-slate-700 shadow-lg">
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-700/80">
+                    <!-- Profil Pembuat Website -->
+                    <div class="p-5 rounded-2xl bg-slate-900 text-white space-y-4 border border-slate-800 shadow-md">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
                             <div class="flex items-center gap-3">
                                 <div class="relative flex-shrink-0">
-                                    <img src="assets/img/fathurrahman.jpg" alt="Fathurrahman Safari Lubis" class="w-16 h-16 rounded-2xl object-cover object-center border-2 border-ocean-400 shadow-xl shadow-ocean-500/30" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-16 h-16 rounded-2xl bg-gradient-to-tr from-ocean-500 to-emerald-400 flex items-center justify-center font-black text-slate-900 text-lg\'>FSL</div>';">
-                                    <span class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-slate-900 flex items-center justify-center text-[10px] text-white" title="Hak Cipta Terverifikasi">
-                                        <i class="fa-solid fa-check"></i>
-                                    </span>
+                                    <img src="assets/img/fathurrahman.jpg" alt="Fathurrahman Safari Lubis" class="w-14 h-14 rounded-2xl object-cover object-top border border-slate-700 shadow-md">
                                 </div>
                                 <div>
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-[10px] font-bold uppercase tracking-wider text-ocean-300">Arsitek Sistem &amp; Pengembang Tunggal:</span>
-                                        <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[9px] font-extrabold border border-emerald-500/30 flex items-center gap-1">
-                                            <i class="fa-solid fa-check-double text-[8px]"></i> Hak Cipta Terverifikasi
-                                        </span>
-                                    </div>
-                                    <h5 class="text-base font-black text-white tracking-tight">Fathurrahman Safari Lubis</h5>
-                                    <p class="text-xs text-slate-300 font-medium">NIM: <strong class="text-ocean-300 font-mono">2411500025</strong> &bull; Mahasiswa Program Studi Teknik Informatika</p>
+                                    <span class="text-[10px] font-semibold tracking-wider text-slate-400 uppercase">Pembuat Website:</span>
+                                    <h5 class="text-base font-bold text-white tracking-tight">Fathurrahman Safari Lubis</h5>
+                                    <p class="text-xs text-slate-300 font-medium">NIM: <strong class="text-ocean-300 font-mono">2411500025</strong> &bull; Mahasiswa Teknik Informatika</p>
                                 </div>
                             </div>
-                            <div class="text-right sm:text-right text-xs text-slate-300">
-                                <div class="font-bold text-white">Institut Sains dan Bisnis Atma Luhur</div>
-                                <div class="text-[11px] text-slate-400">Pangkalpinang, Bangka Belitung</div>
+                            <div class="text-left sm:text-right text-xs text-slate-300">
+                                <div class="font-semibold text-white">Institut Sains dan Bisnis Atma Luhur</div>
+                                <div class="text-[11px] text-slate-400">Pangkalpinang, Kep. Bangka Belitung</div>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px]">
-                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
-                                <div class="font-bold text-ocean-300 flex items-center gap-1.5">
-                                    <i class="fa-solid fa-microchip"></i>
-                                    <span>Peran &amp; Rancang Bangun Sistem</span>
-                                </div>
-                                <p class="text-slate-300 leading-relaxed">
-                                    Merancang arsitektur menyeluruh <em>Spatial Decision Support System</em> (SDSS v2.4), mengintegrasikan basis data spasial 875 POI pariwisata, kurasi 112 baris data runtun waktu BPS, dan antarmuka analitik eksekutif.
-                                </p>
+                        <div class="p-3.5 rounded-xl bg-white/5 border border-white/10 text-xs text-slate-300 leading-relaxed space-y-1.5">
+                            <div class="font-semibold text-ocean-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-code"></i>
+                                <span>Tentang Proyek Website</span>
                             </div>
-                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
-                                <div class="font-bold text-emerald-300 flex items-center gap-1.5">
-                                    <i class="fa-solid fa-square-root-variable"></i>
-                                    <span>Formulasi Matematika &amp; Algoritma</span>
-                                </div>
-                                <p class="text-slate-300 leading-relaxed">
-                                    Mengimplementasikan komputasi algoritma: <em>Haversine Geodesic Distance</em>, <em>Clark &amp; Evans NNA</em>, <em>Global Moran's I Spatial Lag</em>, <em>Holt's Linear Trend Forecasting</em>, <em>Cifuentes TCC</em>, dan <em>TOPSIS MCDM</em>.
-                                </p>
-                            </div>
+                            <p>
+                                Website ini dibuat dan dikembangkan oleh <strong>Fathurrahman Safari Lubis</strong> sebagai proyek pengolahan data dan sistem informasi geospasial (WebGIS) pariwisata Provinsi Kepulauan Bangka Belitung, menggabungkan pemetaan 875 objek wisata dan fasilitas dengan statistik kunjungan BPS.
+                            </p>
                         </div>
 
-                        <div class="pt-2 border-t border-slate-700/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] text-slate-300">
+                        <div class="pt-2 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-400">
                             <div>
-                                Hak Cipta Dilindungi Undang-Undang &copy; 2026 <strong class="text-white">Fathurrahman Safari Lubis</strong>. Seluruh kode sumber, metodologi, dan struktur data adalah karya orisinal.
+                                &copy; <?= date('Y') ?> <strong>Fathurrahman Safari Lubis</strong> &bull; ISB Atma Luhur Pangkalpinang.
                             </div>
-                            <div class="font-mono text-cyan-300 bg-cyan-950/90 px-3 py-1 rounded-lg border border-cyan-500/50 shadow-sm flex items-center gap-1.5 whitespace-nowrap">
-                                <i class="fa-solid fa-fingerprint text-cyan-400 text-xs"></i>
-                                <span>AUTH-ID: ISB-AL/TI/2026/FSL-2411500025-SDSS</span>
+                            <div class="text-slate-400 text-xs">
+                                Teknik Informatika 2024
                             </div>
                         </div>
                     </div>

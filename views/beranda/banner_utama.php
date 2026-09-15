@@ -28,56 +28,77 @@
  * sehingga seluruh teks terbaca sangat tajam dan nyaman di mata pengguna.
  * ==============================================================================
  */
+require_once __DIR__ . '/../../app/database.php';
+
+$currentWilayah = getCurrentWilayah();
+$isNasional = ($currentWilayah === 'nasional');
+
+if ($isNasional) {
+    $heroBgImage = 'assets/img/nasional/hero_indonesia.jpg';
+    $heroFallbackBg = 'assets/img/pantai_lengkuas.jpg';
+    $heroBadge1 = '<span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span><span>Sistem Informasi Intelijen &amp; Spasial Pariwisata Nusantara</span>';
+    $heroBadge2 = '<i class="fa-solid fa-flag text-amber-400 text-[11px]"></i><span>Cakupan 14 Provinsi &bull; Pilot Bangka Belitung</span>';
+    $heroTitle = 'Intelijen &amp; Spasial Pariwisata <span class="bg-gradient-to-r from-sky-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">Nusantara Indonesia</span>';
+    $heroDesc = 'Platform geospasial analitik dan sistem pendukung keputusan pariwisata nasional. Menghubungkan ekosistem 14 provinsi wisata dengan <strong class="text-white font-bold">Provinsi Kepulauan Bangka Belitung</strong> sebagai wilayah percontohan utama (875 objek wisata terpetakan).';
+    $heroSearchPlaceholder = 'Cari destinasi nusantara, pantai, cagar budaya, hotel, kuliner...';
+    $heroCredit = 'Kepulauan Maritim &amp; Wisata Bahari Nusantara';
+} else {
+    $heroBgImage = 'assets/img/bangka_belitung/pantai_lengkuas.jpg';
+    $heroFallbackBg = 'assets/img/pantai_lengkuas.jpg';
+    $heroBadge1 = '<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Portal Resmi Satu Data Spasial &amp; Intelijen Pariwisata</span>';
+    $heroBadge2 = '<i class="fa-solid fa-gem text-amber-400 text-[11px]"></i><span>UNESCO Global Geopark Belitong</span>';
+    $heroTitle = 'Eksplorasi Keindahan Alam &amp; Warisan Budaya <span class="bg-gradient-to-r from-sky-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">Bangka Belitung</span>';
+    $heroDesc = 'Sistem informasi intelijen terintegrasi untuk memetakan <strong class="text-white font-bold">875 objek pariwisata</strong>, menganalisis rasio beban amenitas hotel &amp; restoran berbasis data resmi BPS, serta meranking destinasi unggulan menggunakan algoritma ilmiah SPK TOPSIS.';
+    $heroSearchPlaceholder = 'Cari pantai, hotel, museum, atau kuliner khas Babel...';
+    $heroCredit = 'Mercusuar 1882 Pulau Lengkuas, Sijuk - Kab. Belitung';
+}
 ?>
 
 <!-- ============================================================== -->
-<!-- 1. HERO BANNER UTAMA (LATAR BELAKANG FOTO LENGKUAS PENUH)      -->
+<!-- 1. HERO BANNER UTAMA (LATAR BELAKANG CLEAN MESH CSS TANPA FOTO)-->
 <!-- ============================================================== -->
-<div class="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-800/80 w-full min-h-[360px] sm:min-h-[420px] lg:min-h-[460px] flex items-center">
+<div class="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl border border-slate-800/80 w-full min-h-0 sm:min-h-[400px] flex items-center bg-gradient-to-br from-slate-950 via-slate-900 to-ocean-950">
     
-    <!-- Latar Belakang Foto Panorama Otentik Babel -->
-    <img src="assets/img/pantai_lengkuas.jpg" alt="Panorama Bahari Pulau Lengkuas Bangka Belitung" 
-        class="absolute inset-0 w-full h-full object-cover object-center filter brightness-90 transform scale-100 transition-transform duration-1000 hover:scale-105">
+    <!-- Subtle Radial Dot Matrix (Pure CSS, 0 KB image overhead) -->
+    <div class="absolute inset-0 opacity-25 pointer-events-none" style="background-image: radial-gradient(rgba(56, 189, 248, 0.35) 1px, transparent 1px); background-size: 24px 24px;"></div>
     
-    <!-- Lapisan Gradasi Sinematik Gelap (High-Contrast Dark Gradient Overlay) -->
-    <!-- Memastikan keterbacaan teks 100% tajam dan elegan tanpa mengaburkan keindahan foto -->
-    <div class="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 to-slate-900/40"></div>
+    <!-- Soft Glow Accents -->
+    <div class="absolute -top-24 -right-24 w-96 h-96 bg-ocean-500/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
     
-    <!-- Konten Teks & Tombol Aksi di Atas Foto -->
-    <div class="relative z-10 w-full p-6 sm:p-10 lg:p-14 max-w-4xl space-y-5">
+    <!-- Konten Teks & Tombol Aksi -->
+    <div class="relative z-10 w-full p-4 sm:p-8 lg:p-12 max-w-5xl space-y-3 sm:space-y-4">
         
-        <!-- Label Badge Kebanggaan Provinsi Kepulauan Bangka Belitung -->
-        <div class="flex flex-wrap items-center gap-2">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 backdrop-blur-md shadow-xs">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Portal Resmi Satu Data Spasial &amp; Intelijen Pariwisata</span>
+        <!-- Label Badges Kebanggaan Wilayah -->
+        <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <div class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 backdrop-blur-md shadow-xs">
+                <?= $heroBadge1 ?>
             </div>
             <div class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500/20 text-amber-300 border border-amber-400/30 backdrop-blur-md">
-                <i class="fa-solid fa-gem text-amber-400 text-[11px]"></i>
-                <span>UNESCO Global Geopark Belitong</span>
+                <?= $heroBadge2 ?>
             </div>
         </div>
 
-        <!-- Judul Utama Megah (Headline) -->
-        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight sm:leading-tight">
-            Eksplorasi Keindahan Alam &amp; Warisan Budaya <span class="bg-gradient-to-r from-sky-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">Bangka Belitung</span>
+        <!-- Judul Utama Megah (Headline Adaptif) -->
+        <h1 class="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-snug sm:leading-tight">
+            <?= $heroTitle ?>
         </h1>
 
         <!-- Deskripsi Ringkas & Konteks Nilai Guna Platform -->
-        <p class="text-slate-200 text-xs sm:text-sm lg:text-base leading-relaxed max-w-2xl font-normal drop-shadow-xs">
-            Sistem informasi intelijen terintegrasi untuk memetakan <strong class="text-white font-bold">875 objek pariwisata</strong>, menganalisis rasio beban amenitas hotel &amp; restoran berbasis data resmi BPS, serta meranking destinasi unggulan menggunakan algoritma ilmiah SPK TOPSIS.
+        <p class="text-slate-200 text-xs sm:text-sm lg:text-base leading-relaxed max-w-2xl font-normal drop-shadow-xs line-clamp-2 sm:line-clamp-none">
+            <?= $heroDesc ?>
         </p>
 
         <!-- Kotak Pencarian Instan (Instant Quick Search Bar) -->
-        <div class="relative w-full max-w-xl z-20 pt-1">
+        <div class="relative w-full max-w-xl z-20 pt-0.5">
             <div class="relative flex items-center">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 text-slate-400 text-sm"></i>
-                <input type="text" id="heroQuickSearch" placeholder="Cari pantai, hotel, museum, atau kuliner khas Babel..."
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-slate-400 text-xs sm:text-sm"></i>
+                <input type="text" id="heroQuickSearch" placeholder="<?= $heroSearchPlaceholder ?>"
                     autocomplete="off"
-                    class="w-full pl-11 pr-24 py-3 sm:py-3.5 text-xs sm:text-sm rounded-2xl bg-white/95 text-slate-900 placeholder-slate-400 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-ocean-500 shadow-xl border border-white/30 backdrop-blur-md"
+                    class="w-full pl-9 sm:pl-11 pr-20 sm:pr-24 py-2 sm:py-3 text-xs sm:text-sm rounded-xl sm:rounded-2xl bg-white/95 text-slate-900 placeholder-slate-400 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-ocean-500 shadow-lg sm:shadow-xl border border-white/30 backdrop-blur-md"
                     oninput="handleHeroSearch(this.value)"
                     onkeydown="if(event.key==='Enter') submitHeroSearch()">
-                <button onclick="submitHeroSearch()" class="absolute right-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-ocean-600 hover:bg-ocean-700 text-white font-bold text-xs shadow-sm transition">
+                <button onclick="submitHeroSearch()" class="absolute right-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl bg-ocean-600 hover:bg-ocean-700 text-white font-bold text-xs shadow-sm transition">
                     Cari
                 </button>
             </div>
@@ -87,39 +108,47 @@
             </div>
         </div>
 
-        <!-- Tombol Aksi Pintas (Modern Glassmorphic Quick Action Buttons) -->
-        <div class="flex flex-wrap items-center gap-2.5 sm:gap-3.5 pt-1">
-            <!-- Aksi 1: Peta Spasial GIS -->
-            <a href="index.php?page=peta" class="px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl bg-ocean-600 hover:bg-ocean-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-ocean-600/30 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
-                <i class="fa-solid fa-map-location-dot"></i>
-                <span>Eksplorasi Peta Wisata</span>
-            </a>
+        <!-- Tombol Aksi Pintas (Desktop/Tablet Saja - Mobile sudah terwakili di Bilah Bawah) -->
+        <div class="hidden sm:flex flex-wrap items-center gap-2.5 sm:gap-3.5 pt-1">
+            <?php if ($isNasional): ?>
+                <!-- Aksi Nasional 1: Peta Spasial GIS -->
+                <a href="index.php?page=peta&wilayah=nasional" class="px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl bg-ocean-600 hover:bg-ocean-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-ocean-600/30 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span>Eksplorasi Peta Wisata</span>
+                </a>
 
-            <!-- Aksi 2: Analisis BPS & Beban Amenitas -->
-            <a href="index.php?page=analisis" class="px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs sm:text-sm border border-white/20 backdrop-blur-md transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
-                <i class="fa-solid fa-chart-pie text-amber-400"></i>
-                <span>Analisis Statistik BPS</span>
-            </a>
+                <!-- Aksi Nasional 2: Matriks Komparasi 14 Provinsi -->
+                <a href="#komparasiProvinsi" class="px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs sm:text-sm border border-white/20 backdrop-blur-md transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <i class="fa-solid fa-scale-balanced text-amber-400"></i>
+                    <span>Komparasi 14 Provinsi</span>
+                </a>
 
-            <!-- Aksi 3: Rekomendasi Destinasi TOPSIS -->
-            <a href="index.php?page=rekomendasi" class="px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs sm:text-sm border border-white/20 backdrop-blur-md transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
-                <i class="fa-solid fa-ranking-star text-emerald-400"></i>
-                <span>Rekomendasi TOPSIS</span>
-            </a>
+                <!-- Aksi Nasional 3: Buka Wilayah Percontohan Babel -->
+                <a href="index.php?page=beranda&wilayah=babel" class="px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl bg-emerald-600/80 hover:bg-emerald-600 text-white font-bold text-xs sm:text-sm border border-emerald-400/40 backdrop-blur-md transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <i class="fa-solid fa-gem text-amber-300"></i>
+                    <span>Buka Pilot Babel (875 Objek)</span>
+                </a>
+            <?php else: ?>
+                <!-- Aksi Babel 1: Peta Spasial GIS -->
+                <a href="index.php?page=peta&wilayah=babel" class="px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl bg-ocean-600 hover:bg-ocean-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-ocean-600/30 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span>Eksplorasi Peta Babel</span>
+                </a>
 
-            <!-- Aksi 4: Buku Panduan Pengguna -->
-            <button onclick="openGuideModal('dashboard')" class="px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-2xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white font-semibold text-xs sm:text-sm border border-white/10 backdrop-blur-md transition-all flex items-center gap-1.5">
-                <i class="fa-solid fa-circle-question text-xs"></i>
-                <span>Panduan</span>
-            </button>
+                <!-- Aksi Babel 2: Analisis BPS & Beban Amenitas -->
+                <a href="index.php?page=analisis&wilayah=babel" class="px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs sm:text-sm border border-white/20 backdrop-blur-md transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-amber-400"></i>
+                    <span>Analisis Statistik BPS</span>
+                </a>
+
+                <!-- Aksi Babel 3: Rekomendasi Destinasi TOPSIS -->
+                <a href="index.php?page=rekomendasi&wilayah=babel" class="px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs sm:text-sm border border-white/20 backdrop-blur-md transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <i class="fa-solid fa-ranking-star text-emerald-400"></i>
+                    <span>Rekomendasi Destinasi</span>
+                </a>
+            <?php endif; ?>
         </div>
 
-    </div>
-
-    <!-- Badge Sudut Kanan Bawah: Info Lokasi Foto Latar Belakang -->
-    <div class="hidden md:flex absolute bottom-4 right-4 z-10 items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-[11px]">
-        <i class="fa-solid fa-camera text-amber-400 text-xs"></i>
-        <span>Mercusuar 1882 Pulau Lengkuas, Sijuk - Kab. Belitung</span>
     </div>
 
 </div>
@@ -192,17 +221,26 @@ function submitHeroSearch() {
 function getHeroItemPhoto(nama, sub, kab) {
     const n = (nama || '').toLowerCase();
     const k = (kab || '').toLowerCase();
-    if (n.includes('tikus emas') || n.includes('parai')) return 'assets/img/pantai_tikus_emas.jpg';
-    if (n.includes('tanjung ular') || n.includes('menumbing') || k.includes('barat')) return 'assets/img/pantai_tanjung_ular.jpg';
-    if (n.includes('kaolin') || k.includes('tengah')) return 'assets/img/danau_kaolin_koba.jpg';
-    if (n.includes('batu perahu') || k.includes('selatan')) return 'assets/img/pantai_batu_perahu.jpg';
-    if (n.includes('lengkuas')) return 'assets/img/pantai_lengkuas.jpg';
-    if (n.includes('tanjung tinggi') || k.includes('belitung')) return 'assets/img/pantai_tanjung_tinggi.jpg';
-    if (n.includes('gantong') || k.includes('timur')) return 'assets/img/laskar_pelangi_gantong.jpg';
-    if (n.includes('museum') || n.includes('timah') || k.includes('pangkalpinang')) return 'assets/img/museum_timah_babel.jpg';
-    if (sub === 'Kebudayaan') return 'assets/img/kain_cual_bangka.jpg';
-    if (sub === 'Restoran') return 'assets/img/budaya_nganggung.jpg';
-    return 'assets/img/pantai_tikus_emas.jpg';
+
+    // Deteksi foto destinasi super prioritas nasional
+    if (n.includes('raja ampat') || k.includes('raja ampat')) return 'assets/img/nasional/raja_ampat.jpg';
+    if (n.includes('borobudur') || k.includes('magelang')) return 'assets/img/nasional/borobudur.jpg';
+    if (n.includes('bromo') || k.includes('probolinggo')) return 'assets/img/nasional/bromo.jpg';
+    if (n.includes('labuan bajo') || k.includes('manggarai')) return 'assets/img/nasional/labuan_bajo.jpg';
+    if (n.includes('danau toba') || k.includes('samosir')) return 'assets/img/nasional/danau_toba.jpg';
+
+    // Deteksi foto otentik Bangka Belitung dari folder khusus bangka_belitung/
+    if (n.includes('tikus emas') || n.includes('parai')) return 'assets/img/bangka_belitung/pantai_tikus_emas.jpg';
+    if (n.includes('tanjung ular') || n.includes('menumbing') || k.includes('barat')) return 'assets/img/bangka_belitung/pantai_tanjung_ular.jpg';
+    if (n.includes('kaolin') || k.includes('tengah')) return 'assets/img/bangka_belitung/danau_kaolin_koba.jpg';
+    if (n.includes('batu perahu') || k.includes('selatan')) return 'assets/img/bangka_belitung/pantai_batu_perahu.jpg';
+    if (n.includes('lengkuas')) return 'assets/img/bangka_belitung/pantai_lengkuas.jpg';
+    if (n.includes('tanjung tinggi') || k.includes('belitung')) return 'assets/img/bangka_belitung/pantai_tanjung_tinggi.jpg';
+    if (n.includes('gantong') || k.includes('timur')) return 'assets/img/bangka_belitung/laskar_pelangi_gantong.jpg';
+    if (n.includes('museum') || n.includes('timah') || k.includes('pangkalpinang')) return 'assets/img/bangka_belitung/museum_timah_babel.jpg';
+    if (sub === 'Kebudayaan') return 'assets/img/bangka_belitung/kain_cual_bangka.jpg';
+    if (sub === 'Restoran') return 'assets/img/bangka_belitung/budaya_nganggung.jpg';
+    return 'assets/img/bangka_belitung/pantai_tikus_emas.jpg';
 }
 
 // Tutup dropdown jika klik di luar

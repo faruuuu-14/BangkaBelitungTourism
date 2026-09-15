@@ -65,13 +65,15 @@ $idealCount = count(array_filter($gapData, fn($i) => str_contains($i['status'], 
 <!-- ============================================================== -->
 <!-- STRUKTUR TATA LETAK UTAMA MODUL ANALISIS (STANDAR KONSISTENSI) -->
 <!-- ============================================================== -->
-<main class="flex-grow w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 pb-24 lg:pb-8 min-w-0 overflow-hidden space-y-6">
+<main class="flex-grow w-full max-w-[1720px] mx-auto px-3 sm:px-6 lg:px-10 py-3 sm:py-8 pb-20 lg:pb-8 min-w-0 overflow-hidden space-y-3.5 sm:space-y-6">
 
     <!-- KOP SURAT RESMI PEMERINTAH PROVINSI (HANYA MUNCUL SAAT CETAK / PDF) -->
     <div class="hidden print:block border-b-2 border-slate-900 pb-3 mb-6">
         <div class="flex items-center justify-between gap-4">
             <div class="w-14 h-14 shrink-0 flex items-center justify-center">
-                <img src="assets/img/fathurrahman.jpg" alt="Logo" class="w-12 h-12 rounded-xl object-cover border border-slate-400">
+                <div class="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xs border border-slate-700">
+                    BABEL
+                </div>
             </div>
             <div class="text-center flex-1 space-y-0.5">
                 <h2 class="text-sm font-black uppercase tracking-wider text-slate-900 leading-tight">Pemerintah Provinsi Kepulauan Bangka Belitung</h2>
@@ -86,28 +88,24 @@ $idealCount = count(array_filter($gapData, fn($i) => str_contains($i['status'], 
     </div>
 
     <!-- Header Halaman Analisis -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5 sm:gap-4">
         <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-ocean-50 text-ocean-700 border border-ocean-200/80 mb-2">
-                <i class="fa-solid fa-landmark-flag text-[11px]"></i>
+            <div class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-ocean-50 text-ocean-700 border border-ocean-200/80 mb-1 sm:mb-2">
+                <i class="fa-solid fa-landmark-flag text-[10px] sm:text-[11px]"></i>
                 <span>Standar Analisis Kemenparekraf, Bappenas &amp; BPS RI</span>
             </div>
-            <h1 class="text-xl sm:text-3xl font-black text-slate-900 tracking-tight leading-tight">
+            <h1 class="text-lg sm:text-3xl font-black text-slate-900 tracking-tight leading-tight">
                 Pusat Intelijen &amp; Analisis Statistik Pariwisata
             </h1>
-            <p class="text-slate-500 text-xs sm:text-sm mt-1 max-w-3xl leading-relaxed">
+            <p class="text-slate-500 text-[11px] sm:text-sm mt-0.5 sm:mt-1 max-w-3xl leading-relaxed line-clamp-2 sm:line-clamp-none">
                 Integrasi indikator pertumbuhan Year-over-Year (YoY), matriks korelasi Pearson, evaluasi ketimpangan amenitas spasial, dan peramalan tren kunjungan resmi BPS.
             </p>
         </div>
 
-        <!-- Tombol Aksi Header -->
-        <div class="flex items-center gap-2 self-start md:self-auto">
-            <button onclick="openGuideModal('analisis')" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-xs transition-colors flex items-center gap-1.5">
-                <i class="fa-solid fa-circle-question text-ocean-400"></i>
-                <span>Panduan &amp; Rumus</span>
-            </button>
-            <button onclick="window.print()" class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold border border-slate-200 shadow-xs transition-colors flex items-center gap-1.5" title="Cetak Ringkasan Eksekutif Resmi (A4 / PDF)">
-                <i class="fa-solid fa-print text-ocean-600"></i>
+        <!-- Tombol Aksi Header (Hanya di Desktop/Tablet) -->
+        <div class="hidden sm:flex items-center gap-2 self-start md:self-auto">
+            <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-xs transition-colors flex items-center gap-2" title="Cetak Ringkasan Eksekutif Resmi (A4 / PDF)">
+                <i class="fa-solid fa-print text-ocean-400"></i>
                 <span>Cetak Ringkasan Eksekutif</span>
             </button>
         </div>
@@ -115,28 +113,33 @@ $idealCount = count(array_filter($gapData, fn($i) => str_contains($i['status'], 
 
     <!-- ============================================================== -->
     <!-- BILAH NAVIGASI TAB SEGMENTASI BERBAHASA INDONESIA              -->
-    <!-- Menghilangkan information overload, pengguna memilih fokusnya  -->
+    <!-- Horizontal Scrollable di Mobile, Grid Proporsional di Desktop -->
     <!-- ============================================================== -->
-    <div class="bg-white p-1.5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-1 overflow-x-auto">
+    <div class="bg-white p-1 sm:p-1.5 rounded-2xl border border-slate-200/80 shadow-2xs flex overflow-x-auto no-scrollbar sm:grid sm:grid-cols-3 lg:grid-cols-5 gap-1 sm:gap-1.5 w-full">
         
-        <button onclick="switchTab('tab-ringkasan')" id="btn-tab-ringkasan" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap bg-ocean-600 text-white shadow-xs">
-            <i class="fa-solid fa-chart-pie mr-1.5"></i> Ringkasan BPS &amp; Makro
+        <button onclick="switchTab('tab-ringkasan')" id="btn-tab-ringkasan" class="tab-btn flex-shrink-0 sm:flex-shrink flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 px-3 rounded-xl text-xs sm:text-[13px] font-bold transition-all text-center bg-ocean-600 text-white shadow-xs whitespace-nowrap">
+            <i class="fa-solid fa-chart-pie shrink-0 text-xs sm:text-sm"></i>
+            <span>Ringkasan BPS &amp; Makro</span>
         </button>
 
-        <button onclick="switchTab('tab-korelasi')" id="btn-tab-korelasi" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap text-slate-600 hover:text-ocean-600 hover:bg-ocean-50">
-            <i class="fa-solid fa-link mr-1.5"></i> Korelasi Pearson (r)
+        <button onclick="switchTab('tab-korelasi')" id="btn-tab-korelasi" class="tab-btn flex-shrink-0 sm:flex-shrink flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 px-3 rounded-xl text-xs sm:text-[13px] font-bold transition-all text-center text-slate-600 hover:text-ocean-600 hover:bg-ocean-50 whitespace-nowrap">
+            <i class="fa-solid fa-link shrink-0 text-xs sm:text-sm"></i>
+            <span>Korelasi Pearson (r)</span>
         </button>
 
-        <button onclick="switchTab('tab-ketimpangan')" id="btn-tab-ketimpangan" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap text-slate-600 hover:text-ocean-600 hover:bg-ocean-50">
-            <i class="fa-solid fa-scale-unbalanced mr-1.5"></i> Ketimpangan Spasial
+        <button onclick="switchTab('tab-ketimpangan')" id="btn-tab-ketimpangan" class="tab-btn flex-shrink-0 sm:flex-shrink flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 px-3 rounded-xl text-xs sm:text-[13px] font-bold transition-all text-center text-slate-600 hover:text-ocean-600 hover:bg-ocean-50 whitespace-nowrap">
+            <i class="fa-solid fa-scale-unbalanced shrink-0 text-xs sm:text-sm"></i>
+            <span>Ketimpangan Spasial</span>
         </button>
 
-        <button onclick="switchTab('tab-kuadran')" id="btn-tab-kuadran" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap text-slate-600 hover:text-ocean-600 hover:bg-ocean-50">
-            <i class="fa-solid fa-table-cells-large mr-1.5"></i> Matriks Kuadran Investasi
+        <button onclick="switchTab('tab-kuadran')" id="btn-tab-kuadran" class="tab-btn flex-shrink-0 sm:flex-shrink flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 px-3 rounded-xl text-xs sm:text-[13px] font-bold transition-all text-center text-slate-600 hover:text-ocean-600 hover:bg-ocean-50 whitespace-nowrap">
+            <i class="fa-solid fa-table-cells-large shrink-0 text-xs sm:text-sm"></i>
+            <span>Matriks Kuadran</span>
         </button>
 
-        <button onclick="switchTab('tab-proyeksi')" id="btn-tab-proyeksi" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap text-slate-600 hover:text-ocean-600 hover:bg-ocean-50">
-            <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> Proyeksi Tren &amp; Simulasi
+        <button onclick="switchTab('tab-proyeksi')" id="btn-tab-proyeksi" class="tab-btn flex-shrink-0 sm:flex-shrink flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 px-3 rounded-xl text-xs sm:text-[13px] font-bold transition-all text-center text-slate-600 hover:text-ocean-600 hover:bg-ocean-50 whitespace-nowrap">
+            <i class="fa-solid fa-wand-magic-sparkles shrink-0 text-xs sm:text-sm"></i>
+            <span>Proyeksi &amp; Simulasi</span>
         </button>
 
     </div>
@@ -146,7 +149,7 @@ $idealCount = count(array_filter($gapData, fn($i) => str_contains($i['status'], 
     <!-- ============================================================== -->
     <div id="tab-ringkasan" class="tab-content space-y-6">
         <?php include __DIR__ . '/ringkasan/kartu_kpi.php'; ?>
-        <?php include __DIR__ . '/ringkasan/pilar_visual.php'; ?>
+        <?php include __DIR__ . '/ringkasan/tren_bulanan_bps.php'; ?>
     </div>
 
     <!-- ============================================================== -->
@@ -155,7 +158,6 @@ $idealCount = count(array_filter($gapData, fn($i) => str_contains($i['status'], 
     <div id="tab-korelasi" class="tab-content hidden space-y-6">
         <?php include __DIR__ . '/korelasi_pearson/ringkasan_korelasi.php'; ?>
         <?php include __DIR__ . '/korelasi_pearson/grafik_sebaran.php'; ?>
-        <?php include __DIR__ . '/korelasi_pearson/penjelasan_rumus.php'; ?>
     </div>
 
     <!-- ============================================================== -->

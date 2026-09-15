@@ -7,23 +7,7 @@
  * @file      podium_juara.php
  * @folder    views/rekomendasi/
  * @author    Fathurrahman Safari Lubis (NIM: 2411500025) - ISB Atma Luhur
- * @version   2.0.0 (Podium 3 Destinasi Juara Rekomendasi TOPSIS dengan Foto Otentik)
- * 
- * ------------------------------------------------------------------------------
- * DESKRIPSI & FUNGSI FILE:
- * Komponen podium visual 3 destinasi terbaik (Juara 1 Emas, Juara 2 Perak, dan
- * Juara 3 Perunggu) hasil perankingan nilai preferensi V_i algoritma TOPSIS.
- * Dilengkapi foto otentik representatif, nilai skor preferensi (0.0000 - 1.0000),
- * lencana wilayah, rincian kriteria, dan tombol buka lokasi pada Peta Spasial GIS.
- * 
- * KETERKAITAN ALUR (DATA & LOGIKA):
- * - Dimuat oleh: views/rekomendasi/index.php
- * - Menggunakan array: $top10 (elemen indeks 0, 1, dan 2)
- * - Menggunakan helper foto: getDestinationPhoto($nama, $subKategori, $kabupaten)
- * 
- * TUJUAN DIBUATNYA FILE:
- * Memberikan sorotan visual (*visual highlight*) yang jelas dan membanggakan bagi
- * 3 destinasi wisata paling unggul di Bangka Belitung berdasarkan preferensi pengguna.
+ * @version   3.0.0 (Podium 3 Destinasi Juara Rekomendasi TOPSIS Vektor - Zero Raster Images)
  * ==============================================================================
  */
 
@@ -33,7 +17,7 @@ $juara3 = $top10[2] ?? null;
 ?>
 
 <!-- ============================================================== -->
-<!-- 3. PODIUM 3 DESTINASI TERBAIK HASIL PERHITUNGAN TOPSIS         -->
+<!-- 3. PODIUM 3 DESTINASI TERBAIK (CLEAN VECTOR METALLIC PODIUM)   -->
 <!-- ============================================================== -->
 <div class="space-y-4">
     
@@ -41,48 +25,71 @@ $juara3 = $top10[2] ?? null;
         <div>
             <h3 class="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
                 <i class="fa-solid fa-trophy text-amber-500"></i>
-                <span>Podium 3 Destinasi Paling Direkomendasikan</span>
+                <span>Podium 3 Destinasi Paling Direkomendasikan (TOPSIS)</span>
             </h3>
             <p class="text-xs text-slate-500">Peringkat 1, 2, dan 3 dengan nilai kedekatan relatif tertinggi terhadap solusi ideal positif (A+)</p>
         </div>
     </div>
 
+    <!-- Panduan Cara Membaca Skor TOPSIS (Vi) -->
+    <div class="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-amber-50/80 border border-amber-200/90 text-[11px] sm:text-xs text-amber-950 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2.5">
+        <div class="flex items-center gap-1.5 shrink-0">
+            <i class="fa-solid fa-circle-question text-amber-600 text-xs"></i>
+            <span class="font-bold">Panduan Skor Preferensi ($V_i$):</span>
+        </div>
+        <div class="text-[10px] sm:text-[11px] text-slate-700 leading-snug sm:leading-relaxed">
+            Skor berkisar <strong>0% s/d 100%</strong>. Makin mendekati 100%, makin memenuhi rating tinggi, ulasan banyak, fasilitas lengkap, dan akses efisien.
+        </div>
+    </div>
+
     <!-- Grid 3 Kartu Podium (Urutan IMK Visual: Juara 2 di Kiri, Juara 1 di Tengah Lebih Tinggi, Juara 3 di Kanan) -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-end pt-2">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-5 items-end pt-1 sm:pt-2">
         
         <!-- JUARA 2: MEDALI PERAK -->
-        <?php if ($juara2): 
-            $foto2 = getDestinationPhoto($juara2['nama'], $juara2['sub_kategori'], $juara2['kabupaten']);
-        ?>
-        <div class="order-2 md:order-1 bg-white rounded-3xl overflow-hidden border-2 border-slate-300 shadow-md hover:shadow-xl transition-all space-y-3 p-4 flex flex-col justify-between min-h-[380px]">
-            <div class="space-y-3">
-                <!-- Banner Foto Otentik Juara 2 -->
-                <div class="relative h-40 rounded-2xl overflow-hidden bg-slate-900">
-                    <img src="<?= $foto2 ?>" alt="<?= htmlspecialchars($juara2['nama']) ?>" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
-                    <span class="absolute top-2 left-2 px-2.5 py-1 rounded-full text-xs font-black bg-slate-200 text-slate-800 shadow flex items-center gap-1">
-                        <i class="fa-solid fa-medal text-slate-500"></i> Juara 2 (Perak)
+        <?php if ($juara2): ?>
+        <div class="order-2 md:order-1 bg-gradient-to-b from-slate-100/80 via-white to-white rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-slate-300 shadow-md hover:shadow-xl transition-all space-y-2.5 sm:space-y-4 p-3.5 sm:p-5 flex flex-col justify-between min-h-0 md:min-h-[360px]">
+            <div class="space-y-2 sm:space-y-3.5">
+                <!-- Header Lencana Medali Perak -->
+                <div class="flex items-center justify-between">
+                    <span class="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-black bg-slate-200 text-slate-800 shadow-2xs flex items-center gap-1 sm:gap-1.5">
+                        <i class="fa-solid fa-medal text-slate-500"></i>
+                        <span>Juara 2 (Perak)</span>
                     </span>
-                    <span class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-[10px] font-bold text-white">
-                        V: <?= number_format($juara2['score_v'], 4) ?>
+                    <span class="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                        <?= htmlspecialchars($juara2['sub_kategori']) ?>
                     </span>
                 </div>
+
+                <!-- Callout Nilai TOPSIS -->
+                <div class="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-slate-100/70 border border-slate-200 space-y-0.5 sm:space-y-1">
+                    <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500 block truncate">Skor Preferensi (V)</span>
+                    <div class="flex items-baseline gap-1.5 sm:gap-2">
+                        <span class="text-xl sm:text-3xl font-black text-slate-800 font-mono"><?= number_format($juara2['score_v'], 4) ?></span>
+                        <span class="text-[10px] sm:text-[11px] text-slate-500 font-semibold">(<?= number_format($juara2['score_v'] * 100, 1) ?>%)</span>
+                    </div>
+                </div>
+
+                <!-- Identitas Destinasi -->
                 <div>
                     <h4 class="font-black text-slate-900 text-sm sm:text-base line-clamp-1"><?= htmlspecialchars($juara2['nama']) ?></h4>
-                    <p class="text-xs text-slate-500"><?= htmlspecialchars($juara2['kabupaten']) ?></p>
+                    <p class="text-[11px] sm:text-xs text-slate-500 truncate"><?= htmlspecialchars($juara2['kabupaten']) ?> &bull; Kec. <?= htmlspecialchars($juara2['kecamatan']) ?></p>
                 </div>
-                <div class="grid grid-cols-2 gap-2 text-[11px] bg-slate-50 p-2.5 rounded-xl text-slate-600">
+
+                <!-- 4 Kriteria Penilaian -->
+                <div class="grid grid-cols-2 gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] bg-slate-50 p-2 sm:p-2.5 rounded-xl text-slate-600">
                     <div>Rating: <strong class="text-slate-900">★ <?= $juara2['rating'] ?></strong></div>
                     <div>Ulasan: <strong class="text-slate-900"><?= number_format($juara2['ulasan']) ?></strong></div>
                     <div>Transport: <strong class="text-slate-900"><?= round($juara2['hub_dist'], 1) ?> km</strong></div>
                     <div>Amenitas: <strong class="text-slate-900"><?= $juara2['amenities'] ?> Unit</strong></div>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <button onclick="openQrModal('<?= htmlspecialchars(addslashes($juara2['nama'])) ?>', <?= (float)($juara2['latitude'] ?? -2.1215) ?>, <?= (float)($juara2['longitude'] ?? 106.1130) ?>, '<?= htmlspecialchars(addslashes($juara2['kabupaten'])) ?>', '<?= htmlspecialchars(addslashes($juara2['sub_kategori'])) ?>')" class="p-2 px-3 rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 hover:text-ocean-700 text-xs font-bold transition-all flex items-center justify-center" title="Kode QR Navigasi">
-                    <i class="fa-solid fa-qrcode text-sm"></i>
+
+            <!-- Tombol Aksi -->
+            <div class="flex gap-2 pt-1.5 sm:pt-2 border-t border-slate-100">
+                <button onclick="openQrModal('<?= htmlspecialchars(addslashes($juara2['nama'])) ?>', <?= (float)($juara2['latitude'] ?? -2.1215) ?>, <?= (float)($juara2['longitude'] ?? 106.1130) ?>, '<?= htmlspecialchars(addslashes($juara2['kabupaten'])) ?>', '<?= htmlspecialchars(addslashes($juara2['sub_kategori'])) ?>')" class="p-1.5 sm:p-2 px-2.5 sm:px-3 rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 hover:text-ocean-700 text-xs font-bold transition-all flex items-center justify-center" title="Kode QR Navigasi">
+                    <i class="fa-solid fa-qrcode text-xs sm:text-sm"></i>
                 </button>
-                <a href="index.php?page=peta&search=<?= urlencode($juara2['nama']) ?>" class="flex-1 py-2 rounded-xl bg-slate-100 hover:bg-ocean-600 text-slate-700 hover:text-white text-xs font-bold transition-all text-center flex items-center justify-center gap-1">
+                <a href="index.php?page=peta&search=<?= urlencode($juara2['nama']) ?>" class="flex-1 py-1.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-ocean-600 text-slate-700 hover:text-white text-xs font-bold transition-all text-center flex items-center justify-center gap-1">
                     <i class="fa-solid fa-location-crosshairs text-xs"></i>
                     <span>Buka di Peta</span>
                 </a>
@@ -91,79 +98,102 @@ $juara3 = $top10[2] ?? null;
         <?php endif; ?>
 
         <!-- JUARA 1: MEDALI EMAS (KARTU LEBIH BESAR & TINGGI) -->
-        <?php if ($juara1): 
-            $foto1 = getDestinationPhoto($juara1['nama'], $juara1['sub_kategori'], $juara1['kabupaten']);
-        ?>
-        <div class="order-1 md:order-2 bg-gradient-to-b from-amber-50/50 to-white rounded-3xl overflow-hidden border-2 border-amber-400 shadow-xl hover:shadow-2xl transition-all space-y-3 p-5 flex flex-col justify-between min-h-[420px] transform md:-translate-y-2">
-            <div class="space-y-3">
-                <!-- Banner Foto Otentik Juara 1 -->
-                <div class="relative h-48 rounded-2xl overflow-hidden bg-slate-900 shadow-md">
-                    <img src="<?= $foto1 ?>" alt="<?= htmlspecialchars($juara1['nama']) ?>" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
-                    <span class="absolute top-2 left-2 px-3 py-1 rounded-full text-xs font-black bg-amber-400 text-slate-950 shadow-md flex items-center gap-1.5">
-                        <i class="fa-solid fa-crown text-amber-800"></i> Rekomendasi Utama (Juara 1 Emas)
+        <?php if ($juara1): ?>
+        <div class="order-1 md:order-2 bg-gradient-to-b from-amber-500/10 via-amber-500/5 to-white rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-amber-400 shadow-xl hover:shadow-2xl transition-all space-y-3 sm:space-y-4 p-4 sm:p-6 flex flex-col justify-between min-h-0 md:min-h-[410px] transform md:-translate-y-3">
+            <div class="space-y-2.5 sm:space-y-3.5">
+                <!-- Header Lencana Medali Emas -->
+                <div class="flex items-center justify-between">
+                    <span class="px-3 sm:px-3.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-black bg-amber-400 text-slate-950 shadow-md flex items-center gap-1 sm:gap-1.5">
+                        <i class="fa-solid fa-crown text-amber-900"></i>
+                        <span>Rekomendasi Utama (Juara 1 Emas)</span>
                     </span>
-                    <span class="absolute bottom-2 right-2 px-2.5 py-1 rounded-md bg-black/70 backdrop-blur-md text-xs font-black text-amber-300 border border-amber-400/40">
-                        Skor V: <?= number_format($juara1['score_v'], 4) ?>
+                    <span class="text-[9px] sm:text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
+                        <?= htmlspecialchars($juara1['sub_kategori']) ?>
                     </span>
                 </div>
+
+                <!-- Callout Nilai TOPSIS Juara 1 -->
+                <div class="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-100/90 to-amber-50/60 border border-amber-300 shadow-2xs space-y-0.5 sm:space-y-1">
+                    <span class="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider text-amber-900 block truncate">Skor Preferensi Tertinggi (V)</span>
+                    <div class="flex items-baseline gap-1.5 sm:gap-2">
+                        <span class="text-2xl sm:text-4xl font-black text-amber-700 font-mono"><?= number_format($juara1['score_v'], 4) ?></span>
+                        <span class="text-[10px] sm:text-xs text-amber-900 font-extrabold">(<?= number_format($juara1['score_v'] * 100, 1) ?>% Solusi Ideal)</span>
+                    </div>
+                </div>
+
+                <!-- Identitas Destinasi -->
                 <div>
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-ocean-50 text-ocean-700 uppercase tracking-wider">Paling Direkomendasikan</span>
-                    <h4 class="font-black text-slate-900 text-base sm:text-lg line-clamp-1 mt-1"><?= htmlspecialchars($juara1['nama']) ?></h4>
-                    <p class="text-xs text-slate-500"><?= htmlspecialchars($juara1['kabupaten']) ?> &bull; Kec. <?= htmlspecialchars($juara1['kecamatan']) ?></p>
+                    <h4 class="font-black text-slate-900 text-base sm:text-xl line-clamp-1"><?= htmlspecialchars($juara1['nama']) ?></h4>
+                    <p class="text-[11px] sm:text-xs text-slate-500 truncate"><?= htmlspecialchars($juara1['kabupaten']) ?> &bull; Kec. <?= htmlspecialchars($juara1['kecamatan']) ?></p>
                 </div>
-                <div class="grid grid-cols-2 gap-2 text-xs bg-amber-50/80 p-3 rounded-2xl border border-amber-200 text-slate-700 font-medium">
+
+                <!-- 4 Kriteria Penilaian -->
+                <div class="grid grid-cols-2 gap-1.5 sm:gap-2 text-[10px] sm:text-xs bg-amber-50/80 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-amber-200 text-slate-700 font-medium">
                     <div>Kualitas: <strong class="text-amber-900 font-black">★ <?= $juara1['rating'] ?></strong></div>
                     <div>Ulasan: <strong class="text-amber-900 font-black"><?= number_format($juara1['ulasan']) ?></strong></div>
-                    <div>Transportasi: <strong class="text-amber-900 font-black"><?= round($juara1['hub_dist'], 1) ?> km</strong></div>
+                    <div>Transport: <strong class="text-amber-900 font-black"><?= round($juara1['hub_dist'], 1) ?> km</strong></div>
                     <div>Amenitas: <strong class="text-amber-900 font-black"><?= $juara1['amenities'] ?> Unit</strong></div>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <button onclick="openQrModal('<?= htmlspecialchars(addslashes($juara1['nama'])) ?>', <?= (float)($juara1['latitude'] ?? -2.1215) ?>, <?= (float)($juara1['longitude'] ?? 106.1130) ?>, '<?= htmlspecialchars(addslashes($juara1['kabupaten'])) ?>', '<?= htmlspecialchars(addslashes($juara1['sub_kategori'])) ?>')" class="p-2.5 px-3 rounded-xl bg-white hover:bg-ocean-50 text-slate-800 hover:text-ocean-700 text-xs font-bold border border-amber-300 transition-all flex items-center justify-center shadow-xs" title="Kode QR Navigasi">
-                    <i class="fa-solid fa-qrcode text-base text-ocean-600"></i>
+
+            <!-- Tombol Aksi -->
+            <div class="flex gap-2 pt-2 border-t border-amber-200/60">
+                <button onclick="openQrModal('<?= htmlspecialchars(addslashes($juara1['nama'])) ?>', <?= (float)($juara1['latitude'] ?? -2.1215) ?>, <?= (float)($juara1['longitude'] ?? 106.1130) ?>, '<?= htmlspecialchars(addslashes($juara1['kabupaten'])) ?>', '<?= htmlspecialchars(addslashes($juara1['sub_kategori'])) ?>')" class="p-2 sm:p-2.5 px-2.5 sm:px-3 rounded-xl bg-white hover:bg-ocean-50 text-slate-800 hover:text-ocean-700 text-xs font-bold border border-amber-300 transition-all flex items-center justify-center shadow-xs" title="Kode QR Navigasi">
+                    <i class="fa-solid fa-qrcode text-sm sm:text-base text-ocean-600"></i>
                 </button>
-                <a href="index.php?page=peta&search=<?= urlencode($juara1['nama']) ?>" class="flex-1 py-2.5 rounded-xl bg-ocean-600 hover:bg-ocean-500 text-white text-xs font-extrabold shadow-md shadow-ocean-600/20 transition-all text-center flex items-center justify-center gap-1.5">
+                <a href="index.php?page=peta&search=<?= urlencode($juara1['nama']) ?>" class="flex-1 py-2 sm:py-2.5 rounded-xl bg-ocean-600 hover:bg-ocean-500 text-white text-xs font-extrabold shadow-md shadow-ocean-600/20 transition-all text-center flex items-center justify-center gap-1.5">
                     <i class="fa-solid fa-route"></i>
-                    <span>Eksplorasi Rute Destinasi Terbaik</span>
+                    <span>Rute Destinasi Terbaik</span>
                 </a>
             </div>
         </div>
         <?php endif; ?>
 
         <!-- JUARA 3: MEDALI PERUNGGU -->
-        <?php if ($juara3): 
-            $foto3 = getDestinationPhoto($juara3['nama'], $juara3['sub_kategori'], $juara3['kabupaten']);
-        ?>
-        <div class="order-3 md:order-3 bg-white rounded-3xl overflow-hidden border-2 border-amber-700/40 shadow-md hover:shadow-xl transition-all space-y-3 p-4 flex flex-col justify-between min-h-[380px]">
-            <div class="space-y-3">
-                <!-- Banner Foto Otentik Juara 3 -->
-                <div class="relative h-40 rounded-2xl overflow-hidden bg-slate-900">
-                    <img src="<?= $foto3 ?>" alt="<?= htmlspecialchars($juara3['nama']) ?>" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
-                    <span class="absolute top-2 left-2 px-2.5 py-1 rounded-full text-xs font-black bg-amber-700/20 text-amber-900 border border-amber-700/30 shadow flex items-center gap-1">
-                        <i class="fa-solid fa-medal text-amber-700"></i> Juara 3 (Perunggu)
+        <?php if ($juara3): ?>
+        <div class="order-3 md:order-3 bg-gradient-to-b from-amber-700/10 via-white to-white rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-amber-700/30 shadow-md hover:shadow-xl transition-all space-y-2.5 sm:space-y-4 p-3.5 sm:p-5 flex flex-col justify-between min-h-0 md:min-h-[360px]">
+            <div class="space-y-2 sm:space-y-3.5">
+                <!-- Header Lencana Medali Perunggu -->
+                <div class="flex items-center justify-between">
+                    <span class="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-black bg-amber-700/20 text-amber-900 border border-amber-700/30 shadow-2xs flex items-center gap-1 sm:gap-1.5">
+                        <i class="fa-solid fa-medal text-amber-700"></i>
+                        <span>Juara 3 (Perunggu)</span>
                     </span>
-                    <span class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-[10px] font-bold text-white">
-                        V: <?= number_format($juara3['score_v'], 4) ?>
+                    <span class="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                        <?= htmlspecialchars($juara3['sub_kategori']) ?>
                     </span>
                 </div>
+
+                <!-- Callout Nilai TOPSIS -->
+                <div class="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-amber-50/50 border border-amber-200/80 space-y-0.5 sm:space-y-1">
+                    <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500 block truncate">Skor Preferensi (V)</span>
+                    <div class="flex items-baseline gap-1.5 sm:gap-2">
+                        <span class="text-xl sm:text-3xl font-black text-amber-800 font-mono"><?= number_format($juara3['score_v'], 4) ?></span>
+                        <span class="text-[10px] sm:text-[11px] text-slate-500 font-semibold">(<?= number_format($juara3['score_v'] * 100, 1) ?>%)</span>
+                    </div>
+                </div>
+
+                <!-- Identitas Destinasi -->
                 <div>
                     <h4 class="font-black text-slate-900 text-sm sm:text-base line-clamp-1"><?= htmlspecialchars($juara3['nama']) ?></h4>
-                    <p class="text-xs text-slate-500"><?= htmlspecialchars($juara3['kabupaten']) ?></p>
+                    <p class="text-[11px] sm:text-xs text-slate-500 truncate"><?= htmlspecialchars($juara3['kabupaten']) ?> &bull; Kec. <?= htmlspecialchars($juara3['kecamatan']) ?></p>
                 </div>
-                <div class="grid grid-cols-2 gap-2 text-[11px] bg-slate-50 p-2.5 rounded-xl text-slate-600">
+
+                <!-- 4 Kriteria Penilaian -->
+                <div class="grid grid-cols-2 gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] bg-slate-50 p-2 sm:p-2.5 rounded-xl text-slate-600">
                     <div>Rating: <strong class="text-slate-900">★ <?= $juara3['rating'] ?></strong></div>
                     <div>Ulasan: <strong class="text-slate-900"><?= number_format($juara3['ulasan']) ?></strong></div>
                     <div>Transport: <strong class="text-slate-900"><?= round($juara3['hub_dist'], 1) ?> km</strong></div>
                     <div>Amenitas: <strong class="text-slate-900"><?= $juara3['amenities'] ?> Unit</strong></div>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <button onclick="openQrModal('<?= htmlspecialchars(addslashes($juara3['nama'])) ?>', <?= (float)($juara3['latitude'] ?? -2.1215) ?>, <?= (float)($juara3['longitude'] ?? 106.1130) ?>, '<?= htmlspecialchars(addslashes($juara3['kabupaten'])) ?>', '<?= htmlspecialchars(addslashes($juara3['sub_kategori'])) ?>')" class="p-2 px-3 rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 hover:text-ocean-700 text-xs font-bold transition-all flex items-center justify-center" title="Kode QR Navigasi">
-                    <i class="fa-solid fa-qrcode text-sm"></i>
+
+            <!-- Tombol Aksi -->
+            <div class="flex gap-2 pt-1.5 sm:pt-2 border-t border-slate-100">
+                <button onclick="openQrModal('<?= htmlspecialchars(addslashes($juara3['nama'])) ?>', <?= (float)($juara3['latitude'] ?? -2.1215) ?>, <?= (float)($juara3['longitude'] ?? 106.1130) ?>, '<?= htmlspecialchars(addslashes($juara3['kabupaten'])) ?>', '<?= htmlspecialchars(addslashes($juara3['sub_kategori'])) ?>')" class="p-1.5 sm:p-2 px-2.5 sm:px-3 rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 hover:text-ocean-700 text-xs font-bold transition-all flex items-center justify-center" title="Kode QR Navigasi">
+                    <i class="fa-solid fa-qrcode text-xs sm:text-sm"></i>
                 </button>
-                <a href="index.php?page=peta&search=<?= urlencode($juara3['nama']) ?>" class="flex-1 py-2 rounded-xl bg-slate-100 hover:bg-ocean-600 text-slate-700 hover:text-white text-xs font-bold transition-all text-center flex items-center justify-center gap-1">
+                <a href="index.php?page=peta&search=<?= urlencode($juara3['nama']) ?>" class="flex-1 py-1.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-ocean-600 text-slate-700 hover:text-white text-xs font-bold transition-all text-center flex items-center justify-center gap-1">
                     <i class="fa-solid fa-location-crosshairs text-xs"></i>
                     <span>Buka di Peta</span>
                 </a>

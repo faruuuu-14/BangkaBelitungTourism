@@ -32,104 +32,104 @@
 <!-- ============================================================== -->
 <!-- 2. FORMULIR PENGATURAN BOBOT KRITERIA & PRESET PERSONA         -->
 <!-- ============================================================== -->
-<form method="GET" action="index.php" class="bg-white rounded-3xl p-5 sm:p-7 border border-slate-200/80 shadow-xs space-y-6">
+<form method="GET" action="index.php" class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-7 border border-slate-200/80 shadow-2xs space-y-3.5 sm:space-y-6">
     <input type="hidden" name="page" value="rekomendasi">
 
     <!-- Kepala Formulir Pengaturan -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 sm:pb-4 border-b border-slate-100 gap-2">
         <div>
-            <h3 class="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
-                <span>Atur Bobot Keputusan &amp; Preferensi Wisatawan</span>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">Total Bobot: 100%</span>
+            <h3 class="text-xs sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-1.5 sm:gap-2">
+                <span>Atur Bobot Keputusan &amp; Preferensi</span>
+                <span class="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">Total: 100%</span>
             </h3>
-            <p class="text-xs text-slate-500 mt-0.5">Pilih preset cepat di bawah atau sesuaikan masing-masing kriteria menggunakan slider</p>
+            <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">Pilih preset cepat atau atur kriteria dengan slider</p>
         </div>
         
         <!-- Tombol Preset Cepat (1-Click Persona Presets) -->
-        <div class="flex items-center gap-2 flex-wrap self-start sm:self-auto">
-            <button type="button" onclick="setPersonaPreset('backpacker')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 hover:text-ocean-700 text-xs font-bold transition-all border border-slate-200">
-                🎒 Wisatawan Mandiri
+        <div class="flex items-center gap-1.5 flex-wrap self-start sm:self-auto">
+            <button type="button" onclick="setPersonaPreset('backpacker')" class="px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 hover:text-ocean-700 text-[11px] sm:text-xs font-bold transition-all border border-slate-200">
+                🎒 Mandiri
             </button>
-            <button type="button" onclick="setPersonaPreset('keluarga')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 hover:text-ocean-700 text-xs font-bold transition-all border border-slate-200">
-                👨‍👩‍👧‍👦 Liburan Keluarga
+            <button type="button" onclick="setPersonaPreset('keluarga')" class="px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 hover:text-ocean-700 text-[11px] sm:text-xs font-bold transition-all border border-slate-200">
+                👨‍👩‍👧‍👦 Keluarga
             </button>
-            <button type="button" onclick="setPersonaPreset('populer')" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 hover:text-ocean-700 text-xs font-bold transition-all border border-slate-200">
-                🌟 Favorit Populer
+            <button type="button" onclick="setPersonaPreset('populer')" class="px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl bg-slate-100 hover:bg-ocean-50 text-slate-700 hover:text-ocean-700 text-[11px] sm:text-xs font-bold transition-all border border-slate-200">
+                🌟 Populer
             </button>
         </div>
     </div>
 
-    <!-- 4 Slider Bobot Kriteria -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <!-- 4 Slider Bobot Kriteria (2x2 di Mobile, 4 Kolom di Layar Lebar) -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-5">
         
         <!-- Kriteria 1: Kualitas Rating (Benefit) -->
-        <div class="space-y-2 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/70">
-            <div class="flex justify-between items-center text-xs font-bold">
-                <span class="text-slate-800 flex items-center gap-1.5">
-                    <i class="fa-solid fa-star text-amber-500 text-[11px]"></i>
-                    <span>Kualitas Rating</span>
+        <div class="space-y-1 sm:space-y-2 bg-slate-50/70 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200/70">
+            <div class="flex justify-between items-center text-[11px] sm:text-xs font-bold">
+                <span class="text-slate-800 flex items-center gap-1">
+                    <i class="fa-solid fa-star text-amber-500 text-[10px] sm:text-[11px]"></i>
+                    <span class="truncate">Rating</span>
                 </span>
-                <span id="label_w_rating" class="text-ocean-600 font-mono font-black"><?= $wRating ?>%</span>
+                <span id="label_w_rating" class="text-ocean-600 font-mono font-black text-xs sm:text-sm"><?= $wRating ?>%</span>
             </div>
             <input type="range" name="w_rating" id="w_rating" min="5" max="70" step="5" value="<?= $wRating ?>"
-                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-ocean-600"
+                class="w-full h-1.5 sm:h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-ocean-600"
                 oninput="document.getElementById('label_w_rating').innerText = this.value + '%'">
-            <div class="text-[10px] text-slate-400">Tipe: Benefit (Semakin tinggi semakin baik)</div>
+            <div class="hidden sm:block text-[10px] text-slate-500 font-medium">Prioritas: Bintang kepuasan tinggi</div>
         </div>
 
         <!-- Kriteria 2: Akses Transportasi (Cost) -->
-        <div class="space-y-2 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/70">
-            <div class="flex justify-between items-center text-xs font-bold">
-                <span class="text-slate-800 flex items-center gap-1.5">
-                    <i class="fa-solid fa-road text-sky-500 text-[11px]"></i>
-                    <span>Akses Transportasi</span>
+        <div class="space-y-1 sm:space-y-2 bg-slate-50/70 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200/70">
+            <div class="flex justify-between items-center text-[11px] sm:text-xs font-bold">
+                <span class="text-slate-800 flex items-center gap-1">
+                    <i class="fa-solid fa-road text-sky-500 text-[10px] sm:text-[11px]"></i>
+                    <span class="truncate">Transport</span>
                 </span>
-                <span id="label_w_hub" class="text-sky-600 font-mono font-black"><?= $wHub ?>%</span>
+                <span id="label_w_hub" class="text-sky-600 font-mono font-black text-xs sm:text-sm"><?= $wHub ?>%</span>
             </div>
             <input type="range" name="w_hub" id="w_hub" min="5" max="70" step="5" value="<?= $wHub ?>"
-                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-sky-600"
+                class="w-full h-1.5 sm:h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-sky-600"
                 oninput="document.getElementById('label_w_hub').innerText = this.value + '%'">
-            <div class="text-[10px] text-slate-400">Tipe: Cost (Semakin dekat semakin baik)</div>
+            <div class="hidden sm:block text-[10px] text-slate-500 font-medium">Prioritas: Dekat bandara/pelabuhan</div>
         </div>
 
         <!-- Kriteria 3: Ketersediaan Amenitas (Benefit) -->
-        <div class="space-y-2 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/70">
-            <div class="flex justify-between items-center text-xs font-bold">
-                <span class="text-slate-800 flex items-center gap-1.5">
-                    <i class="fa-solid fa-hotel text-indigo-500 text-[11px]"></i>
-                    <span>Fasilitas Amenitas</span>
+        <div class="space-y-1 sm:space-y-2 bg-slate-50/70 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200/70">
+            <div class="flex justify-between items-center text-[11px] sm:text-xs font-bold">
+                <span class="text-slate-800 flex items-center gap-1">
+                    <i class="fa-solid fa-hotel text-indigo-500 text-[10px] sm:text-[11px]"></i>
+                    <span class="truncate">Amenitas</span>
                 </span>
-                <span id="label_w_amenities" class="text-indigo-600 font-mono font-black"><?= $wAmenities ?>%</span>
+                <span id="label_w_amenities" class="text-indigo-600 font-mono font-black text-xs sm:text-sm"><?= $wAmenities ?>%</span>
             </div>
             <input type="range" name="w_amenities" id="w_amenities" min="5" max="70" step="5" value="<?= $wAmenities ?>"
-                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                class="w-full h-1.5 sm:h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
                 oninput="document.getElementById('label_w_amenities').innerText = this.value + '%'">
-            <div class="text-[10px] text-slate-400">Tipe: Benefit (Hotel &amp; resto sekitar)</div>
+            <div class="hidden sm:block text-[10px] text-slate-500 font-medium">Prioritas: Banyak hotel &amp; resto</div>
         </div>
 
         <!-- Kriteria 4: Popularitas Ulasan (Benefit) -->
-        <div class="space-y-2 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/70">
-            <div class="flex justify-between items-center text-xs font-bold">
-                <span class="text-slate-800 flex items-center gap-1.5">
-                    <i class="fa-solid fa-comments text-emerald-500 text-[11px]"></i>
-                    <span>Popularitas Ulasan</span>
+        <div class="space-y-1 sm:space-y-2 bg-slate-50/70 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200/70">
+            <div class="flex justify-between items-center text-[11px] sm:text-xs font-bold">
+                <span class="text-slate-800 flex items-center gap-1">
+                    <i class="fa-solid fa-comments text-emerald-500 text-[10px] sm:text-[11px]"></i>
+                    <span class="truncate">Ulasan</span>
                 </span>
-                <span id="label_w_ulasan" class="text-emerald-600 font-mono font-black"><?= $wUlasan ?>%</span>
+                <span id="label_w_ulasan" class="text-emerald-600 font-mono font-black text-xs sm:text-sm"><?= $wUlasan ?>%</span>
             </div>
             <input type="range" name="w_ulasan" id="w_ulasan" min="5" max="70" step="5" value="<?= $wUlasan ?>"
-                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+                class="w-full h-1.5 sm:h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
                 oninput="document.getElementById('label_w_ulasan').innerText = this.value + '%'">
-            <div class="text-[10px] text-slate-400">Tipe: Benefit (Banyaknya ulasan publik)</div>
+            <div class="hidden sm:block text-[10px] text-slate-500 font-medium">Prioritas: Jumlah ulasan publik</div>
         </div>
 
     </div>
 
     <!-- Filter Geografis & Tombol Eksekusi -->
-    <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div class="flex items-center gap-2 flex-wrap">
+    <div class="pt-3 sm:pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
+        <div class="flex items-center gap-2 flex-wrap w-full sm:w-auto">
             <!-- Filter Kabupaten -->
-            <select name="kabupaten" class="text-xs rounded-xl border-slate-200 bg-slate-50 py-2 px-3 font-medium text-slate-700 focus:ring-ocean-500">
-                <option value="">Semua Kabupaten/Kota (7 Daerah)</option>
+            <select name="kabupaten" class="text-[11px] sm:text-xs rounded-xl border-slate-200 bg-slate-50 py-1.5 sm:py-2 px-2.5 sm:px-3 font-medium text-slate-700 focus:ring-ocean-500 flex-1 sm:flex-none">
+                <option value="">Semua Daerah (7 Kab/Kota)</option>
                 <?php foreach ($kabList as $kab): ?>
                 <option value="<?= htmlspecialchars($kab) ?>" <?= $filterKab === $kab ? 'selected' : '' ?>>
                     <?= htmlspecialchars($kab) ?>
@@ -138,17 +138,17 @@
             </select>
 
             <!-- Filter Kategori -->
-            <select name="sub_kategori" class="text-xs rounded-xl border-slate-200 bg-slate-50 py-2 px-3 font-medium text-slate-700 focus:ring-ocean-500">
-                <option value="">Semua Kategori Wisata</option>
+            <select name="sub_kategori" class="text-[11px] sm:text-xs rounded-xl border-slate-200 bg-slate-50 py-1.5 sm:py-2 px-2.5 sm:px-3 font-medium text-slate-700 focus:ring-ocean-500 flex-1 sm:flex-none">
+                <option value="">Semua Kategori</option>
                 <option value="Alam" <?= $filterSub === 'Alam' ? 'selected' : '' ?>>Wisata Alam</option>
-                <option value="Kebudayaan" <?= $filterSub === 'Kebudayaan' ? 'selected' : '' ?>>Wisata Budaya &amp; Sejarah</option>
-                <option value="Buatan" <?= $filterSub === 'Buatan' ? 'selected' : '' ?>>Wisata Buatan / Rekreasi</option>
+                <option value="Kebudayaan" <?= $filterSub === 'Kebudayaan' ? 'selected' : '' ?>>Budaya &amp; Sejarah</option>
+                <option value="Buatan" <?= $filterSub === 'Buatan' ? 'selected' : '' ?>>Buatan / Rekreasi</option>
             </select>
         </div>
 
-        <button type="submit" class="px-5 py-2.5 rounded-xl bg-ocean-600 hover:bg-ocean-500 text-white font-extrabold text-xs shadow-md shadow-ocean-600/20 transition-all flex items-center justify-center gap-2">
+        <button type="submit" class="w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-ocean-600 hover:bg-ocean-500 text-white font-extrabold text-xs shadow-md shadow-ocean-600/20 transition-all flex items-center justify-center gap-2">
             <i class="fa-solid fa-calculator"></i>
-            <span>Hitung Ulang Rekomendasi TOPSIS</span>
+            <span>Hitung Ulang TOPSIS</span>
         </button>
     </div>
 

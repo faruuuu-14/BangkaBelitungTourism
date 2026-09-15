@@ -106,35 +106,26 @@ $searchPlaces = $pdo->query("
     ORDER BY ulasan DESC
     LIMIT 150
 ")->fetchAll();
+$currentWilayah = getCurrentWilayah();
+$isNasional = ($currentWilayah === 'nasional');
 ?>
 
 <!-- ============================================================== -->
 <!-- STRUKTUR TATA LETAK UTAMA BERANDA (STANDAR KONSISTENSI IMK)    -->
 <!-- ============================================================== -->
-<main class="flex-grow w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 pb-24 lg:pb-8 min-w-0 overflow-hidden space-y-6 sm:space-y-8">
+<main class="flex-grow w-full max-w-[1720px] mx-auto px-3 sm:px-6 lg:px-10 py-3 sm:py-8 pb-20 lg:pb-8 min-w-0 overflow-hidden space-y-3.5 sm:space-y-8">
 
-    <!-- 1. Hero Banner Utama (Latar Belakang Penuh Foto Lengkuas) -->
+    <!-- 1. Hero Banner Utama (Pencarian Cepat 875 Objek Babel) -->
     <?php include __DIR__ . '/banner_utama.php'; ?>
 
-    <!-- 2. Widget Cerdas Musim Bahari & Keselamatan Pesisir Babel -->
-    <?php include __DIR__ . '/widget_musim.php'; ?>
-
-    <!-- 3. Kartu Panduan Ringkas Pengguna Sistem -->
-    <?php include __DIR__ . '/panduan_pengguna.php'; ?>
-
-    <!-- 3. Kartu Metrik Kunci Pariwisata Babel -->
+    <!-- 2. Kartu Metrik Kunci Pariwisata Babel (875 Objek & BPS 2026) -->
     <?php include __DIR__ . '/kartu_metrik.php'; ?>
 
-    <!-- 4. Galeri 12 Objek Berimbang 7 Kabupaten/Kota & Budaya -->
-    <?php include __DIR__ . '/galeri_wilayah.php'; ?>
-
-    <!-- 5. Grafik Komparasi Sebaran Wilayah & Kebutuhan Amenitas -->
+    <!-- 3. Grafik Komparasi Sebaran Fasilitas 7 Kabupaten/Kota -->
     <?php include __DIR__ . '/grafik_sebaran.php'; ?>
 
-    <!-- 6. Daftar 5 Destinasi Paling Populer -->
-    <?php include __DIR__ . '/destinasi_populer.php'; ?>
-
-    <!-- 7. Dialog Modal Lightbox Foto Layar Penuh -->
+    <!-- Modal Dialog Lightbox -->
     <?php include __DIR__ . '/modal_dialog.php'; ?>
 
 </main>
+
