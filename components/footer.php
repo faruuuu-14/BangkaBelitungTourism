@@ -44,7 +44,7 @@
             <!-- Kartu Identitas Pembuat Web -->
             <div class="flex flex-row items-center gap-3 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-white border border-slate-200/80 shadow-2xs text-left">
                 <div class="relative flex-shrink-0">
-                    <img src="assets/img/fathurrahman.jpg" alt="Fathurrahman Safari Lubis" class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl object-cover object-top border border-slate-200 shadow-2xs">
+                    <img src="assets/img/profil/fathurrahman.jpg" alt="Fathurrahman Safari Lubis" class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl object-cover object-top border border-slate-200 shadow-2xs">
                 </div>
                 <div class="space-y-0.5 min-w-0">
                     <div class="text-[10px] sm:text-[11px] font-semibold text-slate-400">

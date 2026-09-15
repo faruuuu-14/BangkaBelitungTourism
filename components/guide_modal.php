@@ -486,7 +486,7 @@
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
                             <div class="flex items-center gap-3">
                                 <div class="relative flex-shrink-0">
-                                    <img src="assets/img/fathurrahman.jpg" alt="Fathurrahman Safari Lubis" class="w-14 h-14 rounded-2xl object-cover object-top border border-slate-700 shadow-md">
+                                    <img src="assets/img/profil/fathurrahman.jpg" alt="Fathurrahman Safari Lubis" class="w-14 h-14 rounded-2xl object-cover object-top border border-slate-700 shadow-md">
                                 </div>
                                 <div>
                                     <span class="text-[10px] font-semibold tracking-wider text-slate-400 uppercase">Pembuat Website:</span>

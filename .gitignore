@@ -9,7 +9,7 @@ venv/
 ENV/
 
 # Crawler output temp
-crawler/output/
+perayap_data/output/
 
 # Operating System Files
 .DS_Store

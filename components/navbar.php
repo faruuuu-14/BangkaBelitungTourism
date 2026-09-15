@@ -137,7 +137,7 @@ if (!function_exists('navActive')) {
 
                 <!-- Avatar Pembuat Web (Fathurrahman Safari Lubis) -->
                 <button onclick="openGuideModal('gtab-policy')" class="flex items-center justify-center p-0.5 rounded-full bg-slate-100 hover:bg-ocean-50 border border-slate-200 hover:border-ocean-300 transition-all cursor-pointer group" title="Dibuat oleh: Fathurrahman Safari Lubis (NIM: 2411500025)">
-                    <img src="assets/img/fathurrahman.jpg" alt="Fathurrahman Safari Lubis" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover object-top border border-slate-200 group-hover:border-ocean-500 shadow-xs group-hover:scale-105 transition-transform">
+                    <img src="assets/img/profil/fathurrahman.jpg" alt="Fathurrahman Safari Lubis" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover object-top border border-slate-200 group-hover:border-ocean-500 shadow-xs group-hover:scale-105 transition-transform">
                 </button>
             </div>
 

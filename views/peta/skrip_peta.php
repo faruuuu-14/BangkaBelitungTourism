@@ -93,7 +93,7 @@ function getSubCategoryIcon(sub) {
 }
 
 function getClientPhoto(nama, sub, kab) {
-    return 'assets/img/fathurrahman.jpg';
+    return 'assets/img/bangka_belitung/pantai_tikus_emas.jpg';
 }
 
 function createCustomIcon(sub) {

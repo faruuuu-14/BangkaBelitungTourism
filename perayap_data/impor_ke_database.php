@@ -37,11 +37,8 @@ echo "=======================================================\n";
 
 $pdo = getDbConnection();
 
-// Cari file sumber JSON (prioritas di output perayap, lalu di data/)
+// Cari file sumber JSON (pada folder output perayap)
 $jsonPath = __DIR__ . '/output/data_wisata_babel.json';
-if (!file_exists($jsonPath)) {
-    $jsonPath = __DIR__ . '/../data/data_wisata_babel.json';
-}
 
 if (!file_exists($jsonPath)) {
     die("[GAGAL] File hasil perayapan data tidak ditemukan. Jalankan 'python jalankan_crawler.py' terlebih dahulu!\n");

@@ -35,7 +35,7 @@ $isNasional = ($currentWilayah === 'nasional');
 
 if ($isNasional) {
     $heroBgImage = 'assets/img/nasional/hero_indonesia.jpg';
-    $heroFallbackBg = 'assets/img/pantai_lengkuas.jpg';
+    $heroFallbackBg = 'assets/img/bangka_belitung/pantai_lengkuas.jpg';
     $heroBadge1 = '<span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span><span>Sistem Informasi Intelijen &amp; Spasial Pariwisata Nusantara</span>';
     $heroBadge2 = '<i class="fa-solid fa-flag text-amber-400 text-[11px]"></i><span>Cakupan 14 Provinsi &bull; Pilot Bangka Belitung</span>';
     $heroTitle = 'Intelijen &amp; Spasial Pariwisata <span class="bg-gradient-to-r from-sky-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">Nusantara Indonesia</span>';
@@ -44,7 +44,7 @@ if ($isNasional) {
     $heroCredit = 'Kepulauan Maritim &amp; Wisata Bahari Nusantara';
 } else {
     $heroBgImage = 'assets/img/bangka_belitung/pantai_lengkuas.jpg';
-    $heroFallbackBg = 'assets/img/pantai_lengkuas.jpg';
+    $heroFallbackBg = 'assets/img/bangka_belitung/pantai_lengkuas.jpg';
     $heroBadge1 = '<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Portal Resmi Satu Data Spasial &amp; Intelijen Pariwisata</span>';
     $heroBadge2 = '<i class="fa-solid fa-gem text-amber-400 text-[11px]"></i><span>UNESCO Global Geopark Belitong</span>';
     $heroTitle = 'Eksplorasi Keindahan Alam &amp; Warisan Budaya <span class="bg-gradient-to-r from-sky-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">Bangka Belitung</span>';

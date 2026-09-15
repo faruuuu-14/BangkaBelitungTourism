@@ -63,11 +63,9 @@ Aplikasi **Sistem Informasi Geografis (SIG)** dan **Sistem Pendukung Keputusan S
    - Jika menggunakan Laragon: letakkan di `C:/laragon/www/BangkaBelitungTourism/`
    - Jika menggunakan XAMPP: letakkan di `C:/xampp/htdocs/BangkaBelitungTourism/`
 3. **Konfigurasi Database**:
-   - Buka phpMyAdmin / HeidiSQL, buat database baru: `db_babel_tourism`
-   - Jalankan script import data:
-     ```bash
-     php scripts/setup_database.php
-     ```
+   - Pastikan layanan MySQL / MariaDB aktif di Laragon atau XAMPP.
+   - Konfigurasi koneksi basis data diatur terpusat secara otomatis pada `app/database.php` (mendukung `db_pariwisata_babel` dan `db_babel_tourism`).
+
 4. **Buka di Browser**:
    - Akses melalui: `http://localhost/BangkaBelitungTourism/` atau `http://bangkabelitungtourism.test/`
 

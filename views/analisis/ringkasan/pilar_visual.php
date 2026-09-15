@@ -37,7 +37,7 @@
     
     <!-- Pilar 1: Wisata Bahari & Geopark -->
     <div class="group relative rounded-2xl overflow-hidden shadow-xs border border-slate-200 bg-slate-900 h-28 sm:h-36 flex flex-col justify-end p-3 sm:p-4 text-white">
-        <img src="assets/img/pantai_lengkuas.jpg" alt="Wisata Bahari Lengkuas" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 opacity-75">
+        <img src="assets/img/bangka_belitung/pantai_lengkuas.jpg" alt="Wisata Bahari Lengkuas" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 opacity-75">
         <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
         <div class="relative z-10">
             <span class="text-[9px] sm:text-[10px] font-bold text-teal-300 block uppercase tracking-wider">Bahari &amp; Geopark</span>
@@ -48,7 +48,7 @@
 
     <!-- Pilar 2: Seni Kriya Kain Cual -->
     <div class="group relative rounded-2xl overflow-hidden shadow-xs border border-slate-200 bg-slate-900 h-28 sm:h-36 flex flex-col justify-end p-3 sm:p-4 text-white">
-        <img src="assets/img/kain_cual_bangka.jpg" alt="Kain Cual Bangka" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 opacity-75">
+        <img src="assets/img/bangka_belitung/kain_cual_bangka.jpg" alt="Kain Cual Bangka" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 opacity-75">
         <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
         <div class="relative z-10">
             <span class="text-[9px] sm:text-[10px] font-bold text-rose-300 block uppercase tracking-wider">Ekonomi Kreatif</span>
@@ -59,7 +59,7 @@
 
     <!-- Pilar 3: Sastra Laskar Pelangi -->
     <div class="group relative rounded-2xl overflow-hidden shadow-xs border border-slate-200 bg-slate-900 h-28 sm:h-36 flex flex-col justify-end p-3 sm:p-4 text-white">
-        <img src="assets/img/laskar_pelangi_gantong.jpg" alt="SD Laskar Pelangi" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 opacity-75">
+        <img src="assets/img/bangka_belitung/laskar_pelangi_gantong.jpg" alt="SD Laskar Pelangi" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 opacity-75">
         <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
         <div class="relative z-10">
             <span class="text-[9px] sm:text-[10px] font-bold text-emerald-300 block uppercase tracking-wider">Wisata Sastra</span>
@@ -70,7 +70,7 @@
 
     <!-- Pilar 4: Sejarah Museum Timah -->
     <div class="group relative rounded-2xl overflow-hidden shadow-xs border border-slate-200 bg-slate-900 h-28 sm:h-36 flex flex-col justify-end p-3 sm:p-4 text-white">
-        <img src="assets/img/museum_timah_babel.jpg" alt="Museum Timah Indonesia" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 opacity-75">
+        <img src="assets/img/bangka_belitung/museum_timah_babel.jpg" alt="Museum Timah Indonesia" class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 opacity-75">
         <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
         <div class="relative z-10">
             <span class="text-[9px] sm:text-[10px] font-bold text-amber-300 block uppercase tracking-wider">Cagar Budaya</span>

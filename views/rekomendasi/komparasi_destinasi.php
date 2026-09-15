@@ -112,15 +112,15 @@ const compCandidates = <?= json_encode($rankedList ?? []) ?>;
 function getCompPhoto(nama, sub, kab) {
     const n = (nama || '').toLowerCase();
     const k = (kab || '').toLowerCase();
-    if (n.includes('tikus emas') || n.includes('parai')) return 'assets/img/pantai_tikus_emas.jpg';
-    if (n.includes('tanjung ular') || n.includes('menumbing') || k.includes('barat')) return 'assets/img/pantai_tanjung_ular.jpg';
-    if (n.includes('kaolin') || k.includes('tengah')) return 'assets/img/danau_kaolin_koba.jpg';
-    if (n.includes('batu perahu') || k.includes('selatan')) return 'assets/img/pantai_batu_perahu.jpg';
-    if (n.includes('lengkuas')) return 'assets/img/pantai_lengkuas.jpg';
-    if (n.includes('tanjung tinggi') || k.includes('belitung')) return 'assets/img/pantai_tanjung_tinggi.jpg';
-    if (n.includes('gantong') || k.includes('timur')) return 'assets/img/laskar_pelangi_gantong.jpg';
-    if (n.includes('museum') || n.includes('timah') || k.includes('pangkalpinang')) return 'assets/img/museum_timah_babel.jpg';
-    return 'assets/img/pantai_tikus_emas.jpg';
+    if (n.includes('tikus emas') || n.includes('parai')) return 'assets/img/bangka_belitung/pantai_tikus_emas.jpg';
+    if (n.includes('tanjung ular') || n.includes('menumbing') || k.includes('barat')) return 'assets/img/bangka_belitung/pantai_tanjung_ular.jpg';
+    if (n.includes('kaolin') || k.includes('tengah')) return 'assets/img/bangka_belitung/danau_kaolin_koba.jpg';
+    if (n.includes('batu perahu') || k.includes('selatan')) return 'assets/img/bangka_belitung/pantai_batu_perahu.jpg';
+    if (n.includes('lengkuas')) return 'assets/img/bangka_belitung/pantai_lengkuas.jpg';
+    if (n.includes('tanjung tinggi') || k.includes('belitung')) return 'assets/img/bangka_belitung/pantai_tanjung_tinggi.jpg';
+    if (n.includes('gantong') || k.includes('timur')) return 'assets/img/bangka_belitung/laskar_pelangi_gantong.jpg';
+    if (n.includes('museum') || n.includes('timah') || k.includes('pangkalpinang')) return 'assets/img/bangka_belitung/museum_timah_babel.jpg';
+    return 'assets/img/bangka_belitung/pantai_tikus_emas.jpg';
 }
 
 function openModalKomparasi() {
