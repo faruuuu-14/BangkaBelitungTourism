@@ -81,81 +81,65 @@
         <div class="p-6 sm:p-8 overflow-y-auto space-y-6 text-slate-800 text-xs sm:text-sm leading-relaxed" id="guideModalBody">
             
             <!-- ========================================================== -->
-            <!-- TAB 1: PANDUAN PENGGUNAAN FITUR                            -->
+            <!-- TAB 1: PANDUAN PENGGUNAAN FITUR & 3 PILAR NOVELTY          -->
             <!-- ========================================================== -->
             <div id="gtab-overview" class="guide-tab-pane space-y-6">
                 <div class="bg-ocean-50/60 p-4 rounded-2xl border border-ocean-100 space-y-1">
                     <h4 class="font-extrabold text-ocean-950 text-sm flex items-center gap-2">
                         <i class="fa-solid fa-circle-info text-ocean-600"></i>
-                        <span>Tentang Platform Babel Tourism Analytics Hub</span>
+                        <span>Platform Intelijen &amp; SPKS Cerdas Pariwisata Bangka Belitung (Skripsi Edition)</span>
                     </h4>
                     <p class="text-slate-600 text-xs">
-                        Platform ini dirancang sebagai <em>Spatial Decision Support System (SDSS)</em> bagi Dinas Pariwisata, Bappenas/Bappelitbangda, akademisi, investor, serta wisatawan untuk memantau, menganalisis kesenjangan fasilitas, dan mengoptimalkan penataan pariwisata Kepulauan Bangka Belitung berbasis data spasial terverifikasi.
+                        Bukan sekadar visualisasi data pasif, platform ini merupakan <em>Integrated Spatial Decision Support System (SDSS)</em> berbasis komputasi cerdas dengan 3 pilar kebaruan ilmiah (novelty) untuk wisatawan, dinas, dan investor, serta siap diintegrasikan langsung ke aplikasi mobile Android Studio via RESTful JSON API.
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                    <!-- Fitur Dashboard -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <!-- Pilar 1: Smart Itinerary -->
                     <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2">
                         <div class="flex items-center gap-2 font-extrabold text-slate-900 text-sm">
-                            <span class="w-7 h-7 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-xs">
-                                <i class="fa-solid fa-chart-pie"></i>
+                            <span class="w-7 h-7 rounded-lg bg-ocean-100 text-ocean-600 flex items-center justify-center text-xs">
+                                <i class="fa-solid fa-route"></i>
                             </span>
-                            <span>Dashboard Eksekutif</span>
+                            <span>Pilar 1: Smart Itinerary</span>
                         </div>
                         <p class="text-slate-600">
-                            Menampilkan ringkasan makro 875 POI, rasio daya tarik terhadap amenitas, komposisi kategori (Alam, Buatan, Budaya, Hotel, Resto), serta tabel destinasi paling populer menurut ulasan Google Maps.
+                            Penyusun jadwal rute harian otomatis berbasis <strong>Algoritma Heuristic 2-Opt Multi-Constraint OPTW</strong> yang menyeimbangkan durasi jam liburan, batas anggaran (budget), minat kategori, dan efisiensi jarak tempuh.
                         </p>
                         <div class="p-2.5 bg-slate-50 rounded-xl text-[11px] text-slate-500 font-medium">
-                            <strong>Cara Pakai:</strong> Pantau kartu KPI agregat, amati grafik distribusi per kabupaten, dan gunakan tombol pintas cepat menuju WebGIS atau Indeks IPKN.
+                            <strong>Cara Pakai:</strong> Pilih durasi (1-3 hari), titik keberangkatan (bandara/pelabuhan), geser batas budget, lalu klik <em>[Optimasi Jadwal &amp; Rute]</em> untuk melihat timeline menit-ke-menit.
                         </div>
                     </div>
 
-                    <!-- Fitur Peta WebGIS -->
+                    <!-- Pilar 2: Sentiment TOPSIS -->
+                    <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2">
+                        <div class="flex items-center gap-2 font-extrabold text-slate-900 text-sm">
+                            <span class="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs">
+                                <i class="fa-solid fa-ranking-star"></i>
+                            </span>
+                            <span>Pilar 2: TOPSIS Sentimen</span>
+                        </div>
+                        <p class="text-slate-600">
+                            Sistem Pendukung Keputusan pemeringkatan destinasi yang menggabungkan rating bintang dengan <strong>Analisis Sentimen Aspek NLP</strong> (kebersihan, fasilitas, dan aksesibilitas) pada ulasan asli Google Maps.
+                        </p>
+                        <div class="p-2.5 bg-slate-50 rounded-xl text-[11px] text-slate-500 font-medium">
+                            <strong>Cara Pakai:</strong> Buka menu SPK TOPSIS, amati podium juara Top 3, gunakan preset persona atau ubah bobot kriteria untuk melihat perubahan nilai preferensi ($V_i$).
+                        </div>
+                    </div>
+
+                    <!-- Pilar 3: Radar Bisnis UMKM -->
                     <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2">
                         <div class="flex items-center gap-2 font-extrabold text-slate-900 text-sm">
                             <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs">
-                                <i class="fa-solid fa-map-location-dot"></i>
+                                <i class="fa-solid fa-chart-pie"></i>
                             </span>
-                            <span>Peta Spasial &amp; WebGIS</span>
+                            <span>Pilar 3: Radar Bisnis UMKM</span>
                         </div>
                         <p class="text-slate-600">
-                            Peta interaktif Leaflet dengan fitur filter wilayah 7 Kabupaten/Kota, toggle Heatmap kepadatan popularitas, Haversine Radar amenitas 5 km, Drawer Aksesibilitas Simpul Transportasi (Bandara/Pelabuhan), dan Optimasi Rute (TSP).
+                            Evaluasi Spasial Multi-Kriteria (<strong>SMCE</strong>) penentu lokasi strategis pendirian usaha kafe, homestay, atau sentra oleh-oleh berdasarkan <em>Market Gap Analysis</em> (tarikan wisata vs kepadatan pesaing).
                         </p>
                         <div class="p-2.5 bg-slate-50 rounded-xl text-[11px] text-slate-500 font-medium">
-                            <strong>Cara Pakai:</strong> Klik titik pin mana saja untuk melihat indikator jarak ke bandara terdekat, klik tombol <em>[Aksesibilitas Hub]</em> untuk melihat cincin buffer 15–50 km.
-                        </div>
-                    </div>
-
-                    <!-- Fitur Analisis & YoY -->
-                    <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2">
-                        <div class="flex items-center gap-2 font-extrabold text-slate-900 text-sm">
-                            <span class="w-7 h-7 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center text-xs">
-                                <i class="fa-solid fa-chart-line"></i>
-                            </span>
-                            <span>Analisis Statistik &amp; Ekonometrika</span>
-                        </div>
-                        <p class="text-slate-600">
-                            Menyediakan 8 modul ilmiah: Pertumbuhan YoY BPS, Korelasi Pearson, Evaluasi Gap Defisit Amenitas 47 Kecamatan, Indeks IPKN-Daerah (BTDI), Tipologi Klassen, NNA Clark-Evans, Moran's I, Peramalan Holt's, dan TCC Cifuentes.
-                        </p>
-                        <div class="p-2.5 bg-slate-50 rounded-xl text-[11px] text-slate-500 font-medium">
-                            <strong>Cara Pakai:</strong> Klik tab 1 sampai 8 pada bilah navigasi. Klik tombol <em>[Policy Brief Kemenpar]</em> untuk mengunduh lembar rekomendasi kebijakan resmi.
-                        </div>
-                    </div>
-
-                    <!-- Fitur SPK Rekomendasi TOPSIS -->
-                    <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2">
-                        <div class="flex items-center gap-2 font-extrabold text-slate-900 text-sm">
-                            <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-xs">
-                                <i class="fa-solid fa-ranking-star"></i>
-                            </span>
-                            <span>SPK Rekomendasi TOPSIS</span>
-                        </div>
-                        <p class="text-slate-600">
-                            Sistem Pendukung Keputusan multi-kriteria untuk merangking destinasi terbaik berdasarkan 4 variabel terbobot: Rating (C1), Jarak ke Simpul (C2), Kepadatan Amenitas 5 km (C3), dan Volume Ulasan (C4).
-                        </p>
-                        <div class="p-2.5 bg-slate-50 rounded-xl text-[11px] text-slate-500 font-medium">
-                            <strong>Cara Pakai:</strong> Geser slider bobot atau klik preset persona (misal: <em>Keluarga &amp; Santai</em> atau <em>Backpacker</em>), lalu amati kartu peringkat Top 10 dan buka akordeon transparansi matematis.
+                            <strong>Cara Pakai:</strong> Pilih model usaha (Kafe, Homestay, atau Suvenir UMKM), amati peta panas zona peluang emas (hijau), dan pelajari rekomendasi koordinat investasi terbaik.
                         </div>
                     </div>
                 </div>
